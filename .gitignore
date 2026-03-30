@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 로컬 개발 설정
+.claude/
+.mcp.json
+shrimp_data/

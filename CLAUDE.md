@@ -275,6 +275,152 @@ const { data, error } = await supabase
 
 ---
 
+## 🛠️ 개발 도구 설정
+
+### 설치된 도구
+
+이 프로젝트는 다음 도구들로 코드 품질과 협업 효율을 보장합니다:
+
+| 도구                            | 목적                 | 설정 파일           |
+| ------------------------------- | -------------------- | ------------------- |
+| **ESLint 9** (Flat Config)      | 코드 품질 검사       | `eslint.config.mjs` |
+| **simple-import-sort**          | import 자동 정렬     | eslint.config.mjs   |
+| **unused-imports**              | 미사용 import 제거   | eslint.config.mjs   |
+| **Prettier 3**                  | 코드 포맷팅 자동화   | `.prettierrc`       |
+| **prettier-plugin-tailwindcss** | Tailwind 클래스 정렬 | `.prettierrc`       |
+| **Husky v9**                    | Git hooks 관리       | `.husky/pre-commit` |
+| **lint-staged**                 | 스테이징 파일만 검사 | `package.json`      |
+| **EditorConfig**                | 에디터 설정 표준화   | `.editorconfig`     |
+| **knip**                        | 미사용 코드 분석     | `knip.config.ts`    |
+
+### 사용 가능한 Scripts
+
+```bash
+# ESLint 검사
+npm run lint
+
+# ESLint auto-fix (import 정렬 + unused imports 제거)
+npm run lint:fix
+
+# Prettier 포맷팅 (전체)
+npm run format
+
+# Prettier 포맷 검사 (CI용, 수정 안 함)
+npm run format:check
+
+# TypeScript 타입 검사 (빌드 없이)
+npm run type-check
+
+# 미사용 코드/exports 분석 (선택)
+npm run knip
+```
+
+### Git Hooks (자동 실행)
+
+커밋 시 **pre-commit 훅**이 자동으로 실행됩니다:
+
+```bash
+git commit -m "feature: 새 기능"
+# ↓ 자동 실행 (스테이징된 파일에만 적용)
+# 1. *.{ts,tsx}: eslint --fix + prettier --write
+# 2. *.{js,mjs,cjs}: prettier --write
+# 3. *.{json,md,css}: prettier --write
+```
+
+오류 발생 시 커밋이 취소됩니다. 수정 후 다시 시도하세요.
+
+### 설정 파일 설명
+
+#### `.prettierrc` — Prettier 설정
+
+```json
+{
+  "semi": true, // 세미콜론 (항상)
+  "singleQuote": false, // 따옴표 (double)
+  "trailingComma": "all", // trailing comma
+  "printWidth": 80, // 라인 길이
+  "tabWidth": 2, // 들여쓰기 2칸
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindFunctions": ["cn", "cva", "clsx", "twMerge"]
+}
+```
+
+기존 코드 스타일을 완벽히 반영합니다.
+
+#### `.editorconfig` — 에디터 설정
+
+모든 에디터(VS Code, WebStorm 등)에서 동일한 포맷 적용:
+
+- 인코딩: UTF-8
+- 라인 끝: LF (Unix)
+- 들여쓰기: 스페이스 2칸
+- 파일 끝 개행: 항상 추가
+
+#### `eslint.config.mjs` — ESLint 규칙
+
+**핵심 규칙:**
+
+- `simple-import-sort`: import 자동 정렬
+  ```
+  1그룹: React/Next.js 등 외부 패키지
+  2그룹: @/* 경로 (내부 모듈)
+  3그룹: 상대 경로
+  ```
+- `unused-imports`: 미사용 코드 제거
+- `prettier-config`: Prettier 충돌 방지
+
+**무시 패턴:**
+
+```
+.next/, node_modules/, out/
+```
+
+#### `.husky/pre-commit` — Git Hook
+
+```sh
+npx lint-staged
+```
+
+`lint-staged`는 `package.json`의 설정에 따라 자동으로 규칙 적용.
+
+### 팁과 주의사항
+
+#### 1. 개발 중 자주 실행
+
+```bash
+# 저장 시 자동으로 포맷팅하기 (VS Code)
+# Settings → Format On Save 활성화
+```
+
+#### 2. CI/CD 파이프라인에서 검사
+
+```bash
+npm run format:check  # 포맷 검사 (실패하면 배포 차단)
+npm run lint          # ESLint 검사
+npm run type-check    # TypeScript 타입 검사
+```
+
+#### 3. knip로 미사용 코드 정기 검사
+
+```bash
+npm run knip
+# → 미사용 exports, 파일, 의존성 분석
+```
+
+#### 4. 특정 파일만 fix하기
+
+```bash
+# 단일 파일
+eslint app/page.tsx --fix
+prettier app/page.tsx --write
+
+# 폴더 전체
+eslint app/ --fix
+prettier app/ --write
+```
+
+---
+
 ## 🔧 일반적인 개발 작업
 
 ### 새 페이지 추가

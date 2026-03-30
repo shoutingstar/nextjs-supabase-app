@@ -129,6 +129,7 @@ app/
 ```
 
 **규칙:**
+
 - `page.tsx`: 해당 경로의 렌더링 컴포넌트
 - `layout.tsx`: 자식 페이지의 공통 레이아웃/로직
 - Route Handlers는 `[route]/route.ts`로 정의
@@ -150,6 +151,7 @@ components/
 ```
 
 **규칙:**
+
 - `ui/` 폴더: 순수 UI 컴포넌트만 (shadcn/ui 또는 커스텀)
 - 나머지: 비즈니스 로직이 있는 컴포넌트
 - 폼은 `'use client'`로 표시 (클라이언트 컴포넌트)
@@ -203,10 +205,12 @@ lib/
 // app/protected/layout.tsx 예시
 export default async function ProtectedLayout({ children }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/auth/login');
+    redirect("/auth/login");
   }
 
   return children;
@@ -226,6 +230,7 @@ npx shadcn-ui@latest add card
 ```
 
 **규칙:**
+
 - UI 기본 컴포넌트는 `components/ui/`에서 관리
 - 커스텀 스타일은 Tailwind 클래스로 추가
 - CSS Modules 대신 Tailwind 사용
@@ -300,9 +305,9 @@ components/my-feature-server.tsx (서버)
 
 ```typescript
 // app/protected/actions.ts
-'use server'
+"use server";
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from "@/lib/supabase/server";
 
 export async function updateUserProfile(formData: FormData) {
   const supabase = await createClient();
@@ -337,7 +342,7 @@ export async function getUser() {
 ```typescript
 // ❌ 클라이언트 환경에서 서버 클라이언트 사용
 // app/protected/page.tsx (서버 컴포넌트)
-import { createClient as createServerClient } from '@/lib/supabase/server';
+import { createClient as createServerClient } from "@/lib/supabase/server";
 
 // ✅ 올바른 패턴
 // 브라우저 상호작용: 클라이언트 컴포넌트 + createClient()
@@ -348,11 +353,11 @@ import { createClient as createServerClient } from '@/lib/supabase/server';
 
 ```typescript
 // ✅ 브라우저 노출 가능 (공개 키)
-process.env.NEXT_PUBLIC_SUPABASE_URL
-process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+process.env.NEXT_PUBLIC_SUPABASE_URL;
+process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 // ❌ 서버 전용 변수는 NEXT_PUBLIC_ 없음
-process.env.SUPABASE_SERVICE_ROLE_KEY  // 서버 액션에서만
+process.env.SUPABASE_SERVICE_ROLE_KEY; // 서버 액션에서만
 ```
 
 ### 4. 쿠키 업데이트
@@ -401,10 +406,10 @@ npm run lint -- --fix  # 자동 수정
 
 ```typescript
 // 브라우저 콘솔 확인
-console.log('Debug info:', data);
+console.log("Debug info:", data);
 
 // 서버 로그 확인 (터미널)
-console.log('Server debug:', result);
+console.log("Server debug:", result);
 ```
 
 ### 2. 타입 검사
@@ -417,6 +422,7 @@ npm run build  # 빌드 시 타입 에러 감지
 ### 3. 성능 모니터링
 
 Next.js 내장 성능 도구:
+
 - `next/image` - 이미지 최적화
 - `next/font` - 폰트 최적화
 - Server Components - 자동 번들 크기 감소
@@ -425,10 +431,9 @@ Next.js 내장 성능 도구:
 
 ## 🔄 일반적인 실수와 해결책
 
-| 문제 | 원인 | 해결책 |
-|------|------|--------|
-| "Cannot read cookies" 오류 | 클라이언트에서 쿠키 접근 시도 | 서버 컴포넌트 또는 서버 액션 사용 |
-| 무한 리다이렉트 | 세션 검증 루프 | `protected/layout.tsx`의 로직 확인 |
-| 환경 변수 undefined | 빌드 후 변수 변경 | 빌드 전에 `.env.local` 설정 |
-| Supabase 타입 오래됨 | 스키마 변경 후 타입 미갱신 | `npm run supabase gen types` 실행 |
-
+| 문제                       | 원인                          | 해결책                             |
+| -------------------------- | ----------------------------- | ---------------------------------- |
+| "Cannot read cookies" 오류 | 클라이언트에서 쿠키 접근 시도 | 서버 컴포넌트 또는 서버 액션 사용  |
+| 무한 리다이렉트            | 세션 검증 루프                | `protected/layout.tsx`의 로직 확인 |
+| 환경 변수 undefined        | 빌드 후 변수 변경             | 빌드 전에 `.env.local` 설정        |
+| Supabase 타입 오래됨       | 스키마 변경 후 타입 미갱신    | `npm run supabase gen types` 실행  |

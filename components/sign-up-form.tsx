@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { GoogleOAuthButton } from "@/components/google-oauth-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -106,6 +107,21 @@ export function SignUpForm({
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
+
+              {/* Google OAuth 구분선 */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or
+                  </span>
+                </div>
+              </div>
+
+              {/* Google OAuth 버튼 */}
+              <GoogleOAuthButton label="Sign up with Google" />
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}

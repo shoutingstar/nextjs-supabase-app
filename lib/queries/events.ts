@@ -76,7 +76,10 @@ export async function getUserHostedEvents(
       participants_count: participantCountMap.get(event.id) || 0,
     }));
   } catch (error) {
-    console.error("Error fetching hosted events:", error);
+    console.error(
+      "Error fetching hosted events:",
+      error instanceof Error ? error.message : error,
+    );
     return [];
   }
 }

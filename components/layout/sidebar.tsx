@@ -2,11 +2,12 @@
 
 /**
  * 데스크톱 사이드바 네비게이션
- * md(768px) 이상에서만 표시
+ * md(768px) 이상에서만 표시, 호버 시 확장
  * usePathname으로 현재 경로에 따라 active 상태 표시
  */
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,8 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="group fixed bottom-0 left-0 top-16 z-30 hidden w-16 overflow-hidden border-r bg-background transition-all duration-300 hover:w-64 md:block">
       <nav className="flex flex-col gap-1 p-4">

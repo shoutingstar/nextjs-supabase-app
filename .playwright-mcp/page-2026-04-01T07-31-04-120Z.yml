@@ -1,0 +1,58 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "← 컴포넌트 목록" [ref=e4] [cursor=pointer]:
+        - /url: /test/components
+      - heading "LoadingSkeleton 테스트" [level=1] [ref=e5]
+      - paragraph [ref=e6]: 이벤트 카드 및 참여자 카드 로딩 스켈레톤 컴포넌트를 테스트합니다.
+    - generic [ref=e7]:
+      - heading "EventCard 스켈레톤" [level=2] [ref=e8]
+      - generic [ref=e9]:
+        - paragraph [ref=e10]: 단일 스켈레톤 (default)
+        - generic "이벤트 카드 로딩 중" [ref=e12]
+      - generic [ref=e32]:
+        - paragraph [ref=e33]: 단일 스켈레톤 (compact)
+        - generic "이벤트 카드 로딩 중" [ref=e35]
+    - generic [ref=e48]:
+      - heading "EventList 스켈레톤 그리드" [level=2] [ref=e49]
+      - generic [ref=e50]:
+        - paragraph [ref=e51]: 3개 그리드 (default)
+        - generic [ref=e52]:
+          - generic "이벤트 카드 로딩 중" [ref=e53]
+          - generic "이벤트 카드 로딩 중" [ref=e73]
+          - generic "이벤트 카드 로딩 중" [ref=e93]
+      - generic [ref=e113]:
+        - paragraph [ref=e114]: 4개 목록 (compact)
+        - generic [ref=e116]:
+          - generic "이벤트 카드 로딩 중" [ref=e117]
+          - generic "이벤트 카드 로딩 중" [ref=e130]
+          - generic "이벤트 카드 로딩 중" [ref=e143]
+          - generic "이벤트 카드 로딩 중" [ref=e156]
+    - generic [ref=e169]:
+      - heading "ParticipantCard 스켈레톤" [level=2] [ref=e170]
+      - generic [ref=e171]:
+        - paragraph [ref=e172]: 단일 스켈레톤 (default)
+        - generic "참여자 카드 로딩 중" [ref=e174]
+      - generic [ref=e185]:
+        - paragraph [ref=e186]: 단일 스켈레톤 (compact)
+        - generic "참여자 카드 로딩 중" [ref=e188]
+    - generic [ref=e194]:
+      - heading "ParticipantList 스켈레톤" [level=2] [ref=e195]
+      - generic [ref=e196]:
+        - paragraph [ref=e197]: 4개 그리드 (default)
+        - generic [ref=e198]:
+          - generic "참여자 카드 로딩 중" [ref=e199]
+          - generic "참여자 카드 로딩 중" [ref=e210]
+          - generic "참여자 카드 로딩 중" [ref=e221]
+          - generic "참여자 카드 로딩 중" [ref=e232]
+      - generic [ref=e243]:
+        - paragraph [ref=e244]: 5개 목록 (compact)
+        - generic [ref=e246]:
+          - generic "참여자 카드 로딩 중" [ref=e247]
+          - generic "참여자 카드 로딩 중" [ref=e253]
+          - generic "참여자 카드 로딩 중" [ref=e259]
+          - generic "참여자 카드 로딩 중" [ref=e265]
+          - generic "참여자 카드 로딩 중" [ref=e271]
+  - button "Open Next.js Dev Tools" [ref=e282] [cursor=pointer]:
+    - img [ref=e283]
+  - alert [ref=e286]

@@ -1,0 +1,68 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - link "← 컴포넌트 목록" [ref=e4] [cursor=pointer]:
+        - /url: /test/components
+      - heading "EmptyState 테스트" [level=1] [ref=e5]
+      - paragraph [ref=e6]: 빈 상태 컴포넌트의 다양한 케이스를 테스트합니다.
+    - generic [ref=e7]:
+      - heading "기본 빈 상태" [level=2] [ref=e8]
+      - generic [ref=e9]:
+        - paragraph [ref=e10]: 이벤트 없음
+        - generic [ref=e11]:
+          - paragraph [ref=e12]: 이벤트가 없습니다
+          - paragraph [ref=e13]: 아직 등록된 이벤트가 없습니다. 첫 번째 이벤트를 만들어 보세요!
+      - generic [ref=e14]:
+        - paragraph [ref=e15]: 참여자 없음
+        - generic [ref=e16]:
+          - paragraph [ref=e17]: 참여자가 없습니다
+          - paragraph [ref=e18]: 아직 이벤트에 참여한 사람이 없습니다.
+    - generic [ref=e19]:
+      - heading "아이콘 포함 빈 상태" [level=2] [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - paragraph [ref=e23]: 검색 결과 없음
+          - generic [ref=e24]:
+            - img [ref=e26]
+            - paragraph [ref=e29]: 검색 결과가 없습니다
+            - paragraph [ref=e30]: 다른 키워드로 검색해 보세요.
+        - generic [ref=e31]:
+          - paragraph [ref=e32]: 이벤트 달력 비어있음
+          - generic [ref=e33]:
+            - img [ref=e35]
+            - paragraph [ref=e37]: 예정된 이벤트 없음
+            - paragraph [ref=e38]: 이번 주에 예정된 이벤트가 없습니다.
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: 참여자 목록 비어있음
+          - generic [ref=e41]:
+            - img [ref=e43]
+            - paragraph [ref=e48]: 참여자 없음
+            - paragraph [ref=e49]: 아직 이 이벤트에 참여한 사람이 없습니다.
+        - generic [ref=e50]:
+          - paragraph [ref=e51]: 에러 상태
+          - generic [ref=e52]:
+            - img [ref=e54]
+            - paragraph [ref=e56]: 오류가 발생했습니다
+            - paragraph [ref=e57]: 데이터를 불러오는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.
+    - generic [ref=e58]:
+      - heading "액션 버튼 포함" [level=2] [ref=e59]
+      - generic [ref=e60]:
+        - generic [ref=e61]:
+          - paragraph [ref=e62]: 이벤트 생성 유도
+          - generic [ref=e63]:
+            - img [ref=e65]
+            - paragraph [ref=e67]: 이벤트를 만들어 보세요
+            - paragraph [ref=e68]: 간단한 정보만 입력하면 바로 이벤트를 만들 수 있어요.
+            - link "이벤트 만들기" [ref=e70] [cursor=pointer]:
+              - /url: /test/components
+        - generic [ref=e71]:
+          - paragraph [ref=e72]: 참여 유도
+          - generic [ref=e73]:
+            - img [ref=e75]
+            - paragraph [ref=e80]: 아직 참여한 이벤트가 없어요
+            - paragraph [ref=e81]: 관심 있는 이벤트를 찾아 참여해 보세요!
+            - link "이벤트 둘러보기" [ref=e83] [cursor=pointer]:
+              - /url: /test/components
+  - button "Open Next.js Dev Tools" [ref=e89] [cursor=pointer]:
+    - img [ref=e90]
+  - alert [ref=e93]

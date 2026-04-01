@@ -202,11 +202,30 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
  * ============================================================================ */
 
 /**
+ * EventCard에서 표시 가능한 이벤트 데이터 타입
+ * @description 기본 Event에 선택적으로 host, participants_count를 포함
+ */
+export type EventCardData = Event & {
+  /** 호스트 정보 (선택적 - EventDetail에서 제공)
+   *  full_name(DB 컬럼명) 또는 name(UserProfile 필드명) 모두 허용
+   */
+  host?: {
+    full_name?: string | null;
+    name?: string | null;
+    [key: string]: unknown;
+  };
+  /** 참여자 수 (선택적 - EventDetail에서 제공) */
+  participants_count?: number;
+  /** 참여자 수 (EventDetail에서 participant_count 필드명으로도 허용) */
+  participant_count?: number;
+};
+
+/**
  * 이벤트 카드 Props
  * @description 이벤트 목록/상세에서 사용되는 카드
  */
 export interface EventCardProps {
-  event: Event;
+  event: EventCardData;
   variant?: "default" | "compact";
   onClick?: () => void;
   isSelected?: boolean;

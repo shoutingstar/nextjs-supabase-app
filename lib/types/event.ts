@@ -22,6 +22,8 @@ export interface Event {
   status: EventStatus;
   invite_code: string | null;
   max_participants: number | null;
+  /** 이벤트 커버 이미지 URL (Phase 3에서 DB 컬럼으로 추가 예정) */
+  cover_image: string | null;
   created_at: string;
   updated_at: string | null;
 }

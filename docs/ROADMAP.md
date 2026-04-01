@@ -55,13 +55,14 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 
 ### Phase 2: UI/UX 완성 (더미 데이터 활용)
 
-- **Task 003: 공통 컴포넌트 라이브러리 구현**
-  - shadcn/ui 추가 컴포넌트 설치 (Card, Avatar, Dialog, Toast, Form, Select)
-  - 이벤트 카드 컴포넌트 구현
-  - 참여자 프로필 카드 컴포넌트 구현
-  - 로딩 스켈레톤 컴포넌트 구현
-  - 빈 상태 UI 컴포넌트 구현
-  - 더미 데이터 생성 및 관리 유틸리티 작성
+- **Task 003: 공통 컴포넌트 라이브러리 구현** ✅
+  - shadcn/ui 추가 컴포넌트 설치 (Avatar, Dialog, Toast, Form, Select)
+  - ParticipantCard 컴포넌트 구현 (default/compact variant)
+  - LoadingSkeleton 컴포넌트 구현 (EventSkeleton, ParticipantSkeleton)
+  - EventCard 이미지 지원 확장 (next/image 최적화)
+  - 더미 데이터 구조 구축 (mock-data.ts, data-generators.ts)
+  - 컴포넌트 테스트 페이지 작성 (/test/components)
+  - Playwright MCP 테스트 완료 (반응형 + 다크 모드)
 
 - **Task 004: 주최자 모바일 UI/UX 완성**
   - 홈 페이지 (랜딩) UI 구현 (F001)

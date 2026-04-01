@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - heading "컴포넌트 테스트" [level=1] [ref=e4]
+      - paragraph [ref=e5]: Task 003에서 구현된 컴포넌트들을 더미 데이터로 렌더링 테스트합니다.
+    - generic [ref=e6]:
+      - link "EventCard 이벤트 카드 컴포넌트 (default/compact variant, 커버 이미지)" [ref=e7] [cursor=pointer]:
+        - /url: /test/components/event-card
+        - heading "EventCard" [level=2] [ref=e8]
+        - paragraph [ref=e9]: 이벤트 카드 컴포넌트 (default/compact variant, 커버 이미지)
+      - link "ParticipantCard 참여자 카드 컴포넌트 (default/compact variant, 호스트 표시)" [ref=e10] [cursor=pointer]:
+        - /url: /test/components/participant-card
+        - heading "ParticipantCard" [level=2] [ref=e11]
+        - paragraph [ref=e12]: 참여자 카드 컴포넌트 (default/compact variant, 호스트 표시)
+      - link "LoadingSkeletons 이벤트/참여자 카드 로딩 스켈레톤 컴포넌트" [ref=e13] [cursor=pointer]:
+        - /url: /test/components/loading-skeletons
+        - heading "LoadingSkeletons" [level=2] [ref=e14]
+        - paragraph [ref=e15]: 이벤트/참여자 카드 로딩 스켈레톤 컴포넌트
+      - link "EmptyStates 빈 상태 컴포넌트 (데이터 없음, 에러 상태)" [ref=e16] [cursor=pointer]:
+        - /url: /test/components/empty-states
+        - heading "EmptyStates" [level=2] [ref=e17]
+        - paragraph [ref=e18]: 빈 상태 컴포넌트 (데이터 없음, 에러 상태)
+    - link "← 홈으로 돌아가기" [ref=e20] [cursor=pointer]:
+      - /url: /
+  - button "Open Next.js Dev Tools" [ref=e26] [cursor=pointer]:
+    - img [ref=e27]
+  - alert [ref=e30]

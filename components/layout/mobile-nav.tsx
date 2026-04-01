@@ -19,19 +19,20 @@ interface MobileNavItem {
   icon: string;
 }
 
-/** 모바일 하단 네비게이션 메뉴 (주요 4개 항목) */
+/** 모바일 하단 네비게이션 메뉴 (5개 항목) */
 const MOBILE_NAV_ITEMS: MobileNavItem[] = [
+  { label: "카테고리", href: "/protected/categories", icon: "≡" },
+  { label: "검색", href: "/protected/search", icon: "🔍" },
   { label: "홈", href: "/protected", icon: "⊞" },
-  { label: "이벤트", href: "/protected/events", icon: "📅" },
-  { label: "참여자", href: "/protected/participants", icon: "👥" },
-  { label: "계정", href: "/protected/account", icon: "⚙" },
+  { label: "찜", href: "/protected/liked", icon: "💝" },
+  { label: "계정", href: "/protected/account", icon: "👤" },
 ];
 
 export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t bg-background">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 h-20 border-t bg-background/95 shadow-lg">
       <div className="flex h-full items-center justify-around">
         {MOBILE_NAV_ITEMS.map((item) => {
           // 정확한 경로 매칭: /protected는 정확히 일치, 나머지는 startsWith
@@ -40,19 +41,30 @@ export function MobileNav() {
               ? pathname === "/protected"
               : pathname.startsWith(item.href);
 
+          const isHome = item.href === "/protected";
+
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors",
-                isActive
+                "flex flex-1 flex-col items-center justify-center gap-1 py-2 transition-colors",
+                isHome
                   ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                  : isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground",
               )}
             >
-              <span className="text-lg leading-none">{item.icon}</span>
-              <span>{item.label}</span>
+              <span
+                className={cn(
+                  "leading-none transition-all",
+                  isHome ? "text-3xl" : "text-2xl",
+                )}
+              >
+                {item.icon}
+              </span>
+              <span className="text-xs font-medium">{item.label}</span>
             </Link>
           );
         })}

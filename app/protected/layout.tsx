@@ -34,7 +34,7 @@ export default async function ProtectedLayout({
       {/* 콘텐츠 + 하단 네비 컨테이너 (모바일 우선, 최대 너비 제한) */}
       <div className="mx-auto max-w-lg">
         {/* 메인 콘텐츠 영역 */}
-        <main className={["pt-16", "pb-16", "min-h-screen"].join(" ")}>
+        <main className={["pt-16", "pb-20", "min-h-screen"].join(" ")}>
           <div className="p-4 md:p-6">{children}</div>
         </main>
 

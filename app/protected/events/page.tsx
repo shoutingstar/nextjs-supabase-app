@@ -173,7 +173,7 @@ async function EventsContent() {
       {hostedEventsWithHost.length > 0 && (
         <Link
           href="/events/new"
-          className="fixed bottom-20 right-4 z-10"
+          className="fixed bottom-24 right-4 z-10"
           aria-label="이벤트 만들기"
         >
           <Button size="lg" className="h-14 w-14 rounded-full shadow-lg">
@@ -192,7 +192,7 @@ async function EventsContent() {
  */
 export default function EventsPage() {
   return (
-    <div className="space-y-6 pb-24">
+    <div className="space-y-6">
       {/* 상단 헤더 */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">이벤트</h1>

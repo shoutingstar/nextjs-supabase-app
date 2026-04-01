@@ -39,7 +39,7 @@ export default async function ProtectedLayout({
         className={[
           "pt-16", // Navbar 높이(h-16) 만큼 상단 패딩
           "pb-16 md:pb-0", // 모바일: MobileNav 높이 확보, 데스크톱: 불필요
-          "md:ml-64", // 데스크톱: Sidebar 너비(w-64) 만큼 좌측 마진
+          "md:ml-16", // 데스크톱: Sidebar 아이콘 너비(w-16) 만큼 좌측 마진
           "min-h-screen",
         ].join(" ")}
       >

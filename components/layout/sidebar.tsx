@@ -7,7 +7,6 @@
  */
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -28,18 +27,8 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function Sidebar() {
-  const pathname = usePathname();
-  const isAdmin = pathname.startsWith("/protected/admin");
-
   return (
-    <aside
-      className={cn(
-        "group fixed bottom-0 left-0 top-16 z-30 hidden overflow-hidden border-r bg-background transition-all duration-300 md:block",
-        isAdmin
-          ? "w-64" // 관리자: 항상 전체 너비
-          : "w-16 hover:w-64", // 일반 사용자: 호버 확장
-      )}
-    >
+    <aside className="group fixed bottom-0 left-0 top-16 z-30 hidden w-16 overflow-hidden border-r bg-background transition-all duration-300 hover:w-64 md:block">
       <nav className="flex flex-col gap-1 p-4">
         {NAV_ITEMS.map((item) => {
           // 정확한 경로 매칭: /protected는 정확히 일치, 나머지는 startsWith

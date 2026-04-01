@@ -52,7 +52,7 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed bottom-0 left-0 top-16 z-30 hidden w-64 border-r bg-background md:block">
+    <aside className="fixed bottom-0 left-0 top-16 z-40 hidden w-64 border-r bg-background md:block">
       {/* 관리자 구역 헤더 */}
       <div className="border-b px-4 py-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

@@ -11,21 +11,12 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-/** 모바일 네비게이션 아이템 타입 */
-interface MobileNavItem {
-  label: string;
-  href: string;
-  /** 아이콘 텍스트 (Phase 2에서 lucide-react 아이콘으로 교체 예정) */
-  icon: string;
-}
-
-/** 모바일 하단 네비게이션 메뉴 (5개 항목) */
+/** 모바일 하단 네비게이션 메뉴 (주요 4개 항목) */
 const MOBILE_NAV_ITEMS: MobileNavItem[] = [
-  { label: "카테고리", href: "/protected/categories", icon: "≡" },
-  { label: "검색", href: "/protected/search", icon: "🔍" },
   { label: "홈", href: "/protected", icon: "⊞" },
-  { label: "찜", href: "/protected/liked", icon: "💝" },
-  { label: "계정", href: "/protected/account", icon: "👤" },
+  { label: "이벤트", href: "/protected/events", icon: "📅" },
+  { label: "참여자", href: "/protected/participants", icon: "👥" },
+  { label: "계정", href: "/protected/account", icon: "⚙" },
 ];
 
 export function MobileNav() {

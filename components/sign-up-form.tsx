@@ -16,12 +16,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
+import type { SignUpFormProps } from "@/lib/types/component";
 import { cn } from "@/lib/utils";
 
 export function SignUpForm({
   className,
+  onSuccess,
+  onError,
+  redirectTo = "/protected",
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: SignUpFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -46,13 +50,25 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${window.location.origin}${redirectTo}`,
         },
       });
       if (error) throw error;
+      onSuccess?.({
+        id: "",
+        email,
+        name: null,
+        role: "user",
+        avatar_url: null,
+        created_at: new Date().toISOString(),
+        updated_at: null,
+      });
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      const message =
+        error instanceof Error ? error.message : "An error occurred";
+      setError(message);
+      onError?.(message);
     } finally {
       setIsLoading(false);
     }

@@ -16,12 +16,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
+import type { LoginFormProps } from "@/lib/types/component";
 import { cn } from "@/lib/utils";
 
 export function LoginForm({
   className,
+  onSuccess,
+  onError,
+  redirectTo = "/protected",
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,8 +44,16 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      onSuccess?.({
+        id: "",
+        email,
+        name: null,
+        role: "user",
+        avatar_url: null,
+        created_at: new Date().toISOString(),
+        updated_at: null,
+      });
+      router.push(redirectTo);
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

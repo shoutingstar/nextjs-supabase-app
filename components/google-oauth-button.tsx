@@ -4,17 +4,16 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
-
-interface GoogleOAuthButtonProps {
-  next?: string;
-  label?: string;
-}
+import type { GoogleOAuthButtonProps } from "@/lib/types/component";
 
 export function GoogleOAuthButton({
   next = "/protected",
   label = "Continue with Google",
+  isLoading: externalLoading = false,
+  onSuccess,
+  onError,
 }: GoogleOAuthButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(externalLoading ?? false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGoogleLogin = async () => {
@@ -33,14 +32,20 @@ export function GoogleOAuthButton({
       });
 
       if (error) {
-        setError(error.message);
+        const message = error.message;
+        setError(message);
         setIsLoading(false);
+        onError?.(message);
+      } else {
+        onSuccess?.();
+        // 에러가 없으면 Supabase가 Google로 자동 리다이렉트하므로
+        // setIsLoading(false)를 호출할 필요가 없음
       }
-      // 에러가 없으면 Supabase가 Google로 자동 리다이렉트하므로
-      // setIsLoading(false)를 호출할 필요가 없음
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      const message = err instanceof Error ? err.message : "An error occurred";
+      setError(message);
       setIsLoading(false);
+      onError?.(message);
     }
   };
 

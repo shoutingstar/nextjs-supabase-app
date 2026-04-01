@@ -2,24 +2,7 @@
 
 import { Calendar, MapPin, Users } from "lucide-react";
 
-interface Event {
-  id: string;
-  title: string;
-  description?: string;
-  start_date: string;
-  location?: string;
-  host?: {
-    id: string;
-    full_name: string;
-    email: string;
-  };
-  participants_count?: number;
-}
-
-interface EventCardProps {
-  event: Event;
-  variant?: "default" | "compact";
-}
+import type { EventCardProps } from "@/lib/types/component";
 
 export function EventCard({ event, variant = "default" }: EventCardProps) {
   const startDate = new Date(event.start_date);

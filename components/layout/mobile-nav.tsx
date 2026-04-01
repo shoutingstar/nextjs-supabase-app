@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * 모바일 하단 네비게이션 바
- * md(768px) 미만에서만 표시 (fixed bottom)
+ * 사용자용 하단 탭 네비게이션
+ * 모든 화면 크기에서 표시 (모바일 우선 설계)
  * usePathname으로 현재 경로에 따라 active 상태 표시
  */
 
@@ -31,7 +31,7 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t bg-background md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t bg-background">
       <div className="flex h-full items-center justify-around">
         {MOBILE_NAV_ITEMS.map((item) => {
           // 정확한 경로 매칭: /protected는 정확히 일치, 나머지는 startsWith

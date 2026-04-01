@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useState } from "react";
 
@@ -9,9 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 interface CarpoolContentProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   slot: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   userCarpoolStatus: any;
   eventId: string;
 }
@@ -29,7 +29,6 @@ export function CarpoolContent({
   const [selectedRequestId, setSelectedRequestId] = useState("");
   const [selectedUserName, setSelectedUserName] = useState("");
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const approvedRequests =
     slot?.carpool_requests?.filter((r: any) => r.status === "approved") || [];
   const availableSeats = slot ? slot.total_seats - approvedRequests.length : 0;
@@ -122,7 +121,7 @@ export function CarpoolContent({
             </Card>
           ) : (
             <div className="space-y-3">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {}
               {approvedRequests.map((request: any) => (
                 <Card key={request.id} className="p-4">
                   <div className="flex items-center justify-between">
@@ -143,7 +142,7 @@ export function CarpoolContent({
 
         <div>
           <h3 className="mb-4 text-lg font-bold">신청 대기</h3>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           {(slot.carpool_requests || []).filter(
             (r: any) => r.status === "pending",
           ).length === 0 ? (
@@ -152,7 +151,7 @@ export function CarpoolContent({
             </Card>
           ) : (
             <div className="space-y-3">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {}
               {(slot.carpool_requests || [])
                 .filter((r: any) => r.status === "pending")
                 .map((request: any) => (

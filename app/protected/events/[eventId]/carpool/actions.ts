@@ -1,4 +1,5 @@
 "use server";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { revalidatePath } from "next/cache";
 
@@ -137,7 +138,7 @@ export async function requestCarpool(
   if (!slot) {
     throw new Error("카풀 정보를 찾을 수 없습니다");
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const approvedCount = (slot.carpool_requests || []).filter(
     (r: any) => r.status === "approved",
   ).length;
@@ -188,7 +189,6 @@ export async function approveCarpoolRequest(
     throw new Error("신청을 찾을 수 없습니다");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const slots = request.carpool_slots as any;
   if (slots?.driver_id !== user.id) {
     throw new Error("신청을 승인할 권한이 없습니다");
@@ -234,7 +234,6 @@ export async function rejectCarpoolRequest(requestId: string, eventId: string) {
     throw new Error("신청을 찾을 수 없습니다");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const slots = request.carpool_slots as any;
   if (slots?.driver_id !== user.id) {
     throw new Error("신청을 거절할 권한이 없습니다");

@@ -31,21 +31,16 @@ export default async function ProtectedLayout({
       {/* 상단 네비게이션 바 */}
       <Navbar />
 
-      {/* 메인 콘텐츠 영역 (모바일 우선, 최대 너비 제한) */}
-      <main
-        className={[
-          "pt-16",
-          "pb-16",
-          "min-h-screen",
-          "mx-auto",
-          "max-w-lg",
-        ].join(" ")}
-      >
-        <div className="p-4 md:p-6">{children}</div>
-      </main>
+      {/* 콘텐츠 + 하단 네비 컨테이너 (모바일 우선, 최대 너비 제한) */}
+      <div className="mx-auto max-w-lg">
+        {/* 메인 콘텐츠 영역 */}
+        <main className={["pt-16", "pb-16", "min-h-screen"].join(" ")}>
+          <div className="p-4 md:p-6">{children}</div>
+        </main>
 
-      {/* 하단 탭 네비게이션 (모든 화면 크기에서 표시) */}
-      <MobileNav />
+        {/* 하단 탭 네비게이션 (max-w-lg 안에 포함) */}
+        <MobileNav />
+      </div>
     </div>
   );
 }

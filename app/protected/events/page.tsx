@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { EventCard } from "@/components/events/event-card";
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,11 @@ import {
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * 이벤트 목록 페이지 (Server Component)
+ * 이벤트 콘텐츠 (async Server Component)
  *
- * 현재 사용자가 만든 이벤트와 참여한 이벤트를 표시합니다.
+ * 데이터베이스에서 이벤트 데이터를 조회합니다.
  */
-export default async function EventsPage() {
+async function EventsContent() {
   // A. 인증 확인
   const supabase = await createClient();
   const {
@@ -37,15 +38,7 @@ export default async function EventsPage() {
   const showFAB = hostedEventsWithHost.length > 0;
 
   return (
-    <div className="space-y-8 pb-24">
-      {/* 헤더 */}
-      <div>
-        <h1 className="text-2xl font-bold">내 이벤트</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          참여하거나 호스팅하는 이벤트를 관리하세요
-        </p>
-      </div>
-
+    <>
       {/* 내가 만든 이벤트 */}
       <section>
         <h2 className="mb-4 text-lg font-semibold">내가 만든 이벤트</h2>
@@ -105,6 +98,30 @@ export default async function EventsPage() {
           </Button>
         </Link>
       )}
+    </>
+  );
+}
+
+/**
+ * 이벤트 목록 페이지
+ *
+ * Suspense로 async 콘텐츠를 감싼 동기 컴포넌트
+ */
+export default function EventsPage() {
+  return (
+    <div className="space-y-8 pb-24">
+      {/* 헤더 */}
+      <div>
+        <h1 className="text-2xl font-bold">내 이벤트</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          참여하거나 호스팅하는 이벤트를 관리하세요
+        </p>
+      </div>
+
+      {/* Suspense로 async 콘텐츠 래핑 */}
+      <Suspense fallback={<div>로딩 중...</div>}>
+        <EventsContent />
+      </Suspense>
     </div>
   );
 }

@@ -31,8 +31,16 @@ export default async function ProtectedLayout({
       {/* 상단 네비게이션 바 */}
       <Navbar />
 
-      {/* 메인 콘텐츠 영역 (사용자 페이지는 좌측 네비게이션 없음) */}
-      <main className={["pt-16", "pb-16", "min-h-screen"].join(" ")}>
+      {/* 메인 콘텐츠 영역 (모바일 우선, 최대 너비 제한) */}
+      <main
+        className={[
+          "pt-16",
+          "pb-16",
+          "min-h-screen",
+          "mx-auto",
+          "max-w-lg",
+        ].join(" ")}
+      >
         <div className="p-4 md:p-6">{children}</div>
       </main>
 

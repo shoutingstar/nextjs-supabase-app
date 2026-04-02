@@ -3,11 +3,13 @@
 /**
  * 관리자 전용 사이드바 네비게이션
  * /protected/admin 하위 경로에서만 사용
- * usePathname으로 현재 경로에 따라 active 상태 표시
+ * - 상단: Gather 로고 (대시보드로 이동)
+ * - 중단: 관리자 섹션 메뉴
+ * - 하단: 일반 영역으로 돌아가기
  */
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -50,10 +52,27 @@ const ADMIN_NAV_ITEMS: AdminNavItem[] = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    // 로고 클릭 시 관리자 대시보드로 이동
+    router.push("/protected/admin");
+  };
 
   return (
     <aside className="fixed bottom-0 left-0 top-16 z-40 hidden w-64 border-r bg-background md:block">
-      {/* 관리자 구역 헤더 */}
+      {/* Gather 로고 영역 - 클릭 시 대시보드로 이동 */}
+      <div className="border-b px-4 py-4">
+        <button
+          onClick={handleLogoClick}
+          className="flex w-full items-center justify-center rounded-lg bg-accent/10 px-3 py-3 text-2xl font-bold text-accent transition-colors hover:bg-accent/20"
+          title="관리자 대시보드"
+        >
+          ◈
+        </button>
+      </div>
+
+      {/* 관리자 섹션 헤더 */}
       <div className="border-b px-4 py-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           관리자 영역

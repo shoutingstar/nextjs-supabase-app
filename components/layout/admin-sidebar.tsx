@@ -60,7 +60,7 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r bg-background pt-16 md:block">
+    <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r bg-background pt-14 md:block">
       {/* Gather 로고 영역 - 클릭 시 대시보드로 이동 */}
       <div className="border-b px-4 py-1">
         <button

@@ -33,7 +33,10 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
     return (
       <div className="flex gap-4 rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
         {/* 날짜 박스 */}
-        <div className="flex flex-col items-center justify-center rounded-lg bg-primary px-4 py-3 text-white">
+        <div
+          className="flex flex-col items-center justify-center rounded-lg bg-primary px-4 py-3 text-white"
+          suppressHydrationWarning
+        >
           <p className="text-2xl font-bold">{formattedDate}</p>
           <p className="text-xs opacity-90">{formattedTime}</p>
         </div>
@@ -106,7 +109,7 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
 
         {/* 메타 정보: 날짜, 장소, 참여자 수 */}
         <div className="space-y-2 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2" suppressHydrationWarning>
             <Calendar className="h-4 w-4" />
             <span>
               {startDate.toLocaleDateString("ko-KR", {

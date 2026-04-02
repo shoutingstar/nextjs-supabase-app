@@ -62,7 +62,7 @@ export function AdminSidebar() {
   return (
     <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r bg-background md:block">
       {/* Gather 로고 영역 - 클릭 시 대시보드로 이동 (navbar 바로 아래) */}
-      <div className="mt-16 border-b px-4 py-3">
+      <div className="border-b px-4 py-3">
         <button
           onClick={handleLogoClick}
           className="w-full text-center text-lg font-bold text-black transition-opacity hover:opacity-70 dark:text-white"

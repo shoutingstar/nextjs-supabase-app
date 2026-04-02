@@ -1,7 +1,11 @@
+"use cache";
+
 /**
  * 대시보드 페이지 (/protected)
  * Phase 2: 더미 데이터(MOCK_EVENTS, MOCK_CURRENT_USER) 사용
  * Phase 3에서 Supabase 쿼리로 교체 예정
+ *
+ * use cache를 사용하여 new Date() 사용 가능하게 함
  */
 
 import { AlertCircle, Calendar, Users } from "lucide-react";

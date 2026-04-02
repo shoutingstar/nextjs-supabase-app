@@ -40,7 +40,10 @@ export function DashboardContent() {
     <div className="space-y-6 pb-24">
       {/* 인사말 및 헤더 */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1
+          className="text-2xl font-bold tracking-tight"
+          suppressHydrationWarning
+        >
           어서오세요, {MOCK_CURRENT_USER.name}! 👋
         </h1>
         <p className="mt-1 text-muted-foreground">

@@ -8,7 +8,6 @@ import type { EventDetail } from "@/lib/types/event";
 import type { ParticipantDetail } from "@/lib/types/participant";
 import type { User } from "@/lib/types/user";
 import {
-  generateRandomEvent,
   generateRandomParticipant,
   generateRandomUser,
 } from "@/lib/utils/data-generators";
@@ -115,25 +114,43 @@ export const MOCK_EVENTS: EventDetail[] = [
       avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.avatar_url,
     },
   },
-  // Event 4-30: 추가 더미 이벤트 (생성 함수 사용)
+  // Event 4-30: 추가 더미 이벤트 (고정된 데이터)
   ...Array.from({ length: 27 }, (_, i) => {
     const idx = i + 3;
+    const eventNum = idx + 1;
     const hostId = HOST_IDS[idx % HOST_IDS.length];
     const host = MOCK_USERS.find((u) => u.id === hostId)!;
-    const event = generateRandomEvent(hostId);
-    // ID를 고정된 형식으로 변경
-    const fixedEvent = {
-      ...event,
-      id: `event-${String(idx + 1).padStart(3, "0")}`,
-    };
+
     return {
-      ...fixedEvent,
+      id: `event-${String(eventNum).padStart(3, "0")}`,
+      title: `이벤트 ${eventNum}`,
+      description: `${eventNum}번째 이벤트입니다. 더미 데이터로 테스트합니다.`,
+      start_date: new Date(
+        Date.now() + (eventNum % 14) * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      location: `서울 ${eventNum % 10 === 0 ? "강남" : eventNum % 10 === 1 ? "서초" : eventNum % 10 === 2 ? "종로" : eventNum % 10 === 3 ? "마포" : "송파"}구`,
+      host_id: hostId,
+      status:
+        eventNum % 5 === 0
+          ? "draft"
+          : eventNum % 5 === 1
+            ? "completed"
+            : "published",
+      invite_code: `GATHER${String(eventNum).padStart(3, "0")}`,
+      max_participants: 20 + eventNum,
+      cover_image: `https://picsum.photos/seed/event${eventNum}/800/400`,
+      participant_count: 5 + (eventNum % 15),
+      created_at: new Date(
+        Date.now() - (27 - eventNum) * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      updated_at: new Date(
+        Date.now() - (27 - eventNum) * 12 * 60 * 60 * 1000,
+      ).toISOString(),
       host: {
         id: host.id,
         name: host.name,
         avatar_url: host.avatar_url,
       },
-      participant_count: Math.floor(Math.random() * 20) + 1,
     } satisfies EventDetail;
   }),
 ];
@@ -176,6 +193,102 @@ export const MOCK_HOST_PARTICIPANT: ParticipantDetail = {
     name: MOCK_HOST.name,
     avatar_url: MOCK_HOST.avatar_url,
   },
+};
+
+/* ============================================================================
+ * 이벤트-참여자 매핑 (Phase 2: 더미 데이터)
+ * Phase 3에서 event_participants 테이블 쿼리로 교체 예정
+ * ============================================================================ */
+
+/**
+ * 각 이벤트의 참여자 목록
+ * @description 이벤트 ID를 키로 하고, 참여자 사용자 ID 배열을 값으로 함
+ * MOCK_CURRENT_USER(MOCK_USERS[2])는 여러 이벤트에 참여하도록 설정
+ */
+export const MOCK_EVENT_PARTICIPANTS: Record<string, string[]> = {
+  // event-001: 8명 참여 (MOCK_CURRENT_USER 포함)
+  "event-001": [
+    MOCK_USERS[5].id,
+    MOCK_USERS[6].id,
+    MOCK_CURRENT_USER.id, // MOCK_USERS[2]
+    MOCK_USERS[8].id,
+    MOCK_USERS[9].id,
+    MOCK_USERS[10].id,
+    MOCK_USERS[11].id,
+    MOCK_USERS[12].id,
+  ],
+  // event-002: 12명 참여 (MOCK_CURRENT_USER 포함)
+  "event-002": [
+    MOCK_USERS[5].id,
+    MOCK_USERS[7].id,
+    MOCK_USERS[13].id,
+    MOCK_CURRENT_USER.id,
+    MOCK_USERS[14].id,
+    MOCK_USERS[15].id,
+    MOCK_USERS[16].id,
+    MOCK_USERS[17].id,
+    MOCK_USERS[18].id,
+    MOCK_USERS[19].id,
+    MOCK_USERS[20].id,
+    MOCK_USERS[21].id,
+  ],
+  // event-004: 6명 참여 (MOCK_CURRENT_USER 포함)
+  "event-004": [
+    MOCK_USERS[6].id,
+    MOCK_USERS[8].id,
+    MOCK_CURRENT_USER.id,
+    MOCK_USERS[10].id,
+    MOCK_USERS[22].id,
+    MOCK_USERS[23].id,
+  ],
+  // event-005: 5명 참여 (MOCK_CURRENT_USER 미포함, published 상태)
+  "event-005": [
+    MOCK_USERS[7].id,
+    MOCK_USERS[9].id,
+    MOCK_USERS[15].id,
+    MOCK_USERS[24].id,
+    MOCK_USERS[25].id,
+  ],
+  // event-006: 7명 참여 (MOCK_CURRENT_USER 포함)
+  "event-006": [
+    MOCK_USERS[5].id,
+    MOCK_CURRENT_USER.id,
+    MOCK_USERS[11].id,
+    MOCK_USERS[14].id,
+    MOCK_USERS[26].id,
+    MOCK_USERS[27].id,
+    MOCK_USERS[28].id,
+  ],
+  // event-007: 4명 참여 (MOCK_CURRENT_USER 미포함)
+  "event-007": [
+    MOCK_USERS[8].id,
+    MOCK_USERS[12].id,
+    MOCK_USERS[16].id,
+    MOCK_USERS[29].id,
+  ],
+  // event-008: 9명 참여 (MOCK_CURRENT_USER 포함)
+  "event-008": [
+    MOCK_USERS[6].id,
+    MOCK_USERS[9].id,
+    MOCK_CURRENT_USER.id,
+    MOCK_USERS[13].id,
+    MOCK_USERS[17].id,
+    MOCK_USERS[19].id,
+    MOCK_USERS[30].id,
+    MOCK_USERS[31].id,
+    MOCK_USERS[32].id,
+  ],
+  // event-009: 3명 참여 (MOCK_CURRENT_USER 미포함)
+  "event-009": [MOCK_USERS[7].id, MOCK_USERS[14].id, MOCK_USERS[20].id],
+  // event-010: 6명 참여 (MOCK_CURRENT_USER 포함)
+  "event-010": [
+    MOCK_USERS[5].id,
+    MOCK_CURRENT_USER.id,
+    MOCK_USERS[18].id,
+    MOCK_USERS[21].id,
+    MOCK_USERS[33].id,
+    MOCK_USERS[34].id,
+  ],
 };
 
 /* ============================================================================

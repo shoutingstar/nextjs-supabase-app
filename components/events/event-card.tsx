@@ -27,23 +27,28 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
   });
 
   /* ----------------------------------------------------------------
-   * compact variant: 날짜 박스 + 이벤트 기본 정보
+   * compact variant: 커버 이미지 + 날짜 박스 + 이벤트 기본 정보
    * ---------------------------------------------------------------- */
   if (variant === "compact") {
     return (
       <div className="flex gap-4 rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
-        {/* 날짜 박스 */}
-        <div
-          className="flex flex-col items-center justify-center rounded-lg bg-primary px-4 py-3 text-white"
-          suppressHydrationWarning
-        >
-          <p className="text-2xl font-bold">{formattedDate}</p>
-          <p className="text-xs opacity-90">{formattedTime}</p>
-        </div>
+        {/* 왼쪽: 커버 이미지 (있을 때만 표시) */}
+        {event.cover_image && (
+          <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-lg">
+            <Image
+              src={event.cover_image}
+              alt={`${event.title} 커버 이미지`}
+              fill
+              sizes="128px"
+              className="object-cover"
+              priority={false}
+            />
+          </div>
+        )}
 
-        {/* 이벤트 정보 */}
-        <div className="flex-1">
-          <h3 className="font-semibold">{event.title}</h3>
+        {/* 오른쪽: 이벤트 정보 */}
+        <div className="min-w-0 flex-1">
+          <h3 className="line-clamp-2 font-semibold">{event.title}</h3>
           <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
             {event.description}
           </p>

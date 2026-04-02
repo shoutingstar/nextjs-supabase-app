@@ -6,17 +6,24 @@
  * usePathname으로 현재 경로에 따라 active 상태 표시
  */
 
+import { Calendar, Home, type LucideIcon, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
+interface NavItem {
+  label: string;
+  href: string;
+  icon: LucideIcon;
+}
+
 /** 모바일 하단 네비게이션 메뉴 (주요 4개 항목) */
-const MOBILE_NAV_ITEMS: MobileNavItem[] = [
-  { label: "홈", href: "/protected", icon: "⊞" },
-  { label: "이벤트", href: "/protected/events", icon: "📅" },
-  { label: "참여자", href: "/protected/participants", icon: "👥" },
-  { label: "계정", href: "/protected/account", icon: "⚙" },
+const MOBILE_NAV_ITEMS: NavItem[] = [
+  { label: "홈", href: "/protected", icon: Home },
+  { label: "이벤트", href: "/protected/events", icon: Calendar },
+  { label: "참여자", href: "/protected/participants", icon: Users },
+  { label: "계정", href: "/protected/account", icon: Settings },
 ];
 
 export function MobileNav() {
@@ -32,7 +39,7 @@ export function MobileNav() {
               ? pathname === "/protected"
               : pathname.startsWith(item.href);
 
-          const isHome = item.href === "/protected";
+          const Icon = item.icon;
 
           return (
             <Link
@@ -40,21 +47,12 @@ export function MobileNav() {
               href={item.href}
               className={cn(
                 "flex flex-1 flex-col items-center justify-center gap-1 py-2 transition-colors",
-                isHome
+                isActive
                   ? "text-primary"
-                  : isActive
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground",
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
-              <span
-                className={cn(
-                  "leading-none transition-all",
-                  isHome ? "text-3xl" : "text-2xl",
-                )}
-              >
-                {item.icon}
-              </span>
+              <Icon className="h-5 w-5" />
               <span className="text-xs font-medium">{item.label}</span>
             </Link>
           );

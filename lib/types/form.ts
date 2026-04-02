@@ -149,19 +149,9 @@ export type SignUpSchema = any; // Zod 설치 후 구체화
 
 /**
  * 이벤트 생성 검증 스키마
- * @example
- * ```typescript
- * export const createEventSchema = z.object({
- *   title: z.string().min(1, '제목을 입력하세요').max(100),
- *   description: z.string().optional(),
- *   start_date: z.string().datetime('유효한 날짜를 입력하세요'),
- *   location: z.string().optional(),
- *   max_participants: z.number().int().positive().optional(),
- *   cover_image: z.instanceof(File).optional(),
- * });
- * ```
+ * @see lib/validators/event-schema.ts
  */
-export type CreateEventSchema = any; // Zod 설치 후 구체화
+export type { CreateEventFormValues as CreateEventSchema } from "@/lib/validators/event-schema";
 
 /**
  * RSVP 업데이트 검증 스키마

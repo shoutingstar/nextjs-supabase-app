@@ -101,17 +101,17 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
   }
 
   return (
-    <div className="flex w-full max-w-2xl flex-1 flex-col gap-8">
+    <div className="mx-auto w-full max-w-2xl space-y-6 pb-24">
       <div>
-        <h1 className="text-3xl font-bold">프로필 설정</h1>
+        <h1 className="text-2xl font-bold tracking-tight">계정 설정</h1>
         <p className="mt-1 text-muted-foreground">
-          프로필 정보를 확인하고 수정할 수 있습니다.
+          프로필 정보를 확인하고 수정하세요.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>계정 정보</CardTitle>
+          <CardTitle>기본 정보</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* 이메일 (읽기 전용) */}

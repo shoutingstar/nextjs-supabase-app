@@ -1,13 +1,18 @@
 /**
  * 이벤트 수정 페이지 (/protected/events/[eventId]/edit)
- * Phase 2에서 실제 이벤트 수정 폼 구현 예정
+ * UpdateEventForm으로 기존 이벤트 데이터를 수정합니다.
+ * Phase 2: 더미 데이터(MOCK_EVENTS) 사용
  */
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { UpdateEventForm } from "@/components/forms/update-event-form";
+import { MOCK_EVENTS } from "@/lib/data/mock-data";
 
 export const metadata: Metadata = {
-  title: "이벤트 수정 | 이벤트 플래너",
+  title: "이벤트 수정 | Gather",
 };
 
 interface EditEventPageProps {
@@ -18,13 +23,21 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
   // Next.js 15: params는 Promise로 처리
   const { eventId } = await params;
 
+  // 더미 데이터에서 이벤트 조회 (Phase 3에서 Supabase 쿼리로 교체)
+  const event = MOCK_EVENTS.find((e) => e.id === eventId);
+
+  // 이벤트가 없으면 404
+  if (!event) {
+    notFound();
+  }
+
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6 pb-24">
       {/* 페이지 헤더 */}
       <div className="flex items-center gap-3">
         <Link
           href={`/protected/events/${eventId}`}
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           ← 이벤트 상세
         </Link>
@@ -32,62 +45,17 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight">이벤트 수정</h1>
-        <p className="text-sm text-muted-foreground">ID: {eventId}</p>
-      </div>
-
-      {/* TODO: Phase 2 - 이벤트 수정 폼 (기존 값 불러와서 초기화) */}
-      <div className="rounded-lg border p-6">
-        <p className="text-center text-sm text-muted-foreground">
-          Phase 2에서 이벤트 수정 폼이 구현됩니다.
+        <p className="mt-1 text-muted-foreground">
+          이벤트 정보를 변경한 후 저장하세요.
         </p>
-        <div className="mt-4 space-y-4">
-          {[
-            "이벤트 제목",
-            "날짜 및 시간",
-            "장소",
-            "최대 참여 인원",
-            "설명",
-          ].map((field) => (
-            <div key={field} className="space-y-1">
-              <label className="text-sm font-medium text-muted-foreground">
-                {field}
-              </label>
-              <div className="h-9 w-full rounded-md border bg-muted/30" />
-            </div>
-          ))}
-        </div>
       </div>
 
-      {/* 이벤트 상태 변경 (취소/완료) */}
-      <div className="rounded-lg border border-destructive/30 p-6">
-        <h3 className="mb-2 text-sm font-semibold text-destructive">
-          위험 구역
-        </h3>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Phase 2에서 이벤트 취소/삭제 기능이 구현됩니다.
-        </p>
-        <button
-          disabled
-          className="rounded-md border border-destructive px-4 py-2 text-sm text-destructive opacity-50"
-        >
-          이벤트 취소
-        </button>
-      </div>
-
-      {/* 폼 액션 버튼 */}
-      <div className="flex justify-end gap-2">
-        <Link
-          href={`/protected/events/${eventId}`}
-          className="inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-medium hover:bg-accent"
-        >
-          취소
-        </Link>
-        <button
-          disabled
-          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground opacity-50"
-        >
-          변경 저장
-        </button>
+      {/* 이벤트 수정 폼 */}
+      <div className="rounded-lg border bg-card p-6 shadow-sm">
+        <UpdateEventForm
+          event={event}
+          redirectTo={`/protected/events/${eventId}`}
+        />
       </div>
     </div>
   );

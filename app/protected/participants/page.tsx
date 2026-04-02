@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function ParticipantsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">참여자 관리</h1>
         <p className="text-muted-foreground">

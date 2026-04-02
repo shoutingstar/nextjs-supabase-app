@@ -47,33 +47,96 @@ const HOST_IDS = MOCK_USERS.slice(0, 5).map((u) => u.id);
  * 테스트용 고정 이벤트 목록
  * @description start_date는 현재 기준 ±7일 범위로 생성됨
  */
-export const MOCK_EVENTS = Array.from({ length: 30 }, (_, i) => {
-  const hostId = HOST_IDS[i % HOST_IDS.length];
-  const host = MOCK_USERS.find((u) => u.id === hostId)!;
-
-  const event = generateRandomEvent(hostId, {
-    // 처음 3개는 상태를 고정
-    ...(i === 0 && {
-      status: "published",
-      title: "Next.js 15 핵심 기능 스터디",
-    }),
-    ...(i === 1 && { status: "published", title: "React 19 실전 워크숍" }),
-    ...(i === 2 && { status: "draft", title: "[초안] TypeScript 심화 과정" }),
-  });
-
-  // EventDetail 형태로 확장 (호스트 정보 + 참여자 수 포함)
-  const participantCount = Math.floor(Math.random() * 20) + 1;
-
-  return {
-    ...event,
+/**
+ * 더미 이벤트 데이터
+ * 고정된 ID를 사용하여 라우팅 테스트 가능하도록 설정
+ */
+export const MOCK_EVENTS: EventDetail[] = [
+  // Event 1: 이벤트 1 (호스트: 사용자 1)
+  {
+    id: "event-001",
+    title: "Next.js 15 핵심 기능 스터디",
+    description: "Next.js 15의 최신 기능을 함께 학습합니다.",
+    start_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+    location: "서울 강남구 역삼동",
+    host_id: HOST_IDS[0],
+    status: "published",
+    invite_code: "GATHER001",
+    max_participants: 20,
+    cover_image: "https://picsum.photos/seed/event001/800/400?random=1",
+    participant_count: 8,
+    created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
     host: {
-      id: host.id,
-      name: host.name,
-      avatar_url: host.avatar_url,
+      id: HOST_IDS[0],
+      name: MOCK_USERS.find((u) => u.id === HOST_IDS[0])?.name || "주최자 1",
+      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[0])?.avatar_url,
     },
-    participant_count: participantCount,
-  } satisfies EventDetail;
-});
+  },
+  // Event 2: 이벤트 2 (호스트: 사용자 2)
+  {
+    id: "event-002",
+    title: "React 19 실전 워크숍",
+    description: "React 19의 새로운 기능을 실습합니다.",
+    start_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+    location: "서울 서초구 테헤란로",
+    host_id: HOST_IDS[1],
+    status: "published",
+    invite_code: "GATHER002",
+    max_participants: 30,
+    cover_image: "https://picsum.photos/seed/event002/800/400?random=1",
+    participant_count: 12,
+    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    updated_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    host: {
+      id: HOST_IDS[1],
+      name: MOCK_USERS.find((u) => u.id === HOST_IDS[1])?.name || "주최자 2",
+      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[1])?.avatar_url,
+    },
+  },
+  // Event 3: 이벤트 3 (호스트: 사용자 3) - 초안 상태
+  {
+    id: "event-003",
+    title: "[초안] TypeScript 심화 과정",
+    description: "TypeScript의 고급 개념을 깊이 있게 학습합니다.",
+    start_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+    location: "서울 중구",
+    host_id: HOST_IDS[2],
+    status: "draft",
+    invite_code: null,
+    max_participants: 25,
+    cover_image: null,
+    participant_count: 0,
+    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    updated_at: null,
+    host: {
+      id: HOST_IDS[2],
+      name: MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.name || "주최자 3",
+      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.avatar_url,
+    },
+  },
+  // Event 4-30: 추가 더미 이벤트 (생성 함수 사용)
+  ...Array.from({ length: 27 }, (_, i) => {
+    const idx = i + 3;
+    const hostId = HOST_IDS[idx % HOST_IDS.length];
+    const host = MOCK_USERS.find((u) => u.id === hostId)!;
+    const event = generateRandomEvent(hostId);
+    // ID를 고정된 형식으로 변경
+    const fixedEvent = {
+      ...event,
+      id: `event-${String(idx + 1).padStart(3, "0")}`,
+    };
+    return {
+      ...fixedEvent,
+      host: {
+        id: host.id,
+        name: host.name,
+        avatar_url: host.avatar_url,
+      },
+      participant_count: Math.floor(Math.random() * 20) + 1,
+    } satisfies EventDetail;
+  }),
+];
 
 /* ============================================================================
  * 더미 참여자 데이터

@@ -1,25 +1,19 @@
-"use cache";
+"use client";
 
 /**
  * 대시보드 페이지 (/protected)
  * Phase 2: 더미 데이터(MOCK_EVENTS, MOCK_CURRENT_USER) 사용
  * Phase 3에서 Supabase 쿼리로 교체 예정
  *
- * use cache를 사용하여 new Date() 사용 가능하게 함
+ * 클라이언트 컴포넌트로 new Date() 사용 가능
  */
 
 import { AlertCircle, Calendar, Users } from "lucide-react";
-import type { Metadata } from "next";
 import Link from "next/link";
 
 import { EventCard } from "@/components/events/event-card";
 import { Button } from "@/components/ui/button";
 import { MOCK_CURRENT_USER, MOCK_EVENTS } from "@/lib/data/mock-data";
-
-export const metadata: Metadata = {
-  title: "대시보드 | Gather",
-  description: "이벤트 현황을 한눈에 확인하세요.",
-};
 
 export default function DashboardPage() {
   // 현재 사용자의 이벤트 분석

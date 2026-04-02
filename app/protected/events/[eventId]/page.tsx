@@ -126,7 +126,7 @@ export default async function EventDetailPage({
 
       {/* 커버 이미지 */}
       {event.cover_image && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+        <div className="relative aspect-video min-h-64 w-full overflow-hidden rounded-lg bg-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={event.cover_image}

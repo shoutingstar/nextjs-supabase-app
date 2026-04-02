@@ -218,7 +218,7 @@ export function generateRandomEvent(
       Math.random() > 0.5 ? generateId().slice(0, 8).toUpperCase() : null,
     max_participants: hasMaxParticipants ? randomInt(5, 50) : null,
     cover_image: hasCoverImage
-      ? `https://picsum.photos/seed/${generateId().slice(0, 8)}/800/400`
+      ? `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 1000)}`
       : null,
     created_at: randomDateNear(30),
     updated_at: Math.random() > 0.5 ? randomDateNear(7) : null,

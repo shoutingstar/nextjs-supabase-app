@@ -47,7 +47,7 @@ export function StatsCharts() {
           <CardDescription>최근 30일 누적 가입자 수</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart data={MOCK_DAILY_USERS}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
@@ -71,7 +71,7 @@ export function StatsCharts() {
           <CardDescription>최근 30일 상태별 이벤트 생성 수</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={MOCK_DAILY_EVENTS}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
@@ -86,15 +86,15 @@ export function StatsCharts() {
         </CardContent>
       </Card>
 
-      {/* 상태 분포 & 역할 분포 */}
-      <div className="grid gap-6 md:grid-cols-2">
+      {/* 상태 분포 & 역할 분포 - 2열 레이아웃 */}
+      <div className="grid grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>이벤트 상태 분포</CardTitle>
             <CardDescription>현재 이벤트 상태별 개수</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={400}>
               <PieChart>
                 <Pie
                   data={MOCK_EVENT_STATUS_DISTRIBUTION}
@@ -122,7 +122,7 @@ export function StatsCharts() {
             <CardDescription>현재 사용자 역할별 개수</CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={400}>
               <PieChart>
                 <Pie
                   data={MOCK_USER_ROLE_DISTRIBUTION}
@@ -152,7 +152,7 @@ export function StatsCharts() {
           <CardDescription>참여자 수 기준</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart
               data={MOCK_TOP_EVENTS}
               layout="vertical"

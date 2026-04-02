@@ -70,15 +70,17 @@ export default async function AdminSectionPage({
   const meta = SECTION_META[validSection];
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 px-6 py-6 lg:px-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{meta.title}</h1>
         <p className="mt-2 text-muted-foreground">{meta.description}</p>
       </div>
 
-      {/* 섹션별 콘텐츠 렌더링 */}
+      {/* 섹션별 콘텐츠 렌더링 - 데스크톱 풀 너비 테이블 */}
       {validSection === "events" && <EventsTable />}
       {validSection === "users" && <UsersTable />}
+
+      {/* 차트는 전체 너비 활용 */}
       {validSection === "stats" && <StatsCharts />}
     </div>
   );

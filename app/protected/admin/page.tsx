@@ -83,7 +83,7 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 px-6 py-6 lg:px-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">관리자 대시보드</h1>
         <p className="mt-2 text-muted-foreground">
@@ -91,8 +91,8 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      {/* 통계 카드 그리드 */}
-      <div className="grid gap-4 md:grid-cols-3">
+      {/* 통계 카드 그리드 - 데스크톱 레이아웃 */}
+      <div className="grid grid-cols-3 gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -114,8 +114,8 @@ export default function AdminDashboardPage() {
         })}
       </div>
 
-      {/* 관리 섹션 바로가기 */}
-      <div className="grid gap-4 md:grid-cols-3">
+      {/* 관리 섹션 바로가기 - 3열 고정 레이아웃 */}
+      <div className="grid grid-cols-3 gap-4">
         {ADMIN_SECTIONS.map((section) => (
           <Link
             key={section.href}

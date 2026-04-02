@@ -5,12 +5,13 @@
  * /protected/admin 하위 경로에서만 사용
  * - 상단: Gather 로고 (대시보드로 이동)
  * - 중단: 관리자 섹션 메뉴
- * - 하단: 일반 영역으로 돌아가기
+ * - 하단: 로그아웃 버튼
  */
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 /** 관리자 네비게이션 아이템 타입 */
@@ -59,6 +60,12 @@ export function AdminSidebar() {
     router.push("/protected/admin");
   };
 
+  const handleLogout = async () => {
+    const supabase = await createClient();
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+  };
+
   return (
     <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r bg-background md:block">
       {/* Gather 로고 영역 - 클릭 시 대시보드로 이동 (navbar 바로 아래) */}
@@ -105,15 +112,15 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      {/* 일반 영역으로 돌아가기 */}
+      {/* 로그아웃 버튼 */}
       <div className="absolute bottom-0 left-0 right-0 border-t p-4">
-        <Link
-          href="/protected"
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          <span>←</span>
-          <span>일반 영역으로</span>
-        </Link>
+          <span>→</span>
+          <span>로그아웃</span>
+        </button>
       </div>
     </aside>
   );

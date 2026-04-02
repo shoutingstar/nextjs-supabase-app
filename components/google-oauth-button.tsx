@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { GoogleOAuthButtonProps } from "@/lib/types/component";
 
 export function GoogleOAuthButton({
-  next = "/protected",
+  next = "/",
   label = "Continue with Google",
   isLoading: externalLoading = false,
   onSuccess,

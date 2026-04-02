@@ -292,6 +292,104 @@ export const MOCK_EVENT_PARTICIPANTS: Record<string, string[]> = {
 };
 
 /* ============================================================================
+ * 관리자 통계 데이터 (Phase 2: 더미 데이터)
+ * Phase 3에서 실제 데이터베이스 쿼리로 교체 예정
+ * ============================================================================ */
+
+/**
+ * 일일 사용자 통계 (최근 30일)
+ * 누적 가입자 수를 시뮬레이션
+ */
+export const MOCK_DAILY_USERS = Array.from({ length: 30 }, (_, i) => {
+  const date = new Date();
+  date.setDate(date.getDate() - (29 - i));
+  return {
+    date: date.toLocaleDateString("ko-KR", {
+      month: "numeric",
+      day: "numeric",
+    }),
+    count: 1500 + Math.floor(Math.random() * 800) + i * 10,
+  };
+});
+
+/**
+ * 일일 이벤트 생성 통계 (최근 30일)
+ * 상태별 이벤트 생성 수
+ */
+export const MOCK_DAILY_EVENTS = Array.from({ length: 30 }, (_, i) => {
+  const date = new Date();
+  date.setDate(date.getDate() - (29 - i));
+  return {
+    date: date.toLocaleDateString("ko-KR", {
+      month: "numeric",
+      day: "numeric",
+    }),
+    draft: Math.floor(Math.random() * 3),
+    published: Math.floor(Math.random() * 5) + 1,
+    completed: Math.floor(Math.random() * 2),
+  };
+});
+
+/**
+ * 이벤트 상태별 분포
+ */
+export const MOCK_EVENT_STATUS_DISTRIBUTION = [
+  {
+    name: "Draft",
+    value: MOCK_EVENTS.filter((e) => e.status === "draft").length,
+    fill: "#ef4444",
+  },
+  {
+    name: "Published",
+    value: MOCK_EVENTS.filter((e) => e.status === "published").length,
+    fill: "#3b82f6",
+  },
+  {
+    name: "Completed",
+    value: MOCK_EVENTS.filter((e) => e.status === "completed").length,
+    fill: "#10b981",
+  },
+  {
+    name: "Cancelled",
+    value: MOCK_EVENTS.filter((e) => e.status === "cancelled").length,
+    fill: "#6b7280",
+  },
+];
+
+/**
+ * 사용자 역할 분포
+ */
+export const MOCK_USER_ROLE_DISTRIBUTION = [
+  {
+    name: "User",
+    value: MOCK_USERS.filter((u) => u.role === "user").length,
+    fill: "#3b82f6",
+  },
+  {
+    name: "Moderator",
+    value: MOCK_USERS.filter((u) => u.role === "moderator").length,
+    fill: "#f59e0b",
+  },
+  {
+    name: "Admin",
+    value: MOCK_USERS.filter((u) => u.role === "admin").length,
+    fill: "#ef4444",
+  },
+];
+
+/**
+ * 상위 10 인기 이벤트 (참여자 수 기준)
+ */
+export const MOCK_TOP_EVENTS = MOCK_EVENTS.sort(
+  (a, b) => (b.participant_count || 0) - (a.participant_count || 0),
+)
+  .slice(0, 10)
+  .map((event) => ({
+    name: event.title,
+    participants: event.participant_count || 0,
+  }));
+
+/* ============================================================================
  * 편의 export
  * ============================================================================ */
 

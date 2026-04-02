@@ -1,14 +1,15 @@
 /**
  * 보호 레이아웃 (인증 체크)
  * - 미인증 사용자를 /auth/login으로 리다이렉트
- * - 일반 사용자: 모바일 우선 레이아웃 (Navbar + BottomNav)
- * - 관리자: admin/layout.tsx에서 Sidebar로 오버라이드
+ * - 자식 레이아웃이 UI 담당 (route group 사용)
+ *
+ * 구조:
+ * - /protected/(user)/* → 모바일 우선 (Navbar + BottomNav)
+ * - /protected/(admin)/* → 웹앱 스타일 (Sidebar + FullWidth)
  */
 
 import { redirect } from "next/navigation";
 
-import { MobileNav } from "@/components/layout/mobile-nav";
-import { Navbar } from "@/components/layout/navbar";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function ProtectedLayout({
@@ -26,28 +27,6 @@ export default async function ProtectedLayout({
     redirect("/auth/login");
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* 상단 네비게이션 바 */}
-      <Navbar />
-
-      {/* 메인 콘텐츠 영역 (모바일 우선, 최대 너비 제한) */}
-      <main
-        className={[
-          "pt-16",
-          "pb-20",
-          "min-h-screen",
-          "mx-auto",
-          "max-w-lg",
-        ].join(" ")}
-      >
-        <div className="p-4 md:p-6">{children}</div>
-      </main>
-
-      {/* 하단 탭 네비게이션 (max-w-lg 제약 적용) */}
-      <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-lg -translate-x-1/2">
-        <MobileNav />
-      </div>
-    </div>
-  );
+  // 인증 완료 후 자식 레이아웃에 위임
+  return <>{children}</>;
 }

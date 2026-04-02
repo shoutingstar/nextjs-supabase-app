@@ -32,12 +32,12 @@ export default function EventCardTestPage() {
       <div className="mb-8">
         <Link
           href="/test/components"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm"
         >
           ← 컴포넌트 목록
         </Link>
         <h1 className="mt-2 text-3xl font-bold">EventCard 테스트</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           이벤트 카드 컴포넌트의 다양한 variant와 상태를 테스트합니다.
         </p>
       </div>
@@ -52,7 +52,7 @@ export default function EventCardTestPage() {
           {/* 커버 이미지 있는 이벤트 */}
           {eventWithCover && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 커버 이미지 있음
               </p>
               <EventCard event={eventWithCover} variant="default" />
@@ -61,7 +61,7 @@ export default function EventCardTestPage() {
 
           {/* 커버 이미지 없는 이벤트 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               커버 이미지 없음
             </p>
             <EventCard event={eventWithoutCover} variant="default" />
@@ -69,7 +69,7 @@ export default function EventCardTestPage() {
 
           {/* Draft 상태 이벤트 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               Draft 상태
             </p>
             <EventCard event={draftEvent} variant="default" />
@@ -120,7 +120,7 @@ export default function EventCardTestPage() {
               className="flex items-center justify-between rounded border p-2 text-sm"
             >
               <span className="truncate font-medium">{event.title}</span>
-              <span className="ml-4 shrink-0 text-xs text-muted-foreground">
+              <span className="text-muted-foreground ml-4 shrink-0 text-xs">
                 {event.status} |{" "}
                 {event.cover_image ? "이미지 있음" : "이미지 없음"}
               </span>

@@ -40,12 +40,12 @@ export default function ParticipantCardTestPage() {
       <div className="mb-8">
         <Link
           href="/test/components"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm"
         >
           ← 컴포넌트 목록
         </Link>
         <h1 className="mt-2 text-3xl font-bold">ParticipantCard 테스트</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           참여자 카드 컴포넌트의 다양한 variant와 상태를 테스트합니다.
         </p>
       </div>
@@ -61,7 +61,7 @@ export default function ParticipantCardTestPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {/* 호스트 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               호스트 (isHost=true)
             </p>
             <ParticipantCard
@@ -74,7 +74,7 @@ export default function ParticipantCardTestPage() {
           {/* 승인된 참여자 */}
           {approvedParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 승인됨 (approved)
               </p>
               <ParticipantCard
@@ -87,7 +87,7 @@ export default function ParticipantCardTestPage() {
           {/* 대기중 참여자 */}
           {pendingParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 대기중 (pending)
               </p>
               <ParticipantCard
@@ -100,7 +100,7 @@ export default function ParticipantCardTestPage() {
           {/* 거절된 참여자 */}
           {rejectedParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 거절됨 (rejected)
               </p>
               <ParticipantCard
@@ -123,7 +123,7 @@ export default function ParticipantCardTestPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {attendingParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 참석 확정
               </p>
               <ParticipantCard
@@ -135,7 +135,7 @@ export default function ParticipantCardTestPage() {
 
           {notAttendingParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 불참
               </p>
               <ParticipantCard
@@ -147,7 +147,7 @@ export default function ParticipantCardTestPage() {
 
           {maybeParticipant && (
             <div>
-              <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
                 미정
               </p>
               <ParticipantCard

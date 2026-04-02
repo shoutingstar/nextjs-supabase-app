@@ -31,7 +31,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="group fixed bottom-0 left-0 top-16 z-30 hidden w-16 overflow-hidden border-r bg-background transition-all duration-300 hover:w-64 md:block">
+    <aside className="bg-background group fixed bottom-0 left-0 top-16 z-30 hidden w-16 overflow-hidden border-r transition-all duration-300 hover:w-64 md:block">
       <nav className="flex flex-col gap-1 p-4">
         {NAV_ITEMS.map((item) => {
           // 정확한 경로 매칭: /protected는 정확히 일치, 나머지는 startsWith
@@ -47,7 +47,7 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 isActive
-                  ? "bg-accent font-medium text-accent-foreground"
+                  ? "bg-accent text-accent-foreground font-medium"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
               )}
             >

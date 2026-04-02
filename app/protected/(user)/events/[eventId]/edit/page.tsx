@@ -37,7 +37,7 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
       <div className="flex items-center gap-3">
         <Link
           href={`/protected/events/${eventId}`}
-          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm transition-colors"
         >
           ← 이벤트 상세
         </Link>
@@ -45,13 +45,13 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
 
       <div>
         <h1 className="text-2xl font-bold tracking-tight">이벤트 수정</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           이벤트 정보를 변경한 후 저장하세요.
         </p>
       </div>
 
       {/* 이벤트 수정 폼 */}
-      <div className="rounded-lg border bg-card p-6 shadow-sm">
+      <div className="bg-card rounded-lg border p-6 shadow-sm">
         <UpdateEventForm
           event={event}
           redirectTo={`/protected/events/${eventId}`}

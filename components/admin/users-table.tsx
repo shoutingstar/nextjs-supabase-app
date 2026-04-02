@@ -65,7 +65,7 @@ export function UsersTable() {
           {sortedUsers.map((user) => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">{user.name}</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
+              <TableCell className="text-muted-foreground text-sm">
                 {user.email}
               </TableCell>
               <TableCell>
@@ -73,7 +73,7 @@ export function UsersTable() {
                   {ROLE_LABELS[user.role]}
                 </Badge>
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">
+              <TableCell className="text-muted-foreground text-sm">
                 {formatDate(user.created_at)}
               </TableCell>
               <TableCell className="space-x-2 text-right">

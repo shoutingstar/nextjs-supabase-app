@@ -58,12 +58,12 @@ export default async function JoinPage({ params }: JoinPageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-transparent">
+    <div className="from-primary/5 min-h-screen bg-gradient-to-b to-transparent">
       {/* 상단 헤더 */}
       <div className="bg-white px-4 py-6 shadow-sm dark:bg-slate-950">
         <div className="mx-auto max-w-2xl">
           <h1 className="text-lg font-bold">이벤트 초대</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             친구가 초대한 이벤트에 참여하세요
           </p>
         </div>
@@ -73,7 +73,7 @@ export default async function JoinPage({ params }: JoinPageProps) {
       <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
         {/* 커버 이미지 */}
         {event.cover_image && (
-          <div className="relative aspect-video min-h-48 w-full overflow-hidden rounded-lg bg-muted shadow-md">
+          <div className="bg-muted relative aspect-video min-h-48 w-full overflow-hidden rounded-lg shadow-md">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={event.cover_image}
@@ -84,21 +84,21 @@ export default async function JoinPage({ params }: JoinPageProps) {
         )}
 
         {/* 이벤트 정보 카드 */}
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
+        <div className="bg-card rounded-lg border p-6 shadow-sm">
           {/* 제목 */}
           <h2 className="text-2xl font-bold leading-tight">{event.title}</h2>
 
           {/* 주최자 정보 */}
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-3 text-sm">
             주최자:{" "}
-            <span className="font-medium text-foreground">
+            <span className="text-foreground font-medium">
               {event.host.name}
             </span>
           </p>
 
           {/* 설명 */}
           {event.description && (
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-4 text-sm">
               {event.description}
             </p>
           )}
@@ -107,31 +107,31 @@ export default async function JoinPage({ params }: JoinPageProps) {
           <div className="mt-6 space-y-3 border-t pt-6">
             {/* 날짜/시간 */}
             <div className="flex items-start gap-3">
-              <Calendar className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <Calendar className="text-primary mt-0.5 h-5 w-5 shrink-0" />
               <div>
                 <p className="font-medium">{formattedDate}</p>
-                <p className="text-sm text-muted-foreground">{formattedTime}</p>
+                <p className="text-muted-foreground text-sm">{formattedTime}</p>
               </div>
             </div>
 
             {/* 장소 */}
             {event.location && (
               <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                <MapPin className="text-primary mt-0.5 h-5 w-5 shrink-0" />
                 <p className="font-medium">{event.location}</p>
               </div>
             )}
 
             {/* 참여자 정보 */}
             <div className="flex items-start gap-3">
-              <Users className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <Users className="text-primary mt-0.5 h-5 w-5 shrink-0" />
               <div>
                 <p className="font-medium">
                   {event.participant_count}명 참여 중
                   {event.max_participants &&
                     ` / 최대 ${event.max_participants}명`}
                 </p>
-                <p className="text-sm text-muted-foreground">현재 참여자 수</p>
+                <p className="text-muted-foreground text-sm">현재 참여자 수</p>
               </div>
             </div>
           </div>
@@ -145,11 +145,11 @@ export default async function JoinPage({ params }: JoinPageProps) {
           </Button>
 
           {/* 하단 안내 텍스트 */}
-          <p className="text-center text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-center text-xs">
             아직 계정이 없으신가요?{" "}
             <Link
               href="/auth/sign-up"
-              className="font-medium text-primary hover:underline"
+              className="text-primary font-medium hover:underline"
             >
               회원가입
             </Link>

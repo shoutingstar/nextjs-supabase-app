@@ -28,12 +28,12 @@ export default function LoadingSkeletonsTestPage() {
       <div className="mb-8">
         <Link
           href="/test/components"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm"
         >
           ← 컴포넌트 목록
         </Link>
         <h1 className="mt-2 text-3xl font-bold">LoadingSkeleton 테스트</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           이벤트 카드 및 참여자 카드 로딩 스켈레톤 컴포넌트를 테스트합니다.
         </p>
       </div>
@@ -45,7 +45,7 @@ export default function LoadingSkeletonsTestPage() {
         <h2 className="mb-4 text-xl font-semibold">EventCard 스켈레톤</h2>
 
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             단일 스켈레톤 (default)
           </p>
           <div className="max-w-sm">
@@ -54,7 +54,7 @@ export default function LoadingSkeletonsTestPage() {
         </div>
 
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             단일 스켈레톤 (compact)
           </p>
           <div className="max-w-xl">
@@ -72,14 +72,14 @@ export default function LoadingSkeletonsTestPage() {
         </h2>
 
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             3개 그리드 (default)
           </p>
           <EventListSkeleton count={3} variant="default" />
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             4개 목록 (compact)
           </p>
           <div className="max-w-xl">
@@ -95,7 +95,7 @@ export default function LoadingSkeletonsTestPage() {
         <h2 className="mb-4 text-xl font-semibold">ParticipantCard 스켈레톤</h2>
 
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             단일 스켈레톤 (default)
           </p>
           <div className="max-w-xs">
@@ -104,7 +104,7 @@ export default function LoadingSkeletonsTestPage() {
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             단일 스켈레톤 (compact)
           </p>
           <div className="max-w-xs">
@@ -120,14 +120,14 @@ export default function LoadingSkeletonsTestPage() {
         <h2 className="mb-4 text-xl font-semibold">ParticipantList 스켈레톤</h2>
 
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             4개 그리드 (default)
           </p>
           <ParticipantListSkeleton count={4} variant="default" />
         </div>
 
         <div>
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             5개 목록 (compact)
           </p>
           <div className="max-w-xs">

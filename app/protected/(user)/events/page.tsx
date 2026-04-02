@@ -48,7 +48,7 @@ export default function EventsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">이벤트</h1>
         <button
-          className="rounded-full p-2 transition-colors hover:bg-accent"
+          className="hover:bg-accent rounded-full p-2 transition-colors"
           aria-label="이벤트 검색"
         >
           <Search className="h-5 w-5" />
@@ -58,7 +58,7 @@ export default function EventsPage() {
       {/* 이벤트 없음 */}
       {!hasAnyEvents && (
         <EmptyState
-          icon={<Calendar className="h-10 w-10 text-muted-foreground" />}
+          icon={<Calendar className="text-muted-foreground h-10 w-10" />}
           title="아직 이벤트가 없어요"
           description="새로운 이벤트를 만들거나 초대를 받아보세요!"
           action={
@@ -77,7 +77,7 @@ export default function EventsPage() {
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">내가 주최하는 이벤트</h2>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               {displayHostedEvents.length}개
             </span>
           </div>
@@ -100,7 +100,7 @@ export default function EventsPage() {
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">참여 중인 이벤트</h2>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               {displayParticipatingEvents.length}개
             </span>
           </div>

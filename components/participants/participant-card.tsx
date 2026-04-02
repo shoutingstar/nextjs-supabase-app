@@ -143,7 +143,7 @@ export function ParticipantCard({
    * ---------------------------------------------------------------- */
   if (variant === "compact") {
     return (
-      <div className="flex items-center gap-3 rounded-lg border bg-card p-3 transition-colors hover:bg-accent">
+      <div className="bg-card hover:bg-accent flex items-center gap-3 rounded-lg border p-3 transition-colors">
         {/* 아바타 영역 */}
         <div className="relative">
           <Avatar size="default">
@@ -152,7 +152,7 @@ export function ParticipantCard({
           </Avatar>
           {/* 호스트 크라운 배지 */}
           {isHost && (
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-white ring-2 ring-background">
+            <span className="ring-background absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-amber-400 text-white ring-2">
               <Crown className="h-2.5 w-2.5" />
             </span>
           )}
@@ -161,7 +161,7 @@ export function ParticipantCard({
         {/* 이름 + 역할 */}
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium">{displayName}</p>
-          {isHost && <p className="text-xs text-muted-foreground">주최자</p>}
+          {isHost && <p className="text-muted-foreground text-xs">주최자</p>}
         </div>
 
         {/* RSVP 상태 아이콘 */}
@@ -180,7 +180,7 @@ export function ParticipantCard({
    * default 변형: 전체 정보 표시
    * ---------------------------------------------------------------- */
   return (
-    <div className="rounded-lg border bg-card shadow-sm transition-colors hover:bg-accent">
+    <div className="bg-card hover:bg-accent rounded-lg border shadow-sm transition-colors">
       {/* 카드 헤더: 아바타 + 이름 + 상태 배지 */}
       <div className="flex items-center gap-3 border-b p-4">
         <div className="relative shrink-0">
@@ -190,7 +190,7 @@ export function ParticipantCard({
           </Avatar>
           {/* 호스트 크라운 표시 */}
           {isHost && (
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-white ring-2 ring-background">
+            <span className="ring-background absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-amber-400 text-white ring-2">
               <Crown className="h-3 w-3" />
             </span>
           )}
@@ -227,7 +227,7 @@ export function ParticipantCard({
         </div>
 
         {/* 참여 신청 일시 */}
-        <p className="mt-2 text-xs text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-xs">
           참여 신청:{" "}
           {new Date(participant.joined_at).toLocaleDateString("ko-KR", {
             month: "long",

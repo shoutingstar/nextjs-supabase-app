@@ -108,7 +108,7 @@ export default async function EventDetailPage({
       {/* 뒤로가기 */}
       <Link
         href="/protected/events"
-        className="inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
+        className="text-muted-foreground hover:text-foreground inline-block text-sm transition-colors"
       >
         ← 이벤트 목록
       </Link>
@@ -121,12 +121,12 @@ export default async function EventDetailPage({
             {statusBadge.label}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground">주최: {event.host.name}</p>
+        <p className="text-muted-foreground text-sm">주최: {event.host.name}</p>
       </div>
 
       {/* 커버 이미지 */}
       {event.cover_image && (
-        <div className="relative aspect-video min-h-64 w-full overflow-hidden rounded-lg bg-muted">
+        <div className="bg-muted relative aspect-video min-h-64 w-full overflow-hidden rounded-lg">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={event.cover_image}
@@ -137,12 +137,12 @@ export default async function EventDetailPage({
       )}
 
       {/* 이벤트 정보 카드 */}
-      <div className="rounded-lg border bg-card p-5 shadow-sm">
+      <div className="bg-card rounded-lg border p-5 shadow-sm">
         <h2 className="mb-4 font-semibold">이벤트 정보</h2>
         <div className="space-y-3">
           {/* 날짜/시간 */}
           <div className="flex items-start gap-3 text-sm">
-            <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+            <Calendar className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
             <div>
               <p>{formattedDate}</p>
               <p className="text-muted-foreground">{formattedTime}</p>
@@ -152,14 +152,14 @@ export default async function EventDetailPage({
           {/* 장소 */}
           {event.location && (
             <div className="flex items-start gap-3 text-sm">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+              <MapPin className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
               <p>{event.location}</p>
             </div>
           )}
 
           {/* 참여 인원 */}
           <div className="flex items-start gap-3 text-sm">
-            <Users className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+            <Users className="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
             <p>
               {event.participant_count}명 참여
               {event.max_participants && ` / 최대 ${event.max_participants}명`}
@@ -170,7 +170,7 @@ export default async function EventDetailPage({
         {/* 이벤트 설명 */}
         {event.description && (
           <div className="mt-4 border-t pt-4">
-            <p className="text-sm text-muted-foreground">{event.description}</p>
+            <p className="text-muted-foreground text-sm">{event.description}</p>
           </div>
         )}
       </div>
@@ -180,7 +180,7 @@ export default async function EventDetailPage({
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-semibold">
             참여자 목록
-            <span className="ml-2 text-sm font-normal text-muted-foreground">
+            <span className="text-muted-foreground ml-2 text-sm font-normal">
               ({participants.length}명)
             </span>
           </h2>

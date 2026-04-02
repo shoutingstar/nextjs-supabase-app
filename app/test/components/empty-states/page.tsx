@@ -20,12 +20,12 @@ export default function EmptyStatesTestPage() {
       <div className="mb-8">
         <Link
           href="/test/components"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm"
         >
           ← 컴포넌트 목록
         </Link>
         <h1 className="mt-2 text-3xl font-bold">EmptyState 테스트</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           빈 상태 컴포넌트의 다양한 케이스를 테스트합니다.
         </p>
       </div>
@@ -38,7 +38,7 @@ export default function EmptyStatesTestPage() {
 
         {/* 이벤트 없음 */}
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             이벤트 없음
           </p>
           <EmptyState
@@ -49,7 +49,7 @@ export default function EmptyStatesTestPage() {
 
         {/* 참여자 없음 */}
         <div className="mb-6">
-          <p className="mb-3 text-sm font-medium text-muted-foreground">
+          <p className="text-muted-foreground mb-3 text-sm font-medium">
             참여자 없음
           </p>
           <EmptyState
@@ -68,11 +68,11 @@ export default function EmptyStatesTestPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {/* 검색 결과 없음 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               검색 결과 없음
             </p>
             <EmptyState
-              icon={<Search className="h-8 w-8 text-muted-foreground" />}
+              icon={<Search className="text-muted-foreground h-8 w-8" />}
               title="검색 결과가 없습니다"
               description="다른 키워드로 검색해 보세요."
             />
@@ -80,11 +80,11 @@ export default function EmptyStatesTestPage() {
 
           {/* 이벤트 목록 빔 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               이벤트 달력 비어있음
             </p>
             <EmptyState
-              icon={<Calendar className="h-8 w-8 text-muted-foreground" />}
+              icon={<Calendar className="text-muted-foreground h-8 w-8" />}
               title="예정된 이벤트 없음"
               description="이번 주에 예정된 이벤트가 없습니다."
             />
@@ -92,11 +92,11 @@ export default function EmptyStatesTestPage() {
 
           {/* 참여자 없음 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               참여자 목록 비어있음
             </p>
             <EmptyState
-              icon={<Users className="h-8 w-8 text-muted-foreground" />}
+              icon={<Users className="text-muted-foreground h-8 w-8" />}
               title="참여자 없음"
               description="아직 이 이벤트에 참여한 사람이 없습니다."
             />
@@ -104,11 +104,11 @@ export default function EmptyStatesTestPage() {
 
           {/* 에러 상태 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               에러 상태
             </p>
             <EmptyState
-              icon={<AlertCircle className="h-8 w-8 text-destructive" />}
+              icon={<AlertCircle className="text-destructive h-8 w-8" />}
               title="오류가 발생했습니다"
               description="데이터를 불러오는 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요."
             />
@@ -125,17 +125,17 @@ export default function EmptyStatesTestPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {/* 이벤트 생성 유도 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               이벤트 생성 유도
             </p>
             <EmptyState
-              icon={<Calendar className="h-8 w-8 text-muted-foreground" />}
+              icon={<Calendar className="text-muted-foreground h-8 w-8" />}
               title="이벤트를 만들어 보세요"
               description="간단한 정보만 입력하면 바로 이벤트를 만들 수 있어요."
               action={
                 <Link
                   href="/test/components"
-                  className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-9 items-center justify-center rounded-md px-4 py-2 text-sm font-medium shadow transition-colors"
                 >
                   이벤트 만들기
                 </Link>
@@ -145,17 +145,17 @@ export default function EmptyStatesTestPage() {
 
           {/* 참여 유도 */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase text-muted-foreground">
+            <p className="text-muted-foreground mb-2 text-xs font-medium uppercase">
               참여 유도
             </p>
             <EmptyState
-              icon={<Users className="h-8 w-8 text-muted-foreground" />}
+              icon={<Users className="text-muted-foreground h-8 w-8" />}
               title="아직 참여한 이벤트가 없어요"
               description="관심 있는 이벤트를 찾아 참여해 보세요!"
               action={
                 <Link
                   href="/test/components"
-                  className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                  className="border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-9 items-center justify-center rounded-md border px-4 py-2 text-sm font-medium shadow-sm transition-colors"
                 >
                   이벤트 둘러보기
                 </Link>

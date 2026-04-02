@@ -15,11 +15,11 @@ export function EmptyState({
   action,
 }: EmptyStateProps) {
   return (
-    <div className="rounded-lg border border-dashed bg-card p-12 text-center">
+    <div className="bg-card rounded-lg border border-dashed p-12 text-center">
       {/* 아이콘 */}
       {icon && <div className="mb-4 flex justify-center">{icon}</div>}
       <p className="text-lg font-semibold">{title}</p>
-      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+      <p className="text-muted-foreground mt-2 text-sm">{description}</p>
       {action && <div className="mt-4">{action}</div>}
     </div>
   );

@@ -104,7 +104,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
     <div className="mx-auto w-full max-w-2xl space-y-6 pb-24">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">계정 설정</h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           프로필 정보를 확인하고 수정하세요.
         </p>
       </div>
@@ -124,7 +124,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
               disabled
               className="bg-muted"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               이메일은 Supabase 계정 설정에서 변경할 수 있습니다.
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
               placeholder="my_username"
               disabled={loading}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               영문, 숫자, 언더스코어(_)만 사용 가능 (최소 3자)
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
 
           {/* 에러 메시지 */}
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">
               {error}
             </div>
           )}

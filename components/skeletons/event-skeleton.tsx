@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 function SkeletonBlock({ className }: { className?: string }) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
+      className={cn("bg-muted animate-pulse rounded-md", className)}
       aria-hidden="true"
     />
   );
@@ -34,7 +34,7 @@ function SkeletonBlock({ className }: { className?: string }) {
 export function EventCardSkeleton() {
   return (
     <div
-      className="rounded-lg border bg-card shadow-sm"
+      className="bg-card rounded-lg border shadow-sm"
       aria-label="이벤트 카드 로딩 중"
       aria-busy="true"
     >
@@ -87,7 +87,7 @@ export function EventCardSkeleton() {
 export function EventCardCompactSkeleton() {
   return (
     <div
-      className="flex gap-4 rounded-lg border bg-card p-4"
+      className="bg-card flex gap-4 rounded-lg border p-4"
       aria-label="이벤트 카드 로딩 중"
       aria-busy="true"
     >

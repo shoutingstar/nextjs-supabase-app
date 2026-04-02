@@ -67,7 +67,7 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r bg-background md:block">
+    <aside className="bg-background fixed bottom-0 left-0 top-0 z-30 hidden w-64 border-r md:block">
       {/* Gather 로고 영역 - 클릭 시 대시보드로 이동 (navbar 바로 아래) */}
       <div className="border-b px-4 py-3">
         <button
@@ -81,7 +81,7 @@ export function AdminSidebar() {
 
       {/* 관리자 섹션 헤더 */}
       <div className="border-b px-4 py-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">
           관리자 영역
         </p>
       </div>
@@ -101,7 +101,7 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 isActive
-                  ? "bg-accent font-medium text-accent-foreground"
+                  ? "bg-accent text-accent-foreground font-medium"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
               )}
             >
@@ -116,7 +116,7 @@ export function AdminSidebar() {
       <div className="absolute bottom-0 left-0 right-0 border-t p-4">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground flex w-full items-center gap-2 text-sm transition-colors"
         >
           <span>→</span>
           <span>로그아웃</span>

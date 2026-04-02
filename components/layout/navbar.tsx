@@ -12,14 +12,14 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export function Navbar() {
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 h-16 border-b bg-background">
+    <header className="bg-background fixed left-0 right-0 top-0 z-40 h-16 border-b">
       <div className="flex h-full items-center justify-between px-4">
         {/* 로고 및 앱 이름 */}
         <Link
           href="/protected"
           className="flex items-center gap-2 font-semibold"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-md">
             <span className="text-sm font-bold">E</span>
           </div>
           <span className="hidden sm:inline">이벤트 플래너</span>

@@ -30,7 +30,7 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 h-20 border-t bg-background/95 shadow-lg">
+    <nav className="bg-background/95 fixed bottom-0 left-0 right-0 z-40 h-20 border-t shadow-lg">
       <div className="flex h-full items-center justify-around">
         {MOBILE_NAV_ITEMS.map((item) => {
           // 경로 매칭 로직

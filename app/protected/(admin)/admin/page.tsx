@@ -86,7 +86,7 @@ export default function AdminDashboardPage() {
     <div className="space-y-6 px-6 py-6 lg:px-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">관리자 대시보드</h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           서비스 전체 현황을 관리합니다.
         </p>
       </div>
@@ -101,11 +101,11 @@ export default function AdminDashboardPage() {
                 <CardTitle className="text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
+                <Icon className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {stat.description}
                 </p>
               </CardContent>
@@ -120,12 +120,12 @@ export default function AdminDashboardPage() {
           <Link
             key={section.href}
             href={section.href}
-            className="flex items-start gap-4 rounded-lg border bg-card p-6 shadow-sm transition-colors hover:bg-accent"
+            className="bg-card hover:bg-accent flex items-start gap-4 rounded-lg border p-6 shadow-sm transition-colors"
           >
             <span className="text-2xl">{section.icon}</span>
             <div>
               <h3 className="font-semibold">{section.title}</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {section.description}
               </p>
             </div>

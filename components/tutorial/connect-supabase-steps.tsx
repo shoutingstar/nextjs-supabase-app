@@ -3,58 +3,57 @@ import { TutorialStep } from "./tutorial-step";
 export function ConnectSupabaseSteps() {
   return (
     <ol className="flex flex-col gap-6">
-      <TutorialStep title="Create Supabase project">
+      <TutorialStep title="Supabase 프로젝트 생성">
         <p>
-          Head over to{" "}
           <a
             href="https://app.supabase.com/project/_/settings/api"
             target="_blank"
-            className="font-bold text-foreground/80 hover:underline"
+            className="text-foreground/80 font-bold hover:underline"
             rel="noreferrer"
           >
             database.new
-          </a>{" "}
-          and create a new Supabase project.
+          </a>
+          에서 새로운 Supabase 프로젝트를 생성하세요.
         </p>
       </TutorialStep>
 
-      <TutorialStep title="Declare environment variables">
+      <TutorialStep title="환경 변수 설정">
         <p>
-          Rename the{" "}
-          <span className="relative rounded border bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium text-secondary-foreground">
+          Next.js 앱의{" "}
+          <span className="bg-muted text-secondary-foreground relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium">
             .env.example
           </span>{" "}
-          file in your Next.js app to{" "}
-          <span className="relative rounded border bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium text-secondary-foreground">
+          파일을{" "}
+          <span className="bg-muted text-secondary-foreground relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium">
             .env.local
-          </span>{" "}
-          and populate with values from{" "}
+          </span>
+          로 변경하고{" "}
           <a
             href="https://app.supabase.com/project/_/settings/api"
             target="_blank"
-            className="font-bold text-foreground/80 hover:underline"
+            className="text-foreground/80 font-bold hover:underline"
             rel="noreferrer"
           >
-            your Supabase project&apos;s API Settings
+            Supabase API 설정
           </a>
-          .
+          에서 값을 복사해 입력하세요.
         </p>
       </TutorialStep>
 
-      <TutorialStep title="Restart your Next.js development server">
+      <TutorialStep title="개발 서버 재시작">
         <p>
-          You may need to quit your Next.js development server and run{" "}
-          <span className="relative rounded border bg-muted px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium text-secondary-foreground">
+          Next.js 개발 서버를 중지한 후{" "}
+          <span className="bg-muted text-secondary-foreground relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-xs font-medium">
             npm run dev
-          </span>{" "}
-          again to load the new environment variables.
+          </span>
+          를 다시 실행하여 새로운 환경 변수를 로드해야 할 수도 있습니다.
         </p>
       </TutorialStep>
 
-      <TutorialStep title="Refresh the page">
+      <TutorialStep title="페이지 새로고침">
         <p>
-          You may need to refresh the page for Next.js to load the new
-          environment variables.
+          Next.js가 새로운 환경 변수를 로드하기 위해 페이지를 새로고침해야 할
+          수도 있습니다.
         </p>
       </TutorialStep>
     </ol>

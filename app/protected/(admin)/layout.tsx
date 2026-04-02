@@ -16,7 +16,7 @@ export default function AdminLayout({
   // TODO: Phase 3 - 관리자 역할(role: 'admin') 체크 로직 추가
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* 관리자 전용 사이드바 */}
       <AdminSidebar />
 

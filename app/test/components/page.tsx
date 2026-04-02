@@ -41,7 +41,7 @@ export default function ComponentTestIndexPage() {
       {/* 페이지 헤더 */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">컴포넌트 테스트</h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Task 003에서 구현된 컴포넌트들을 더미 데이터로 렌더링 테스트합니다.
         </p>
       </div>
@@ -52,12 +52,12 @@ export default function ComponentTestIndexPage() {
           <Link
             key={page.href}
             href={page.href}
-            className="group rounded-lg border bg-card p-6 shadow-sm transition-all hover:border-primary hover:shadow-md"
+            className="bg-card hover:border-primary group rounded-lg border p-6 shadow-sm transition-all hover:shadow-md"
           >
-            <h2 className="font-semibold group-hover:text-primary">
+            <h2 className="group-hover:text-primary font-semibold">
               {page.title}
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="text-muted-foreground mt-1 text-sm">
               {page.description}
             </p>
           </Link>
@@ -68,7 +68,7 @@ export default function ComponentTestIndexPage() {
       <div className="mt-8">
         <Link
           href="/"
-          className="text-sm text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground text-sm"
         >
           ← 홈으로 돌아가기
         </Link>

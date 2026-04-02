@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/protected";
+  const next = searchParams.get("next") ?? "/";
   const error_description = searchParams.get("error_description");
 
   // OAuth 에러 처리 (사용자가 Google 인증을 거부한 경우 등)
@@ -34,6 +34,6 @@ export async function GET(request: NextRequest) {
   }
 
   // 오픈 리다이렉트 공격 방지: next 파라미터가 "/"로 시작해야만 허용
-  const safeNext = next.startsWith("/") ? next : "/protected";
+  const safeNext = next.startsWith("/") ? next : "/";
   return NextResponse.redirect(`${origin}${safeNext}`);
 }

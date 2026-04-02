@@ -81,7 +81,7 @@ export function EventsTable() {
                 </Badge>
               </TableCell>
               <TableCell>{event.host.name}</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
+              <TableCell className="text-muted-foreground text-sm">
                 {formatDate(event.created_at)}
               </TableCell>
               <TableCell className="text-right text-sm">

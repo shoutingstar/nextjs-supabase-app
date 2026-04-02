@@ -31,7 +31,7 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
    * ---------------------------------------------------------------- */
   if (variant === "compact") {
     return (
-      <div className="flex gap-4 rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+      <div className="bg-card hover:bg-accent flex gap-4 rounded-lg border p-4 transition-colors">
         {/* 왼쪽: 커버 이미지 (있을 때만 표시) */}
         {event.cover_image && (
           <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-lg">
@@ -49,12 +49,12 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
         {/* 오른쪽: 이벤트 정보 */}
         <div className="min-w-0 flex-1">
           <h3 className="line-clamp-2 font-semibold">{event.title}</h3>
-          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
             {event.description}
           </p>
 
           {/* 메타 정보 */}
-          <div className="mt-3 flex flex-wrap gap-4 text-xs text-muted-foreground">
+          <div className="text-muted-foreground mt-3 flex flex-wrap gap-4 text-xs">
             {event.location && (
               <div className="flex items-center gap-1">
                 <MapPin className="h-4 w-4" />
@@ -77,7 +77,7 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
    * default variant: 커버 이미지 + 상세 정보
    * ---------------------------------------------------------------- */
   return (
-    <div className="rounded-lg border bg-card shadow-sm transition-colors hover:bg-accent">
+    <div className="bg-card hover:bg-accent rounded-lg border shadow-sm transition-colors">
       {/* 커버 이미지 (cover_image 필드가 있을 때만 표시) */}
       {event.cover_image && (
         <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
@@ -98,7 +98,7 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
       >
         <h3 className="font-semibold">{event.title}</h3>
         {event.host && (
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-xs">
             주최: {(event.host.full_name ?? event.host.name) as string | null}
           </p>
         )}
@@ -107,13 +107,13 @@ export function EventCard({ event, variant = "default" }: EventCardProps) {
       {/* 본문: 설명 + 메타 정보 */}
       <div className="p-4">
         {event.description && (
-          <p className="mb-3 line-clamp-3 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mb-3 line-clamp-3 text-sm">
             {event.description}
           </p>
         )}
 
         {/* 메타 정보: 날짜, 장소, 참여자 수 */}
-        <div className="space-y-2 text-xs text-muted-foreground">
+        <div className="text-muted-foreground space-y-2 text-xs">
           <div className="flex items-center gap-2" suppressHydrationWarning>
             <Calendar className="h-4 w-4" />
             <span>

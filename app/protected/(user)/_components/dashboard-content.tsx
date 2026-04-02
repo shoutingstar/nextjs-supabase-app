@@ -46,7 +46,7 @@ export function DashboardContent() {
         >
           어서오세요, {MOCK_CURRENT_USER.name}! 👋
         </h1>
-        <p className="mt-1 text-muted-foreground">
+        <p className="text-muted-foreground mt-1">
           당신의 이벤트 현황을 한눈에 확인하세요.
         </p>
       </div>
@@ -55,19 +55,19 @@ export function DashboardContent() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* 내 이벤트 */}
         <Link href="/protected/events" className="group">
-          <div className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm transition-all group-hover:border-primary/50 group-hover:shadow-md">
+          <div className="bg-card text-card-foreground group-hover:border-primary/50 rounded-lg border p-5 shadow-sm transition-all group-hover:shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   내 이벤트
                 </p>
                 <p className="mt-2 text-3xl font-bold">
                   {myHostedEvents.length}
                 </p>
               </div>
-              <Calendar className="h-8 w-8 text-muted-foreground opacity-50" />
+              <Calendar className="text-muted-foreground h-8 w-8 opacity-50" />
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="text-muted-foreground mt-2 text-xs">
               주최하는 이벤트
             </p>
           </div>
@@ -75,19 +75,19 @@ export function DashboardContent() {
 
         {/* 참여 중인 이벤트 */}
         <Link href="/protected/events" className="group">
-          <div className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm transition-all group-hover:border-primary/50 group-hover:shadow-md">
+          <div className="bg-card text-card-foreground group-hover:border-primary/50 rounded-lg border p-5 shadow-sm transition-all group-hover:shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   참여 중인 이벤트
                 </p>
                 <p className="mt-2 text-3xl font-bold">
                   {myParticipatingEvents.length}
                 </p>
               </div>
-              <Users className="h-8 w-8 text-muted-foreground opacity-50" />
+              <Users className="text-muted-foreground h-8 w-8 opacity-50" />
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="text-muted-foreground mt-2 text-xs">
               참여 중인 이벤트
             </p>
           </div>
@@ -95,19 +95,19 @@ export function DashboardContent() {
 
         {/* 예정된 이벤트 */}
         <Link href="/protected/events" className="group">
-          <div className="rounded-lg border bg-card p-5 text-card-foreground shadow-sm transition-all group-hover:border-primary/50 group-hover:shadow-md">
+          <div className="bg-card text-card-foreground group-hover:border-primary/50 rounded-lg border p-5 shadow-sm transition-all group-hover:shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-muted-foreground text-sm font-medium">
                   예정된 이벤트
                 </p>
                 <p className="mt-2 text-3xl font-bold">
                   {upcomingEvents.length}
                 </p>
               </div>
-              <AlertCircle className="h-8 w-8 text-muted-foreground opacity-50" />
+              <AlertCircle className="text-muted-foreground h-8 w-8 opacity-50" />
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">7일 이내 예정</p>
+            <p className="text-muted-foreground mt-2 text-xs">7일 이내 예정</p>
           </div>
         </Link>
       </div>
@@ -119,7 +119,7 @@ export function DashboardContent() {
             <h2 className="text-lg font-semibold">최근 이벤트</h2>
             <Link
               href="/protected/events"
-              className="text-sm text-primary hover:underline"
+              className="text-primary text-sm hover:underline"
             >
               모두 보기 →
             </Link>
@@ -137,10 +137,10 @@ export function DashboardContent() {
           </div>
         </section>
       ) : (
-        <div className="rounded-lg border border-dashed bg-card p-6 text-center">
-          <Calendar className="mx-auto h-10 w-10 text-muted-foreground opacity-50" />
+        <div className="bg-card rounded-lg border border-dashed p-6 text-center">
+          <Calendar className="text-muted-foreground mx-auto h-10 w-10 opacity-50" />
           <h3 className="mt-3 font-semibold">아직 이벤트가 없어요</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-1 text-sm">
             새로운 이벤트를 만들거나 친구의 초대를 기다려 보세요.
           </p>
           <Button className="mt-4" asChild>

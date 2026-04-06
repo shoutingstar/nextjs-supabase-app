@@ -27,6 +27,8 @@ export async function generateMetadata({
 export default async function JoinPage({ params }: JoinPageProps) {
   const { inviteCode } = await params;
 
+  console.log("[SERVER JOIN PAGE] inviteCode:", inviteCode);
+
   // 모든 로직을 클라이언트 컴포넌트에서 처리
   return <ClientJoinPage inviteCode={inviteCode} initialUser={null} />;
 }

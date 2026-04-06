@@ -81,8 +81,12 @@ export function ClientJoinPage({
             console.error("[CLIENT JOIN] localStorage 저장 실패:", e);
           }
 
-          const redirectUrl = `/auth/login`;
-          console.log("[CLIENT JOIN] 로그인 페이지로 리다이렉트:", redirectUrl);
+          // redirect_to 파라미터와 함께 로그인 페이지로 리다이렉트
+          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/protected/events/${eventData.id}?join=true&code=${inviteCode}`)}`;
+          console.log(
+            "[CLIENT JOIN] 로그인 페이지로 리다이렉트 (with redirect_to):",
+            redirectUrl,
+          );
           window.location.href = redirectUrl;
           return;
         }

@@ -1,8 +1,9 @@
 /**
  * 초대 링크를 통한 이벤트 참여 페이지
- * /join/[inviteCode] - 미인증 사용자는 redirect_to 파라미터와 함께 로그인 페이지로 리다이렉트
+ * /join/[inviteCode] - API Route Handler (/api/join/[inviteCode])로 리다이렉트
  *
- * 서버 컴포넌트에서 미인증 감지 → 바로 이벤트 참여 페이지로 리다이렉트
+ * 미인증 사용자: /api/join/[inviteCode] → eventId 조회 → /auth/login?redirect_to=...
+ * 로그인 사용자: 이벤트 상세 페이지 표시
  */
 
 import type { Metadata } from "next";
@@ -30,7 +31,7 @@ export async function generateMetadata({
 export default async function JoinPage({ params }: JoinPageProps) {
   const { inviteCode } = await params;
 
-  console.log("[SERVER JOIN PAGE] 초대 링크 접속, inviteCode:", inviteCode);
+  console.log("[PAGE JOIN] 초대 링크 접속, inviteCode:", inviteCode);
 
   // 인증 상태 확인
   const supabase = await createClient();
@@ -38,43 +39,16 @@ export default async function JoinPage({ params }: JoinPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(
-    "[SERVER JOIN PAGE] 사용자 인증 상태:",
-    user ? user.email : "미인증",
-  );
+  console.log("[PAGE JOIN] 사용자 인증 상태:", user ? user.email : "미인증");
 
-  // 미인증 사용자인 경우
+  // 미인증 사용자는 API Route Handler로 리다이렉트
+  // (API Route가 redirect_to 파라미터를 올바르게 처리함)
   if (!user) {
-    console.log(
-      "[SERVER JOIN PAGE] 미인증 사용자 감지, inviteCode로 eventId 조회",
-    );
-
-    // 초대 코드로 이벤트ID 조회
-    const { data: eventData, error: eventError } = await supabase
-      .from("events")
-      .select("id")
-      .eq("invite_code", inviteCode)
-      .single();
-
-    if (eventError || !eventData) {
-      console.error(
-        "[SERVER JOIN PAGE] 초대 코드에 해당하는 이벤트를 찾을 수 없음",
-      );
-      // 이벤트를 찾을 수 없으면 홈으로 리다이렉트
-      redirect("/");
-    }
-
-    console.log("[SERVER JOIN PAGE] 이벤트 조회 성공, eventId:", eventData.id);
-
-    // redirect_to 파라미터와 함께 로그인 페이지로 리다이렉트
-    const redirectTo = `/protected/events/${eventData.id}?join=true&code=${inviteCode}`;
-    const loginUrl = `/auth/login?redirect_to=${encodeURIComponent(redirectTo)}`;
-
-    console.log("[SERVER JOIN PAGE] 로그인 페이지로 리다이렉트:", loginUrl);
-    redirect(loginUrl);
+    console.log("[PAGE JOIN] 미인증 사용자, API Route로 리다이렉트");
+    redirect(`/api/join/${inviteCode}`);
   }
 
-  console.log("[SERVER JOIN PAGE] 인증 사용자, 클라이언트 컴포넌트 렌더링");
+  console.log("[PAGE JOIN] 인증 사용자, 클라이언트 컴포넌트 렌더링");
 
   // 로그인한 사용자는 클라이언트 컴포넌트로 렌더링
   return <ClientJoinPage inviteCode={inviteCode} initialUser={user} />;

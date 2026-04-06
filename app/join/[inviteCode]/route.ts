@@ -55,10 +55,11 @@ export async function GET(request: NextRequest, context: RouteContext) {
   // 미인증 사용자: 로그인 페이지로 리다이렉트 (with redirect_to)
   console.log("[ROUTE JOIN] 미인증 사용자, 로그인 페이지로 리다이렉트");
 
-  const loginUrl = new URL("/auth/login", request.url);
-  loginUrl.searchParams.set("redirect_to", eventPath);
+  const redirectTo = encodeURIComponent(eventPath);
+  const finalUrl = `/auth/login?redirect_to=${redirectTo}`;
 
-  console.log("[ROUTE JOIN] 최종 리다이렉트 URL:", loginUrl.toString());
+  console.log("[ROUTE JOIN] 최종 리다이렉트 URL:", finalUrl);
+  console.log("[ROUTE JOIN] eventPath:", eventPath);
 
-  return NextResponse.redirect(loginUrl);
+  return NextResponse.redirect(finalUrl);
 }

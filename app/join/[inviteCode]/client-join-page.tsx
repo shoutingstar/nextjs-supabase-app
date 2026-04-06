@@ -50,12 +50,27 @@ export function ClientJoinPage({
         // 미인증 사용자인 경우
         if (!user) {
           console.log(
-            "[CLIENT JOIN] 미인증 사용자 감지, 로그인 페이지로 리다이렉트",
+            "[CLIENT JOIN] 미인증 사용자 감지, 이벤트ID 조회 후 로그인 페이지로 리다이렉트",
           );
 
-          // redirect_to 파라미터로 로그인 후 자동 리다이렉트 처리
-          // (localStorage 대신 URL 쿼리 파라미터 사용 - 더 명확함)
-          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/join/${inviteCode}`)}`;
+          // 초대 코드로 이벤트ID 조회
+          const { data: eventData } = await supabase
+            .from("events")
+            .select("id")
+            .eq("invite_code", inviteCode)
+            .single();
+
+          if (!eventData) {
+            console.error(
+              "[CLIENT JOIN] 초대 코드에 해당하는 이벤트를 찾을 수 없음",
+            );
+            setError("이벤트를 찾을 수 없습니다.");
+            setIsLoading(false);
+            return;
+          }
+
+          // 로그인 후 직접 이벤트 참여 페이지로 리다이렉트
+          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/protected/events/${eventData.id}?join=true&code=${inviteCode}`)}`;
           console.log("[CLIENT JOIN] 로그인 페이지로 리다이렉트:", redirectUrl);
           window.location.href = redirectUrl;
           return;

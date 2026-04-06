@@ -47,47 +47,14 @@ export function ClientJoinPage({
           user ? `${user.email}` : "미인증",
         );
 
-        // 미인증 사용자인 경우
+        // 미인증 사용자는 서버에서 이미 리다이렉트됨 (도달 불가)
+        // 이 부분은 로그인한 사용자가 /join/[code]로 직접 접속한 경우만 실행됨
         if (!user) {
           console.log(
-            "[CLIENT JOIN] 미인증 사용자 감지, inviteCode로 eventId 조회",
+            "[CLIENT JOIN] 미인증 사용자 (서버에서 리다이렉트되었어야 함)",
           );
-
-          // 초대 코드로 이벤트ID 조회
-          const { data: eventData } = await supabase
-            .from("events")
-            .select("id")
-            .eq("invite_code", inviteCode)
-            .single();
-
-          if (!eventData) {
-            console.error(
-              "[CLIENT JOIN] 초대 코드에 해당하는 이벤트를 찾을 수 없음",
-            );
-            setError("이벤트를 찾을 수 없습니다.");
-            setIsLoading(false);
-            return;
-          }
-
-          // localStorage에 eventId와 inviteCode 저장
-          try {
-            localStorage.setItem("pending_event_id", eventData.id);
-            localStorage.setItem("pending_invite_code", inviteCode);
-            console.log(
-              "[CLIENT JOIN] localStorage 저장 완료 - eventId:",
-              eventData.id,
-            );
-          } catch (e) {
-            console.error("[CLIENT JOIN] localStorage 저장 실패:", e);
-          }
-
-          // redirect_to 파라미터와 함께 로그인 페이지로 리다이렉트
-          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/protected/events/${eventData.id}?join=true&code=${inviteCode}`)}`;
-          console.log(
-            "[CLIENT JOIN] 로그인 페이지로 리다이렉트 (with redirect_to):",
-            redirectUrl,
-          );
-          window.location.href = redirectUrl;
+          setError("이벤트를 찾을 수 없습니다.");
+          setIsLoading(false);
           return;
         }
 

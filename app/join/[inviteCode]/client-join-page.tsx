@@ -50,7 +50,7 @@ export function ClientJoinPage({
         // 미인증 사용자인 경우
         if (!user) {
           console.log(
-            "[CLIENT JOIN] 미인증 사용자 감지, 이벤트ID 조회 후 로그인 페이지로 리다이렉트",
+            "[CLIENT JOIN] 미인증 사용자 감지, inviteCode로 eventId 조회",
           );
 
           // 초대 코드로 이벤트ID 조회
@@ -69,8 +69,19 @@ export function ClientJoinPage({
             return;
           }
 
-          // 로그인 후 직접 이벤트 참여 페이지로 리다이렉트
-          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/protected/events/${eventData.id}?join=true&code=${inviteCode}`)}`;
+          // localStorage에 eventId와 inviteCode 저장
+          try {
+            localStorage.setItem("pending_event_id", eventData.id);
+            localStorage.setItem("pending_invite_code", inviteCode);
+            console.log(
+              "[CLIENT JOIN] localStorage 저장 완료 - eventId:",
+              eventData.id,
+            );
+          } catch (e) {
+            console.error("[CLIENT JOIN] localStorage 저장 실패:", e);
+          }
+
+          const redirectUrl = `/auth/login`;
           console.log("[CLIENT JOIN] 로그인 페이지로 리다이렉트:", redirectUrl);
           window.location.href = redirectUrl;
           return;

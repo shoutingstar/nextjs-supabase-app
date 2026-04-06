@@ -61,13 +61,17 @@ export function LoginForm({
         updated_at: null,
       });
 
-      // localStorage에서 초대 코드 확인
+      // localStorage에서 초대 정보 확인
+      let eventId: string | null = null;
       let inviteCode: string | null = null;
       try {
+        eventId = localStorage.getItem("pending_event_id");
         inviteCode = localStorage.getItem("pending_invite_code");
-        if (inviteCode) {
+        if (eventId && inviteCode) {
           console.log(
-            "[LOGIN FORM] localStorage에서 초대 코드 감지:",
+            "[LOGIN FORM] localStorage에서 초대 정보 감지 - eventId:",
+            eventId,
+            "inviteCode:",
             inviteCode,
           );
         }
@@ -78,16 +82,17 @@ export function LoginForm({
       // redirectTo를 먼저 저장 (refresh 후에도 접근 가능하도록)
       let targetUrl = redirectTo;
 
-      // 초대 코드가 있으면 join 페이지로 리다이렉트
-      if (inviteCode) {
-        console.log("[LOGIN FORM] 초대 코드 감지:", inviteCode);
-        targetUrl = `/join/${inviteCode}`;
+      // 초대 정보가 있으면 바로 이벤트 참여 페이지로 리다이렉트
+      if (eventId && inviteCode) {
+        console.log("[LOGIN FORM] 초대 정보 감지:", { eventId, inviteCode });
+        targetUrl = `/protected/events/${eventId}?join=true&code=${inviteCode}`;
         console.log("[LOGIN FORM] 최종 리다이렉트 URL:", targetUrl);
 
         // localStorage에서 제거
         try {
+          localStorage.removeItem("pending_event_id");
           localStorage.removeItem("pending_invite_code");
-          console.log("[LOGIN FORM] localStorage에서 초대 코드 제거");
+          console.log("[LOGIN FORM] localStorage에서 초대 정보 제거");
         } catch (e) {
           console.error("[LOGIN FORM] localStorage 제거 실패:", e);
         }

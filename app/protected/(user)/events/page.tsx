@@ -1,46 +1,47 @@
 /**
  * 이벤트 목록 페이지 (/protected/events)
- * Phase 2: 더미 데이터(MOCK_EVENTS, MOCK_CURRENT_USER) 사용
- * Phase 3에서 Supabase 쿼리로 교체 예정
+ * Supabase DB에서 현재 사용자의 이벤트를 조회합니다.
  */
 
 import { Calendar, Plus, Search } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { EventCard } from "@/components/events/event-card";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { MOCK_CURRENT_USER, MOCK_EVENTS } from "@/lib/data/mock-data";
+import {
+  getUserHostedEvents,
+  getUserParticipatingEvents,
+} from "@/lib/queries/events";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "이벤트 | Gather",
   description: "내가 주최하는 이벤트와 참여 중인 이벤트를 확인하세요.",
 };
 
-export default function EventsPage() {
-  // Phase 2: 더미 데이터에서 현재 사용자 기준으로 이벤트 분리
-  // MOCK_CURRENT_USER는 MOCK_USERS[2]이며 HOST_IDS(처음 5명)에 포함되지 않음
-  // 테스트를 위해 처음 5개 이벤트를 주최 이벤트로, 다음 5개를 참여 이벤트로 사용
-  const hostedEvents = MOCK_EVENTS.filter(
-    (e) => e.host_id === MOCK_CURRENT_USER.id,
-  ).slice(0, 5);
+export default async function EventsPage() {
+  const supabase = await createClient();
 
-  // 참여 이벤트: 주최하지 않는 published 이벤트 중 일부 (더미)
-  const participatingEvents = MOCK_EVENTS.filter(
-    (e) => e.host_id !== MOCK_CURRENT_USER.id && e.status === "published",
-  ).slice(0, 5);
+  // 현재 로그인 사용자 확인
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // 더미 데이터에서 호스팅 이벤트가 없으면 처음 3개를 보여줌
-  const displayHostedEvents =
-    hostedEvents.length > 0 ? hostedEvents : MOCK_EVENTS.slice(0, 3);
-  const displayParticipatingEvents =
-    participatingEvents.length > 0
-      ? participatingEvents
-      : MOCK_EVENTS.slice(3, 6);
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  // DB에서 이벤트 목록 조회 (병렬 실행)
+  const [hostedEvents, participatingEvents] = await Promise.all([
+    getUserHostedEvents(user.id),
+    getUserParticipatingEvents(user.id),
+  ]);
 
   const hasAnyEvents =
-    displayHostedEvents.length > 0 || displayParticipatingEvents.length > 0;
+    hostedEvents.length > 0 || participatingEvents.length > 0;
 
   return (
     <div className="space-y-6 pb-24">
@@ -73,22 +74,44 @@ export default function EventsPage() {
       )}
 
       {/* 내가 주최하는 이벤트 */}
-      {displayHostedEvents.length > 0 && (
+      {hostedEvents.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">내가 주최하는 이벤트</h2>
             <span className="text-muted-foreground text-sm">
-              {displayHostedEvents.length}개
+              {hostedEvents.length}개
             </span>
           </div>
           <div className="space-y-3">
-            {displayHostedEvents.map((event) => (
+            {hostedEvents.map((event) => (
               <Link
                 key={event.id}
                 href={`/protected/events/${event.id}`}
                 className="block"
               >
-                <EventCard event={event} variant="compact" />
+                <EventCard
+                  event={{
+                    id: event.id,
+                    title: event.title,
+                    description: event.description,
+                    start_date: event.event_date,
+                    location: event.location,
+                    host_id: event.host.id,
+                    status: event.status,
+                    invite_code: event.invite_code,
+                    max_participants: event.max_participants,
+                    cover_image: event.cover_image_url,
+                    created_at: new Date().toISOString(),
+                    updated_at: null,
+                    host: {
+                      id: event.host.id,
+                      name: event.host.full_name ?? "알 수 없음",
+                      avatar_url: null,
+                    },
+                    participant_count: event.participants_count,
+                  }}
+                  variant="compact"
+                />
               </Link>
             ))}
           </div>
@@ -96,22 +119,44 @@ export default function EventsPage() {
       )}
 
       {/* 참여 중인 이벤트 */}
-      {displayParticipatingEvents.length > 0 && (
+      {participatingEvents.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">참여 중인 이벤트</h2>
             <span className="text-muted-foreground text-sm">
-              {displayParticipatingEvents.length}개
+              {participatingEvents.length}개
             </span>
           </div>
           <div className="space-y-3">
-            {displayParticipatingEvents.map((event) => (
+            {participatingEvents.map((event) => (
               <Link
                 key={event.id}
                 href={`/protected/events/${event.id}`}
                 className="block"
               >
-                <EventCard event={event} variant="compact" />
+                <EventCard
+                  event={{
+                    id: event.id,
+                    title: event.title,
+                    description: event.description,
+                    start_date: event.event_date,
+                    location: event.location,
+                    host_id: event.host.id,
+                    status: event.status,
+                    invite_code: event.invite_code,
+                    max_participants: event.max_participants,
+                    cover_image: event.cover_image_url,
+                    created_at: new Date().toISOString(),
+                    updated_at: null,
+                    host: {
+                      id: event.host.id,
+                      name: event.host.full_name ?? "알 수 없음",
+                      avatar_url: null,
+                    },
+                    participant_count: event.participants_count,
+                  }}
+                  variant="compact"
+                />
               </Link>
             ))}
           </div>

@@ -4,3 +4,6 @@ out/
 next-env.d.ts
 package-lock.json
 .DS_Store
+# Playwright 테스트 생성 파일
+playwright-report/
+test-results/

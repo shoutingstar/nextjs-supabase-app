@@ -78,7 +78,7 @@ export function StatsCharts() {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="draft" stackId="a" fill="#ef4444" name="초안" />
+              <Bar dataKey="draft" stackId="a" fill="#ef4444" name="예정" />
               <Bar dataKey="published" stackId="a" fill="#3b82f6" name="공개" />
               <Bar dataKey="completed" stackId="a" fill="#10b981" name="완료" />
             </BarChart>

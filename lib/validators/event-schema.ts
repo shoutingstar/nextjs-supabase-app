@@ -34,19 +34,13 @@ export const createEventSchema = z.object({
     .optional()
     .or(z.literal("")),
 
+  // Zod v4 + react-hook-form 호환: z.number().optional()으로 명확한 타입 제공
+  // 빈 문자열 처리는 폼 컴포넌트의 onChange에서 담당
   max_participants: z
-    .union([
-      // 숫자 문자열 → 정수 변환
-      z.coerce
-        .number({
-          invalid_type_error: "숫자를 입력해 주세요",
-        })
-        .int("정수를 입력해 주세요")
-        .positive("1명 이상 입력해 주세요")
-        .max(10000, "최대 10,000명까지 설정할 수 있습니다"),
-      // 빈 문자열은 undefined로 처리
-      z.literal("").transform(() => undefined),
-    ])
+    .number()
+    .int("정수를 입력해 주세요")
+    .positive("1명 이상 입력해 주세요")
+    .max(10000, "최대 10,000명까지 설정할 수 있습니다")
     .optional(),
 
   description: z
@@ -56,6 +50,7 @@ export const createEventSchema = z.object({
     .or(z.literal("")),
 
   // 브라우저 File 타입: SSR 환경에서 File이 undefined일 수 있어 z.any() 사용
+
   cover_image: z.any().optional(),
 });
 
@@ -63,10 +58,13 @@ export const createEventSchema = z.object({
  * 이벤트 수정 스키마
  * ============================================================================ */
 
-/** 이벤트 상태 enum */
+/**
+ * 이벤트 상태 enum
+ * DB check 제약: draft | active | cancelled | completed
+ */
 export const eventStatusSchema = z.enum([
   "draft",
-  "published",
+  "active",
   "cancelled",
   "completed",
 ]);

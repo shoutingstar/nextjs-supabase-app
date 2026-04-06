@@ -52,7 +52,7 @@ export default function AdminDashboardPage() {
   ).length;
   const totalParticipations = Object.values(MOCK_EVENT_PARTICIPANTS).flat()
     .length;
-  const thisMonthEvents = MOCK_EVENTS.filter((e) => {
+  const _thisMonthEvents = MOCK_EVENTS.filter((e) => {
     const eventDate = new Date(e.created_at);
     const now = new Date();
     return (
@@ -65,7 +65,7 @@ export default function AdminDashboardPage() {
     {
       title: "전체 이벤트",
       value: totalEvents,
-      description: `공개: ${MOCK_EVENTS.filter((e) => e.status === "published").length}개`,
+      description: `활성: ${MOCK_EVENTS.filter((e) => e.status === "active").length}개`,
       icon: BarChart3,
     },
     {

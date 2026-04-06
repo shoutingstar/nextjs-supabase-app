@@ -107,22 +107,22 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 
 ### Phase 3: 데이터베이스 설정 및 핵심 기능 구현
 
-- **Task 007: 데이터베이스 스키마 및 Supabase 초기 설정**
-  - UI 검토 후 최종 확정된 요구사항을 반영한 스키마 설계
-  - Supabase 데이터베이스 테이블 생성 (users, events, event_participants)
-  - Row Level Security (RLS) 정책 설정
-  - 인덱스 생성 (invite_code, created_by, event_id, user_id)
-  - Supabase Storage 버킷 생성 (event-covers)
-  - Realtime 구독 설정 준비
-  - UI에서 사용 중인 임시 타입을 실제 DB 스키마 타입으로 교체
+- **Task 007: 데이터베이스 스키마 및 Supabase 초기 설정** ✅ - 완료
+  - ✅ UI 검토 후 최종 확정된 요구사항을 반영한 스키마 설계
+  - ✅ Supabase 데이터베이스 테이블 생성 (profiles, events, event_participants, carpool_slots, carpool_requests, announcements, expenses, expense_splits)
+  - ✅ Row Level Security (RLS) 정책 설정
+  - ✅ 인덱스 생성 (invite_code, host_id, event_id, user_id, driver_id, slot_id 등 전체 외래키 인덱스)
+  - ✅ Supabase Storage 버킷 생성 (event-covers)
+  - ✅ Realtime 구독 설정 준비
+  - ✅ UI에서 사용 중인 임시 타입을 실제 DB 스키마 타입으로 교체 (lib/types/database.types.ts)
 
-- **Task 008: 인증 시스템 및 권한 관리**
-  - Google OAuth 로그인 플로우 완성 (F010)
-  - 사용자 프로필 자동 생성 로직 구현
-  - 관리자 권한 체크 미들웨어 구현 (role: admin)
-  - 보호된 라우트 접근 제어 구현
-  - 로그아웃 기능 구현
-  - Playwright MCP를 활용한 인증 플로우 E2E 테스트
+- **Task 008: 인증 시스템 및 권한 관리** ✅ - 완료
+  - ✅ Google OAuth 로그인 플로우 완성 (F010)
+  - ✅ 사용자 프로필 자동 생성 로직 구현
+  - ✅ 관리자 권한 체크 미들웨어 구현 (role: admin)
+  - ✅ 보호된 라우트 접근 제어 구현
+  - ✅ 로그아웃 기능 구현
+  - ✅ Playwright MCP를 활용한 인증 플로우 E2E 테스트
 
 - **Task 009: 이벤트 CRUD 및 초대 시스템**
   - 이벤트 생성 API 구현 (F001)
@@ -303,6 +303,9 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 3. **UI 우선 개발**: Phase 2에서 더미 데이터로 전체 UI를 완성한 후 데이터베이스 설계 진행
 
 ---
+
+**📅 최종 업데이트**: 2026-04-03
+**📊 진행 상황**: Phase 3 진행 중 (8/15 Tasks 완료)
 
 **📌 이 로드맵은 6주 내 MVP 완성을 목표로 하며, 각 Task는 1-2일 내 완료 가능한 단위로 구성되었습니다.**
 **구조 우선 접근법을 엄격히 준수하여 중복 작업을 최소화하고 팀 협업 효율을 극대화합니다.**

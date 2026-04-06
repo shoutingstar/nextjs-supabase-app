@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]
+  - alert [ref=e40]: 이벤트 | Gather | Gather
+  - generic [ref=e41]:
+    - banner [ref=e42]:
+      - generic [ref=e43]:
+        - link "G Gather" [ref=e44] [cursor=pointer]:
+          - /url: /protected
+          - generic [ref=e46]: G
+          - generic [ref=e47]: Gather
+        - generic [ref=e48]:
+          - generic [ref=e49]: dhljjknd@gmail.com
+          - button [ref=e50]:
+            - img
+          - button [ref=e51]:
+            - img
+    - main [ref=e52]:
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - heading "이벤트" [level=1] [ref=e56]
+          - button "이벤트 검색" [ref=e57]:
+            - img [ref=e58]
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - heading "내가 주최하는 이벤트" [level=2] [ref=e63]
+            - generic [ref=e64]: 3개
+          - generic [ref=e65]:
+            - link "개발자 모임 커버 이미지 개발자 모임 완료됨 개발자 모임2 스타벅스" [ref=e66] [cursor=pointer]:
+              - /url: /protected/events/1293a211-78b5-4d43-959a-eaca01de24a9
+              - generic [ref=e67]:
+                - img "개발자 모임 커버 이미지" [ref=e69]
+                - generic [ref=e70]:
+                  - generic [ref=e71]:
+                    - heading "개발자 모임" [level=3] [ref=e72]
+                    - generic [ref=e73]: 완료됨
+                  - paragraph [ref=e74]: 개발자 모임2
+                  - generic [ref=e76]:
+                    - img [ref=e77]
+                    - text: 스타벅스
+            - link "이벤트 초대 확인 커버 이미지 이벤트 초대 확인 예정 이벤트 초대 확인 스타벅스" [ref=e80] [cursor=pointer]:
+              - /url: /protected/events/a58213e1-3e1b-465d-9756-43cc9349efa2
+              - generic [ref=e81]:
+                - img "이벤트 초대 확인 커버 이미지" [ref=e83]
+                - generic [ref=e84]:
+                  - generic [ref=e85]:
+                    - heading "이벤트 초대 확인" [level=3] [ref=e86]
+                    - generic [ref=e87]: 예정
+                  - paragraph [ref=e88]: 이벤트 초대 확인
+                  - generic [ref=e90]:
+                    - img [ref=e91]
+                    - text: 스타벅스
+            - link "이벤트 상태 확인1 커버 이미지 이벤트 상태 확인1 예정 이벤트 상태 확인1 강남역" [ref=e94] [cursor=pointer]:
+              - /url: /protected/events/fb622270-4775-4d17-b035-9310a6e597ab
+              - generic [ref=e95]:
+                - img "이벤트 상태 확인1 커버 이미지" [ref=e97]
+                - generic [ref=e98]:
+                  - generic [ref=e99]:
+                    - heading "이벤트 상태 확인1" [level=3] [ref=e100]
+                    - generic [ref=e101]: 예정
+                  - paragraph [ref=e102]: 이벤트 상태 확인1
+                  - generic [ref=e104]:
+                    - img [ref=e105]
+                    - text: 강남역
+        - link "이벤트 만들기" [ref=e108] [cursor=pointer]:
+          - /url: /protected/events/new
+          - button "새 이벤트 만들기" [ref=e109]:
+            - img
+    - navigation [ref=e110]:
+      - generic [ref=e111]:
+        - link "홈" [ref=e112] [cursor=pointer]:
+          - /url: /protected
+          - img [ref=e113]
+          - generic [ref=e116]: 홈
+        - link "이벤트" [ref=e117] [cursor=pointer]:
+          - /url: /protected/events
+          - img [ref=e118]
+          - generic [ref=e120]: 이벤트
+        - link "새이벤트" [ref=e121] [cursor=pointer]:
+          - /url: /protected/events/new
+          - img [ref=e122]
+          - generic [ref=e123]: 새이벤트
+        - link "프로필" [ref=e124] [cursor=pointer]:
+          - /url: /protected/account
+          - img [ref=e125]
+          - generic [ref=e128]: 프로필

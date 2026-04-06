@@ -7,6 +7,7 @@
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import { EventsTable } from "@/components/admin/events-table";
 import { StatsCharts } from "@/components/admin/stats-charts";
@@ -77,11 +78,18 @@ export default async function AdminSectionPage({
       </div>
 
       {/* 섹션별 콘텐츠 렌더링 - 데스크톱 풀 너비 테이블 */}
-      {validSection === "events" && <EventsTable />}
-      {validSection === "users" && <UsersTable />}
-
-      {/* 차트는 전체 너비 활용 */}
-      {validSection === "stats" && <StatsCharts />}
+      <Suspense
+        fallback={
+          <div className="text-muted-foreground py-8 text-center">
+            불러오는 중...
+          </div>
+        }
+      >
+        {validSection === "events" && <EventsTable />}
+        {validSection === "users" && <UsersTable />}
+        {/* 차트는 전체 너비 활용 */}
+        {validSection === "stats" && <StatsCharts />}
+      </Suspense>
     </div>
   );
 }

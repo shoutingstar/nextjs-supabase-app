@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { createCarpoolSlot } from "@/app/protected/events/[eventId]/carpool/actions";
+import { createCarpoolSlot } from "@/app/protected/(user)/events/[eventId]/carpool/actions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

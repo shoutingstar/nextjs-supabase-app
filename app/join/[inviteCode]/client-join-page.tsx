@@ -50,17 +50,12 @@ export function ClientJoinPage({
         // 미인증 사용자인 경우
         if (!user) {
           console.log(
-            "[CLIENT JOIN] 미인증 사용자 감지, localStorage에 inviteCode 저장",
+            "[CLIENT JOIN] 미인증 사용자 감지, 로그인 페이지로 리다이렉트",
           );
-          // localStorage에 초대 코드 저장
-          try {
-            localStorage.setItem("pending_invite_code", inviteCode);
-            console.log("[CLIENT JOIN] localStorage 저장 완료");
-          } catch (e) {
-            console.error("[CLIENT JOIN] localStorage 저장 실패:", e);
-          }
 
-          const redirectUrl = `/auth/login`;
+          // redirect_to 파라미터로 로그인 후 자동 리다이렉트 처리
+          // (localStorage 대신 URL 쿼리 파라미터 사용 - 더 명확함)
+          const redirectUrl = `/auth/login?redirect_to=${encodeURIComponent(`/join/${inviteCode}`)}`;
           console.log("[CLIENT JOIN] 로그인 페이지로 리다이렉트:", redirectUrl);
           window.location.href = redirectUrl;
           return;

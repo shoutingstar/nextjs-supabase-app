@@ -136,9 +136,9 @@ const USER_NAMES = [
 
 /** 이벤트 상태 목록 */
 const EVENT_STATUSES: EventStatus[] = [
-  "published",
-  "published",
-  "published",
+  "active",
+  "active",
+  "active",
   "draft",
   "completed",
   "cancelled",

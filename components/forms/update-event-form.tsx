@@ -2,8 +2,7 @@
 
 /**
  * 이벤트 수정 폼 컴포넌트
- * CreateEventForm 기반으로 확장 (기존 데이터 미리 채우기 + status 필드)
- * Phase 2: 더미 데이터 처리만 수행 (API 미연동)
+ * Supabase updateEvent / deleteEvent / uploadEventCoverImage Server Action 연동
  */
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +11,12 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import {
+  deleteEventAction,
+  updateEvent,
+  updateEventAction,
+  uploadEventCoverImage,
+} from "@/app/protected/(user)/events/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,19 +44,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { EventDetail } from "@/lib/types/event";
+import type { EventDetailData } from "@/lib/queries/events";
 import {
   type UpdateEventFormValues,
   updateEventSchema,
 } from "@/lib/validators/event-schema";
 
 /* ============================================================================
- * 상태 레이블 매핑
+ * 상태 레이블 매핑 (DB enum: draft | active | cancelled | completed)
  * ============================================================================ */
 
 const STATUS_OPTIONS = [
-  { value: "draft", label: "초안" },
-  { value: "published", label: "공개" },
+  { value: "draft", label: "예정" },
+  { value: "active", label: "활성" },
   { value: "cancelled", label: "취소됨" },
   { value: "completed", label: "완료됨" },
 ] as const;
@@ -62,12 +67,15 @@ const STATUS_OPTIONS = [
 
 /**
  * ISO 8601 날짜 문자열을 datetime-local input 형식으로 변환합니다.
- * @example "2024-03-15T14:30:00" → "2024-03-15T14:30"
+ * @example "2024-03-15T14:30:00Z" → "2024-03-15T14:30"
  */
 function toDatetimeLocalValue(isoString: string): string {
   if (!isoString) return "";
-  // 초 이하 제거: "YYYY-MM-DDTHH:mm" 형식으로 변환
-  return isoString.slice(0, 16);
+  // UTC → 로컬 시간 변환 후 "YYYY-MM-DDTHH:mm" 형식으로
+  const date = new Date(isoString);
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+  return localDate.toISOString().slice(0, 16);
 }
 
 /* ============================================================================
@@ -75,8 +83,8 @@ function toDatetimeLocalValue(isoString: string): string {
  * ============================================================================ */
 
 interface UpdateEventFormProps {
-  /** 수정할 이벤트 데이터 */
-  event: EventDetail;
+  /** 수정할 이벤트 데이터 (DB에서 조회한 실제 데이터) */
+  event: EventDetailData;
   /**
    * 폼 제출 성공 후 리다이렉트 경로
    * @default `/protected/events/${event.id}`
@@ -91,10 +99,10 @@ interface UpdateEventFormProps {
 /**
  * 이벤트 수정 폼 컴포넌트
  *
- * CreateEventForm에서 다음 기능이 추가됩니다:
- * - event prop으로 기존 데이터 미리 채우기 (defaultValues)
- * - status 필드 (draft/published/cancelled/completed)
+ * - event prop으로 기존 데이터 미리 채우기
+ * - status 필드 (draft/active/cancelled/completed)
  * - 삭제 버튼 + 확인 모달
+ * - 커버 이미지 업로드 지원
  */
 export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
   const router = useRouter();
@@ -111,7 +119,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
     resolver: zodResolver(updateEventSchema),
     defaultValues: {
       title: event.title,
-      start_date: toDatetimeLocalValue(event.start_date),
+      start_date: toDatetimeLocalValue(event.event_date),
       location: event.location ?? "",
       max_participants: event.max_participants ?? undefined,
       description: event.description ?? "",
@@ -124,19 +132,54 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
 
   /* ------------------------------------------------------------------
    * 폼 제출 핸들러
-   * Phase 2: 콘솔 로그 + toast 메시지만 처리
-   * Phase 3: Supabase PATCH 연동 예정
+   * 1. 커버 이미지 업로드 (파일이 있는 경우)
+   * 2. 이벤트 수정 (updateEventAction: Zod 서버 측 재검증 포함)
+   *    - 커버 이미지 URL 업데이트는 updateEvent(저수준)로 별도 처리
    * ------------------------------------------------------------------ */
   async function onSubmit(values: UpdateEventFormValues) {
-    console.log("이벤트 수정 데이터:", { id: event.id, ...values });
+    let coverImageUrl: string | undefined = undefined;
 
-    // 실제 제출 시뮬레이션
-    await new Promise((resolve) => setTimeout(resolve, 300));
+    // 1단계: 새 커버 이미지 업로드 (파일이 있는 경우)
+    // cover_image(File)는 Server Action으로 직렬화 불가 → 별도 업로드 단계로 처리
+    if (values.cover_image instanceof File && values.cover_image.size > 0) {
+      const imageFormData = new FormData();
+      imageFormData.append("cover_image", values.cover_image);
+
+      const imageResult = await uploadEventCoverImage(imageFormData, event.id);
+
+      if (imageResult.success && imageResult.data) {
+        coverImageUrl = imageResult.data.url;
+      } else {
+        toast.warning("커버 이미지 업로드에 실패했습니다.", {
+          description: imageResult.error,
+        });
+        // 이미지 업로드 실패해도 나머지 수정은 계속 진행
+      }
+    }
+
+    // 2단계: Zod 검증 포함 이벤트 수정 Action 호출
+    // cover_image 필드는 File 타입이라 직렬화 불가하므로 제외하고 전달
+    const { cover_image: _cover_image, ...restValues } = values;
+    const result = await updateEventAction(event.id, restValues);
+
+    if (!result.success) {
+      // Zod 에러 포함 서버 에러 메시지 표시
+      toast.error("이벤트 수정에 실패했습니다.", {
+        description: result.error,
+      });
+      return;
+    }
+
+    // 3단계: 커버 이미지 URL 별도 업데이트 (새 이미지가 업로드된 경우)
+    if (coverImageUrl !== undefined) {
+      await updateEvent(event.id, { cover_image_url: coverImageUrl });
+    }
 
     toast.success("이벤트가 수정되었습니다!", {
       description: `"${values.title ?? event.title}" 이벤트가 업데이트되었습니다.`,
     });
 
+    // 성공 시 수정된 이벤트 상세 페이지로 이동
     startTransition(() => {
       router.push(successRedirect);
       router.refresh();
@@ -145,26 +188,27 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
 
   /* ------------------------------------------------------------------
    * 삭제 핸들러
-   * Phase 2: 콘솔 로그 + toast 메시지만 처리
-   * Phase 3: Supabase DELETE 연동 예정
+   * deleteEventAction: 권한 검증 + Storage 정리 + redirect() 포함
    * ------------------------------------------------------------------ */
   async function handleDelete() {
     setIsDeleting(true);
-    console.log("이벤트 삭제:", event.id);
 
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    setIsDeleting(false);
-    setDeleteDialogOpen(false);
-
-    toast.success("이벤트가 삭제되었습니다", {
-      description: `"${event.title}" 이벤트가 삭제되었습니다.`,
-    });
-
-    startTransition(() => {
-      router.push("/protected/events");
-      router.refresh();
-    });
+    try {
+      // deleteEventAction은 성공 시 내부에서 redirect() 호출 (NEXT_REDIRECT throw)
+      await deleteEventAction(event.id);
+    } catch (err) {
+      // redirect()는 NEXT_REDIRECT 에러를 throw하므로 반드시 re-throw
+      const error = err as { digest?: string };
+      if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+        throw err;
+      }
+      // 실제 오류인 경우 (권한 없음, 이벤트 없음 등)
+      toast.error("이벤트 삭제에 실패했습니다.", {
+        description: "잠시 후 다시 시도해 주세요.",
+      });
+      setIsDeleting(false);
+      setDeleteDialogOpen(false);
+    }
   }
 
   /* ------------------------------------------------------------------
@@ -285,7 +329,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
                   value={field.value ?? ""}
                   onChange={(e) => {
                     const val = e.target.value;
-                    field.onChange(val === "" ? undefined : val);
+                    field.onChange(val === "" ? undefined : Number(val));
                   }}
                   disabled={isSubmitting}
                 />
@@ -326,7 +370,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
               <FormControl>
                 <Input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     onChange(file ?? undefined);
@@ -335,11 +379,12 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
                   disabled={isSubmitting}
                 />
               </FormControl>
-              {event.cover_image && (
+              {event.cover_image_url && (
                 <FormDescription>
                   현재 이미지가 있습니다. 새 파일을 선택하면 교체됩니다.
                 </FormDescription>
               )}
+              <FormDescription>JPG, PNG, WebP 형식 / 최대 5MB</FormDescription>
               <FormMessage />
             </FormItem>
           )}

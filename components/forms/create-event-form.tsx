@@ -3,7 +3,7 @@
 /**
  * 이벤트 생성 폼 컴포넌트
  * React Hook Form + Zod 검증 사용
- * Phase 2: 더미 데이터 처리만 수행 (API 미연동)
+ * Supabase Storage 이미지 업로드 + 이벤트 생성 Server Action 연동
  */
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,11 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import {
+  createEventAction,
+  updateEvent,
+  uploadEventCoverImage,
+} from "@/app/protected/(user)/events/actions";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -47,16 +52,13 @@ interface CreateEventFormProps {
 /**
  * 이벤트 생성 폼 컴포넌트
  *
- * 필드:
- * - title: 이벤트 제목 (필수)
- * - start_date: 시작 날짜/시간 (필수)
- * - location: 장소 (선택)
- * - max_participants: 최대 참여 인원 (선택)
- * - description: 설명 (선택)
- * - cover_image: 커버 이미지 (선택)
+ * 제출 순서:
+ * 1. 이벤트 DB 레코드 생성 (invite_code 포함)
+ * 2. 커버 이미지가 있으면 Storage 업로드 후 URL 업데이트
+ * 3. 성공 시 이벤트 상세 페이지로 리다이렉트
  */
 export function CreateEventForm({
-  redirectTo = "/protected/events",
+  redirectTo: _redirectTo = "/protected/events",
 }: CreateEventFormProps) {
   const router = useRouter();
   // 라우터 전환 중 로딩 상태 관리
@@ -78,22 +80,57 @@ export function CreateEventForm({
 
   /* ------------------------------------------------------------------
    * 폼 제출 핸들러
-   * Phase 2: 콘솔 로그 + toast 메시지만 처리
-   * Phase 3: Supabase INSERT 연동 예정
+   * 1. 이벤트 생성 (createEventAction: Zod 서버 측 재검증 포함)
+   * 2. 커버 이미지 업로드 (uploadEventCoverImage Server Action)
+   * 3. 이미지 URL을 이벤트에 반영 (updateEvent)
    * ------------------------------------------------------------------ */
   async function onSubmit(values: CreateEventFormValues) {
-    // Phase 2: 더미 처리 (API 호출 없음)
-    console.log("이벤트 생성 데이터:", values);
-
-    // 실제 제출 시뮬레이션 (300ms 딜레이)
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    toast.success("이벤트가 생성되었습니다!", {
-      description: `"${values.title}" 이벤트가 만들어졌습니다.`,
+    // 1단계: Zod 검증 포함 이벤트 생성 Action 호출
+    // cover_image(File)는 Server Action으로 직렬화 불가 → 별도 업로드 단계로 처리
+    const result = await createEventAction({
+      title: values.title,
+      start_date: values.start_date,
+      location: values.location || undefined,
+      max_participants: values.max_participants,
+      description: values.description || undefined,
     });
 
+    if (!result.success || !result.data) {
+      // Zod 에러 포함 서버 에러 메시지 표시
+      toast.error("이벤트 생성에 실패했습니다.", {
+        description: result.error,
+      });
+      return;
+    }
+
+    const { id: eventId, invite_code } = result.data;
+
+    // 2단계: 커버 이미지 업로드 (파일이 있는 경우)
+    if (values.cover_image instanceof File && values.cover_image.size > 0) {
+      const imageFormData = new FormData();
+      imageFormData.append("cover_image", values.cover_image);
+
+      const imageResult = await uploadEventCoverImage(imageFormData, eventId);
+
+      if (imageResult.success && imageResult.data) {
+        // 3단계: 이미지 URL을 이벤트에 업데이트
+        await updateEvent(eventId, { cover_image_url: imageResult.data.url });
+      } else {
+        // 이미지 업로드 실패는 경고만 (이벤트는 이미 생성됨)
+        toast.warning("커버 이미지 업로드에 실패했습니다.", {
+          description:
+            "이벤트는 생성되었습니다. 나중에 이미지를 추가할 수 있습니다.",
+        });
+      }
+    }
+
+    toast.success("이벤트가 생성되었습니다!", {
+      description: `"${values.title}" 이벤트가 만들어졌습니다. 초대 코드: ${invite_code}`,
+    });
+
+    // 성공 시 새 이벤트 상세 페이지로 이동
     startTransition(() => {
-      router.push(redirectTo);
+      router.push(`/protected/events/${eventId}`);
       router.refresh();
     });
   }
@@ -187,7 +224,7 @@ export function CreateEventForm({
                   value={field.value ?? ""}
                   onChange={(e) => {
                     const val = e.target.value;
-                    field.onChange(val === "" ? undefined : val);
+                    field.onChange(val === "" ? undefined : Number(val));
                   }}
                   disabled={isSubmitting}
                 />
@@ -228,7 +265,7 @@ export function CreateEventForm({
               <FormControl>
                 <Input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/webp"
                   onChange={(e) => {
                     // FileList에서 첫 번째 파일만 사용
                     const file = e.target.files?.[0];
@@ -238,7 +275,7 @@ export function CreateEventForm({
                   disabled={isSubmitting}
                 />
               </FormControl>
-              <FormDescription>JPG, PNG, WebP 등 이미지 파일</FormDescription>
+              <FormDescription>JPG, PNG, WebP 형식 / 최대 5MB</FormDescription>
               <FormMessage />
             </FormItem>
           )}

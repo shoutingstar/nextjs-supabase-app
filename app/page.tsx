@@ -1,11 +1,24 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
+import { HomeNav } from "@/components/layout/home-nav";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  // 이미 로그인되었으면 대시보드로 리다이렉트
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect("/protected");
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="flex w-full flex-1 flex-col items-center gap-20">
@@ -22,13 +35,18 @@ export default function Home() {
             </div>
           </div>
         </nav>
-        <div className="flex w-full max-w-sm flex-1 flex-col gap-12 p-5 pt-20">
+        <div className="flex w-full max-w-sm flex-1 flex-col gap-12 p-5 pb-20 pt-20">
           <Hero />
         </div>
 
         <footer className="text-muted-foreground mx-auto w-full py-8 text-center text-xs">
           © 2026 Gather
         </footer>
+
+        {/* 하단 네비게이션 - 비로그인 사용자는 버튼 비활성화 */}
+        <div className="fixed bottom-0 left-1/2 z-40 w-full max-w-sm -translate-x-1/2">
+          <HomeNav isLoggedIn={!!user} />
+        </div>
       </div>
     </main>
   );

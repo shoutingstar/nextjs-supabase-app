@@ -6,7 +6,8 @@
 
 import type { ReactNode } from "react";
 
-import type { Event, EventDetail, ParticipantDetail } from "./event";
+import type { Event, EventDetail } from "./event";
+import type { ParticipantDetail } from "./participant";
 import type { User, UserProfile } from "./user";
 
 /* ============================================================================
@@ -91,8 +92,12 @@ export interface DropdownMenuProps {
 /**
  * 폼 Props
  * @description React Hook Form과 통합된 폼 컴포넌트
+ * React.FormHTMLAttributes의 onSubmit과 충돌하지 않도록 별도 핸들러 사용
  */
-export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
+export interface FormProps extends Omit<
+  React.FormHTMLAttributes<HTMLFormElement>,
+  "onSubmit"
+> {
   onSubmit: (formData: FormData) => Promise<void> | void;
   isLoading?: boolean;
   error?: string | null;
@@ -285,8 +290,12 @@ export interface ParticipantCardProps {
 /**
  * 로그인 폼 Props
  * @description 로그인 폼 컴포넌트
+ * React.HTMLAttributes의 onError와 충돌하지 않도록 별도 핸들러 사용
  */
-export interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface LoginFormProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "onError"
+> {
   onSuccess?: (user: User) => void;
   onError?: (error: string) => void;
   redirectTo?: string;
@@ -295,8 +304,12 @@ export interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * 회원가입 폼 Props
  * @description 회원가입 폼 컴포넌트
+ * React.HTMLAttributes의 onError와 충돌하지 않도록 별도 핸들러 사용
  */
-export interface SignUpFormProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SignUpFormProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "onError"
+> {
   onSuccess?: (user: User) => void;
   onError?: (error: string) => void;
   redirectTo?: string;

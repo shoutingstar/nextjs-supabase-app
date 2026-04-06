@@ -1,0 +1,71 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]
+  - alert [ref=e40]: 이벤트 초대 확인 | Gather | Gather
+  - generic [ref=e41]:
+    - banner [ref=e42]:
+      - generic [ref=e43]:
+        - link "G Gather" [ref=e44] [cursor=pointer]:
+          - /url: /protected
+          - generic [ref=e46]: G
+          - generic [ref=e47]: Gather
+        - generic [ref=e48]:
+          - generic [ref=e49]: dhljjknd@gmail.com
+          - button [ref=e50]:
+            - img
+          - button [ref=e51]:
+            - img
+    - main [ref=e52]:
+      - generic [ref=e129]:
+        - link "← 이벤트 목록" [ref=e130] [cursor=pointer]:
+          - /url: /protected/events
+        - generic [ref=e131]:
+          - generic [ref=e132]:
+            - heading "이벤트 초대 확인" [level=1] [ref=e133]
+            - generic [ref=e134]: 예정
+          - paragraph [ref=e135]: "주최: 쿠and쿠"
+        - img "이벤트 초대 확인 커버 이미지" [ref=e137]
+        - generic [ref=e138]:
+          - heading "이벤트 정보" [level=2] [ref=e139]
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - img [ref=e142]
+              - generic [ref=e144]:
+                - paragraph [ref=e145]: 2026년 4월 21일 화요일
+                - paragraph [ref=e146]: 03:29
+            - generic [ref=e147]:
+              - img [ref=e148]
+              - paragraph [ref=e151]: 스타벅스
+            - generic [ref=e152]:
+              - img [ref=e153]
+              - paragraph [ref=e158]: 0명 참여 / 최대 11명
+          - paragraph [ref=e160]: 이벤트 초대 확인
+        - generic [ref=e161]:
+          - paragraph [ref=e162]: 초대 코드
+          - paragraph [ref=e163]: r6zvhxck
+        - generic [ref=e164]:
+          - button "초대 링크 복사" [ref=e165]:
+            - img
+            - text: 초대 링크 복사
+          - link "이벤트 수정" [ref=e166] [cursor=pointer]:
+            - /url: /protected/events/a58213e1-3e1b-465d-9756-43cc9349efa2/edit
+            - img
+            - text: 이벤트 수정
+    - navigation [ref=e110]:
+      - generic [ref=e111]:
+        - link "홈" [ref=e112] [cursor=pointer]:
+          - /url: /protected
+          - img [ref=e113]
+          - generic [ref=e116]: 홈
+        - link "이벤트" [ref=e117] [cursor=pointer]:
+          - /url: /protected/events
+          - img [ref=e118]
+          - generic [ref=e120]: 이벤트
+        - link "새이벤트" [ref=e121] [cursor=pointer]:
+          - /url: /protected/events/new
+          - img [ref=e122]
+          - generic [ref=e123]: 새이벤트
+        - link "프로필" [ref=e124] [cursor=pointer]:
+          - /url: /protected/account
+          - img [ref=e125]
+          - generic [ref=e128]: 프로필

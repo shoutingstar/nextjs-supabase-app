@@ -1,0 +1,29 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]: Sign up
+      - generic [ref=e8]: Create a new account
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: Email
+          - textbox "Email" [ref=e14]:
+            - /placeholder: m@example.com
+        - generic [ref=e15]:
+          - generic [ref=e17]: Password
+          - textbox "Password" [ref=e18]
+        - generic [ref=e19]:
+          - generic [ref=e21]: Repeat Password
+          - textbox "Repeat Password" [ref=e22]
+        - button "Sign up" [ref=e23]
+        - generic [ref=e28]: Or
+        - button "Sign up with Google" [ref=e30]:
+          - img
+          - generic [ref=e31]: Sign up with Google
+      - generic [ref=e32]:
+        - text: Already have an account?
+        - link "Login" [ref=e33] [cursor=pointer]:
+          - /url: /auth/login
+  - button "Open Next.js Dev Tools" [ref=e39] [cursor=pointer]:
+    - img [ref=e40]
+  - alert [ref=e43]

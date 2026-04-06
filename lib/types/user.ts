@@ -26,11 +26,13 @@ export interface User {
 /**
  * 사용자 프로필 (공개 정보)
  * @description EventDetail, ParticipantDetail 등에서 호스트/참여자 정보로 사용
+ * EventCardData.host 타입과 호환을 위해 인덱스 시그니처 포함
  */
 export interface UserProfile {
   id: string;
   name: string | null;
   avatar_url: string | null;
+  [key: string]: unknown;
 }
 
 /**

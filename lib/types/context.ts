@@ -7,12 +7,8 @@
 
 import type { ReactNode } from "react";
 
-import type {
-  Event,
-  EventDetail,
-  Participant,
-  ParticipantDetail,
-} from "./event";
+import type { Event, EventDetail } from "./event";
+import type { Participant, ParticipantDetail } from "./participant";
 import type { LoadingState, ModalState, ToastState } from "./ui";
 import type { User } from "./user";
 
@@ -282,11 +278,13 @@ export interface AppContextState {
 /**
  * 전체 앱 Context 액션
  * @description 모든 context 액션을 통합
+ * EventActions.setFilter와 FilterActions.setFilter 시그니처 충돌로 인해
+ * setFilter는 더 유연한 시그니처로 오버라이드
  */
 export interface AppContextActions
   extends
     AuthActions,
-    EventActions,
+    Omit<EventActions, "setFilter">,
     ParticipantActions,
     UIActions,
     FilterActions {}

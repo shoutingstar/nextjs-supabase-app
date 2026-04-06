@@ -1,0 +1,56 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e3]:
+      - navigation [ref=e4]:
+        - generic [ref=e5]:
+          - link "Gather" [ref=e7] [cursor=pointer]:
+            - /url: /
+          - generic [ref=e8]:
+            - button [ref=e9]:
+              - img
+            - generic [ref=e10]:
+              - link "로그인" [ref=e11] [cursor=pointer]:
+                - /url: /auth/login
+              - link "회원가입" [ref=e12] [cursor=pointer]:
+                - /url: /auth/sign-up
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - heading "Gather" [level=1] [ref=e18]
+          - paragraph [ref=e19]: 함께 모이는 가장 간단한 방법
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - img [ref=e23]
+            - generic [ref=e25]:
+              - heading "간편한 이벤트 생성" [level=3] [ref=e26]
+              - paragraph [ref=e27]: 원클릭으로 이벤트를 생성하고 시작하세요
+          - generic [ref=e28]:
+            - img [ref=e30]
+            - generic [ref=e33]:
+              - heading "원클릭 초대 시스템" [level=3] [ref=e34]
+              - paragraph [ref=e35]: 링크를 공유하는 것만으로 초대 완료
+          - generic [ref=e36]:
+            - img [ref=e38]
+            - generic [ref=e43]:
+              - heading "실시간 참여자 관리" [level=3] [ref=e44]
+              - paragraph [ref=e45]: 모든 참여자의 상태를 실시간으로 확인
+        - button "Google로 시작하기" [ref=e48]:
+          - img
+          - generic [ref=e49]: Google로 시작하기
+      - generic [ref=e50]: © 2026 Gather
+      - navigation [ref=e52]:
+        - generic [ref=e53]:
+          - button "홈" [disabled] [ref=e54]:
+            - img [ref=e55]
+            - generic [ref=e58]: 홈
+          - button "이벤트" [disabled] [ref=e59]:
+            - img [ref=e60]
+            - generic [ref=e62]: 이벤트
+          - button "새이벤트" [disabled] [ref=e63]:
+            - img [ref=e64]
+            - generic [ref=e65]: 새이벤트
+          - button "프로필" [disabled] [ref=e66]:
+            - img [ref=e67]
+            - generic [ref=e70]: 프로필
+  - button "Open Next.js Dev Tools" [ref=e76] [cursor=pointer]:
+    - img [ref=e77]
+  - alert [ref=e80]

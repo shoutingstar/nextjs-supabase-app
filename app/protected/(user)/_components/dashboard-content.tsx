@@ -2,7 +2,8 @@
 
 /**
  * 대시보드 콘텐츠 (클라이언트 컴포넌트)
- * new Date() 사용으로 예정된 이벤트 필터링
+ * - 서버 컴포넌트(DashboardPage)에서 데이터를 받아 UI를 렌더링
+ * - new Date() 사용으로 '예정된 이벤트' 필터링 (클라이언트에서 처리)
  */
 
 import { AlertCircle, Calendar, Users } from "lucide-react";
@@ -10,29 +11,68 @@ import Link from "next/link";
 
 import { EventCard } from "@/components/events/event-card";
 import { Button } from "@/components/ui/button";
-import { MOCK_CURRENT_USER, MOCK_EVENTS } from "@/lib/data/mock-data";
+import type { EventWithHost } from "@/lib/queries/events";
 
-export function DashboardContent() {
-  // 현재 사용자의 이벤트 분석
-  const myHostedEvents = MOCK_EVENTS.filter(
-    (e) => e.host_id === MOCK_CURRENT_USER.id,
-  );
+/* ============================================================================
+ * Props 타입
+ * ============================================================================ */
 
-  const myParticipatingEvents = MOCK_EVENTS.filter(
-    (e) => e.host_id !== MOCK_CURRENT_USER.id && e.status === "published",
-  );
+interface DashboardContentProps {
+  /** 현재 로그인 사용자 이름 */
+  userName: string | null;
+  /** 내가 주최하는 이벤트 목록 */
+  hostedEvents: EventWithHost[];
+  /** 참여 중인 이벤트 목록 */
+  participatingEvents: EventWithHost[];
+}
 
-  // 예정된 이벤트 (미래 이벤트만)
+/* ============================================================================
+ * EventWithHost → EventCard용 포맷 변환 유틸
+ * ============================================================================ */
+
+function toEventCardData(event: EventWithHost) {
+  return {
+    id: event.id,
+    title: event.title,
+    description: event.description,
+    start_date: event.event_date,
+    location: event.location,
+    host_id: event.host.id,
+    status: event.status,
+    invite_code: event.invite_code,
+    max_participants: event.max_participants,
+    cover_image: event.cover_image_url,
+    created_at: new Date().toISOString(),
+    updated_at: null,
+    host: {
+      id: event.host.id,
+      name: event.host.full_name ?? "알 수 없음",
+      avatar_url: null,
+    },
+    participants_count: event.participants_count,
+  };
+}
+
+/* ============================================================================
+ * 대시보드 콘텐츠 컴포넌트
+ * ============================================================================ */
+
+export function DashboardContent({
+  userName,
+  hostedEvents,
+  participatingEvents,
+}: DashboardContentProps) {
+  // 예정된 이벤트 (미래 이벤트만) - 클라이언트에서 현재 시각 기준으로 필터링
   const now = new Date();
-  const upcomingEvents = [...myHostedEvents, ...myParticipatingEvents].filter(
-    (e) => new Date(e.start_date) > now,
+  const upcomingEvents = [...hostedEvents, ...participatingEvents].filter(
+    (e) => new Date(e.event_date) > now,
   );
 
-  // 최근 이벤트 (생성 순서대로 최대 3개)
-  const recentEvents = [...myHostedEvents, ...myParticipatingEvents]
+  // 최근 이벤트 (최대 3개, 날짜 기준 내림차순)
+  const recentEvents = [...hostedEvents, ...participatingEvents]
     .sort(
       (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        new Date(b.event_date).getTime() - new Date(a.event_date).getTime(),
     )
     .slice(0, 3);
 
@@ -44,7 +84,7 @@ export function DashboardContent() {
           className="text-2xl font-bold tracking-tight"
           suppressHydrationWarning
         >
-          어서오세요, {MOCK_CURRENT_USER.name}! 👋
+          어서오세요, {userName ?? "사용자"}님! 👋
         </h1>
         <p className="text-muted-foreground mt-1">
           당신의 이벤트 현황을 한눈에 확인하세요.
@@ -61,9 +101,7 @@ export function DashboardContent() {
                 <p className="text-muted-foreground text-sm font-medium">
                   내 이벤트
                 </p>
-                <p className="mt-2 text-3xl font-bold">
-                  {myHostedEvents.length}
-                </p>
+                <p className="mt-2 text-3xl font-bold">{hostedEvents.length}</p>
               </div>
               <Calendar className="text-muted-foreground h-8 w-8 opacity-50" />
             </div>
@@ -82,7 +120,7 @@ export function DashboardContent() {
                   참여 중인 이벤트
                 </p>
                 <p className="mt-2 text-3xl font-bold">
-                  {myParticipatingEvents.length}
+                  {participatingEvents.length}
                 </p>
               </div>
               <Users className="text-muted-foreground h-8 w-8 opacity-50" />
@@ -131,7 +169,7 @@ export function DashboardContent() {
                 href={`/protected/events/${event.id}`}
                 className="block"
               >
-                <EventCard event={event} variant="compact" />
+                <EventCard event={toEventCardData(event)} variant="compact" />
               </Link>
             ))}
           </div>

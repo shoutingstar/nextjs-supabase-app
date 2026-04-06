@@ -11,10 +11,10 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: {
-    default: "이벤트 플래너",
-    template: "%s | 이벤트 플래너",
+    default: "Gather",
+    template: "%s | Gather",
   },
-  description: "이벤트를 쉽게 만들고 관리하세요. 카풀, 정산, 참여자 관리까지.",
+  description: "함께 모이는 가장 간단한 방법",
 };
 
 const geistSans = Geist({

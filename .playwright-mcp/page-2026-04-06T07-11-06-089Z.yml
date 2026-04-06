@@ -1,0 +1,88 @@
+- generic:
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]
+  - alert: 이벤트 초대 확인 | Gather | Gather
+  - generic:
+    - banner:
+      - generic:
+        - link:
+          - /url: /protected
+          - generic:
+            - generic: G
+          - generic: Gather
+        - generic:
+          - generic: dhljjknd@gmail.com
+          - button:
+            - img
+          - button [expanded]:
+            - img
+    - main:
+      - generic:
+        - generic:
+          - link:
+            - /url: /protected/events
+            - text: ← 이벤트 목록
+          - generic:
+            - generic:
+              - heading [level=1]: 이벤트 초대 확인
+              - generic: 예정
+            - paragraph: "주최: 쿠and쿠"
+          - generic:
+            - img
+          - generic:
+            - heading [level=2]: 이벤트 정보
+            - generic:
+              - generic:
+                - img
+                - generic:
+                  - paragraph: 2026년 4월 21일 화요일
+                  - paragraph: 03:29
+              - generic:
+                - img
+                - paragraph: 스타벅스
+              - generic:
+                - img
+                - paragraph: 0명 참여 / 최대 11명
+            - generic:
+              - paragraph: 이벤트 초대 확인
+          - generic:
+            - paragraph: 초대 코드
+            - paragraph: r6zvhxck
+          - generic:
+            - button:
+              - img
+              - text: 초대 링크 복사
+            - link:
+              - /url: /protected/events/a58213e1-3e1b-465d-9756-43cc9349efa2/edit
+              - img
+              - text: 이벤트 수정
+    - navigation:
+      - generic:
+        - link:
+          - /url: /protected
+          - img
+          - generic: 홈
+        - link:
+          - /url: /protected/events
+          - img
+          - generic: 이벤트
+        - link:
+          - /url: /protected/events/new
+          - img
+          - generic: 새이벤트
+        - link:
+          - /url: /protected/account
+          - img
+          - generic: 프로필
+  - menu [active] [ref=e169]:
+    - group [ref=e170]:
+      - menuitemradio "Light" [ref=e171]:
+        - img [ref=e173]
+        - generic [ref=e179]: Light
+      - menuitemradio "Dark" [ref=e180]:
+        - img [ref=e182]
+        - generic [ref=e184]: Dark
+      - menuitemradio "System" [checked] [ref=e185]:
+        - img [ref=e188]
+        - img [ref=e190]
+        - generic [ref=e192]: System

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { requestCarpool } from "@/app/protected/events/[eventId]/carpool/actions";
+import { requestCarpool } from "@/app/protected/(user)/events/[eventId]/carpool/actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

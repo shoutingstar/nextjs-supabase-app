@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import type { SignUpFormProps } from "@/lib/types/component";
 import { cn } from "@/lib/utils";
+import { translateAuthError } from "@/lib/utils/auth-errors";
 
 export function SignUpForm({
   className,
@@ -40,20 +41,41 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError("비밀번호가 일치하지 않습니다");
       setIsLoading(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}${redirectTo}`,
         },
       });
+
+      // 디버깅: 실제 응답 로깅
+      console.log("[SignUp Response]", {
+        data,
+        error,
+        userExists: !!data?.user,
+      });
+
+      // Supabase 보안 정책: 중복 이메일은 error 없이 user: null 반환
+      if (!data?.user) {
+        console.warn("[SignUp] Email already registered (user is null)");
+        throw new Error("이미 가입된 이메일 주소입니다");
+      }
+
+      if (error?.message?.toLowerCase().includes("already")) {
+        throw new Error("이미 가입된 이메일 주소입니다");
+      }
+
       if (error) throw error;
+
+      console.log("[SignUp] 회원가입 성공, redirectTo:", redirectTo);
+
       onSuccess?.({
         id: "",
         email,
@@ -63,12 +85,29 @@ export function SignUpForm({
         created_at: new Date().toISOString(),
         updated_at: null,
       });
-      router.push("/auth/sign-up-success");
+
+      // redirectTo를 먼저 저장
+      const targetUrl = `/auth/sign-up-success?next=${encodeURIComponent(redirectTo)}`;
+
+      // 약간의 지연 후 리다이렉트
+      setTimeout(() => {
+        console.log("[SignUp] 회원가입 성공 페이지로 이동:", targetUrl);
+        router.push(targetUrl);
+
+        // 페이지 이동 후에 서버 상태 새로고침
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
+      }, 100);
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : "An error occurred";
-      setError(message);
-      onError?.(message);
+        error instanceof Error ? error.message : "오류가 발생했습니다";
+      // 이미 한국어 메시지면 그대로 사용, 영어면 번역
+      const translatedMessage = message.includes("이미 가입된")
+        ? message
+        : translateAuthError(message);
+      setError(translatedMessage);
+      onError?.(translatedMessage);
     } finally {
       setIsLoading(false);
     }
@@ -137,11 +176,17 @@ export function SignUpForm({
               </div>
 
               {/* Google OAuth 버튼 */}
-              <GoogleOAuthButton label="Sign up with Google" />
+              <GoogleOAuthButton
+                label="Sign up with Google"
+                next={redirectTo}
+              />
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
+              <Link
+                href={`/auth/login?next=${encodeURIComponent(redirectTo)}`}
+                className="underline underline-offset-4"
+              >
                 Login
               </Link>
             </div>

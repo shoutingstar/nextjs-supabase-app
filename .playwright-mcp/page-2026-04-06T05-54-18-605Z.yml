@@ -1,0 +1,66 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "G Gather" [ref=e5] [cursor=pointer]:
+        - /url: /protected
+        - generic [ref=e7]: G
+        - generic [ref=e8]: Gather
+    - main [ref=e9]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - heading "어서오세요, dhljjknd@naver.com님! 👋" [level=1] [ref=e13]
+          - paragraph [ref=e14]: 당신의 이벤트 현황을 한눈에 확인하세요.
+        - generic [ref=e15]:
+          - link "내 이벤트 0 주최하는 이벤트" [ref=e16] [cursor=pointer]:
+            - /url: /protected/events
+            - generic [ref=e17]:
+              - generic [ref=e18]:
+                - generic [ref=e19]:
+                  - paragraph [ref=e20]: 내 이벤트
+                  - paragraph [ref=e21]: "0"
+                - img [ref=e22]
+              - paragraph [ref=e24]: 주최하는 이벤트
+          - link "참여 중인 이벤트 0 참여 중인 이벤트" [ref=e25] [cursor=pointer]:
+            - /url: /protected/events
+            - generic [ref=e26]:
+              - generic [ref=e27]:
+                - generic [ref=e28]:
+                  - paragraph [ref=e29]: 참여 중인 이벤트
+                  - paragraph [ref=e30]: "0"
+                - img [ref=e31]
+              - paragraph [ref=e36]: 참여 중인 이벤트
+          - link "예정된 이벤트 0 7일 이내 예정" [ref=e37] [cursor=pointer]:
+            - /url: /protected/events
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic [ref=e40]:
+                  - paragraph [ref=e41]: 예정된 이벤트
+                  - paragraph [ref=e42]: "0"
+                - img [ref=e43]
+              - paragraph [ref=e45]: 7일 이내 예정
+        - generic [ref=e46]:
+          - img [ref=e47]
+          - heading "아직 이벤트가 없어요" [level=3] [ref=e49]
+          - paragraph [ref=e50]: 새로운 이벤트를 만들거나 친구의 초대를 기다려 보세요.
+          - link "새 이벤트 만들기" [ref=e51] [cursor=pointer]:
+            - /url: /protected/events/new
+    - navigation [ref=e52]:
+      - generic [ref=e53]:
+        - link "홈" [ref=e54] [cursor=pointer]:
+          - /url: /protected
+          - img [ref=e55]
+          - generic [ref=e58]: 홈
+        - link "이벤트" [ref=e59] [cursor=pointer]:
+          - /url: /protected/events
+          - img [ref=e60]
+          - generic [ref=e62]: 이벤트
+        - link "새이벤트" [ref=e63] [cursor=pointer]:
+          - /url: /protected/events/new
+          - img [ref=e64]
+          - generic [ref=e65]: 새이벤트
+        - link "프로필" [ref=e66] [cursor=pointer]:
+          - /url: /protected/account
+          - img [ref=e67]
+          - generic [ref=e70]: 프로필
+  - button "Open Next.js Dev Tools" [ref=e76] [cursor=pointer]:
+    - img [ref=e77]

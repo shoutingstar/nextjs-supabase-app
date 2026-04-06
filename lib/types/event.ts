@@ -5,8 +5,21 @@
 
 import type { UserProfile } from "./user";
 
-/** 이벤트 상태 */
-export type EventStatus = "draft" | "published" | "cancelled" | "completed";
+// participant.ts에서 re-export (하위 호환성 유지)
+export type {
+  JoinEventInput,
+  Participant,
+  ParticipantDetail,
+  ParticipantStatus,
+  RsvpStatus,
+  UpdateRsvpInput,
+} from "./participant";
+
+/**
+ * 이벤트 상태
+ * DB 컬럼 check: draft | active | cancelled | completed
+ */
+export type EventStatus = "draft" | "active" | "cancelled" | "completed";
 
 /**
  * 이벤트 기본 정보

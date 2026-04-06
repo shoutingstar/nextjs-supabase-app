@@ -3,8 +3,8 @@
 
 import { useState } from "react";
 
-import { CarpoolActionsDialog } from "@/app/protected/events/[eventId]/carpool/carpool-actions-dialog";
-import { CarpoolRequestDialog } from "@/app/protected/events/[eventId]/carpool/carpool-request-dialog";
+import { CarpoolActionsDialog } from "@/app/protected/(user)/events/[eventId]/carpool/carpool-actions-dialog";
+import { CarpoolRequestDialog } from "@/app/protected/(user)/events/[eventId]/carpool/carpool-request-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";

@@ -59,7 +59,7 @@ export const MOCK_EVENTS: EventDetail[] = [
     start_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
     location: "서울 강남구 역삼동",
     host_id: HOST_IDS[0],
-    status: "published",
+    status: "active",
     invite_code: "GATHER001",
     max_participants: 20,
     cover_image: "https://picsum.photos/seed/nextjs15study/800/400",
@@ -69,7 +69,9 @@ export const MOCK_EVENTS: EventDetail[] = [
     host: {
       id: HOST_IDS[0],
       name: MOCK_USERS.find((u) => u.id === HOST_IDS[0])?.name || "주최자 1",
-      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[0])?.avatar_url,
+      // undefined → null 변환 (UserProfile.avatar_url은 string | null)
+      avatar_url:
+        MOCK_USERS.find((u) => u.id === HOST_IDS[0])?.avatar_url ?? null,
     },
   },
   // Event 2: 이벤트 2 (호스트: 사용자 2)
@@ -80,7 +82,7 @@ export const MOCK_EVENTS: EventDetail[] = [
     start_date: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
     location: "서울 서초구 테헤란로",
     host_id: HOST_IDS[1],
-    status: "published",
+    status: "active",
     invite_code: "GATHER002",
     max_participants: 30,
     cover_image: "https://picsum.photos/seed/react19workshop/800/400",
@@ -90,7 +92,9 @@ export const MOCK_EVENTS: EventDetail[] = [
     host: {
       id: HOST_IDS[1],
       name: MOCK_USERS.find((u) => u.id === HOST_IDS[1])?.name || "주최자 2",
-      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[1])?.avatar_url,
+      // undefined → null 변환 (UserProfile.avatar_url은 string | null)
+      avatar_url:
+        MOCK_USERS.find((u) => u.id === HOST_IDS[1])?.avatar_url ?? null,
     },
   },
   // Event 3: 이벤트 3 (호스트: 사용자 3) - 초안 상태
@@ -111,7 +115,9 @@ export const MOCK_EVENTS: EventDetail[] = [
     host: {
       id: HOST_IDS[2],
       name: MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.name || "주최자 3",
-      avatar_url: MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.avatar_url,
+      // undefined → null 변환 (UserProfile.avatar_url은 string | null)
+      avatar_url:
+        MOCK_USERS.find((u) => u.id === HOST_IDS[2])?.avatar_url ?? null,
     },
   },
   // Event 4-30: 추가 더미 이벤트 (고정된 데이터)
@@ -135,7 +141,7 @@ export const MOCK_EVENTS: EventDetail[] = [
           ? "draft"
           : eventNum % 5 === 1
             ? "completed"
-            : "published",
+            : "active",
       invite_code: `GATHER${String(eventNum).padStart(3, "0")}`,
       max_participants: 20 + eventNum,
       cover_image: `https://picsum.photos/seed/event${eventNum}/800/400`,
@@ -341,7 +347,7 @@ export const MOCK_EVENT_STATUS_DISTRIBUTION = [
   },
   {
     name: "Published",
-    value: MOCK_EVENTS.filter((e) => e.status === "published").length,
+    value: MOCK_EVENTS.filter((e) => e.status === "active").length,
     fill: "#3b82f6",
   },
   {
@@ -399,10 +405,10 @@ export const MOCK_TOP_EVENTS = MOCK_EVENTS.sort(
 export const MOCK_EVENT_DETAIL = MOCK_EVENTS[0];
 
 /**
- * published 상태의 이벤트만 필터링
+ * active 상태의 이벤트만 필터링
  */
 export const MOCK_PUBLISHED_EVENTS = MOCK_EVENTS.filter(
-  (e) => e.status === "published",
+  (e) => e.status === "active",
 );
 
 /**

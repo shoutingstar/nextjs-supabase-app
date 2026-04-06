@@ -5,7 +5,7 @@ import { useState } from "react";
 import {
   approveCarpoolRequest,
   rejectCarpoolRequest,
-} from "@/app/protected/events/[eventId]/carpool/actions";
+} from "@/app/protected/(user)/events/[eventId]/carpool/actions";
 import {
   AlertDialog,
   AlertDialogAction,

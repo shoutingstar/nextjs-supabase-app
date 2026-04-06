@@ -54,13 +54,13 @@ export function GoogleOAuthButton({
       <Button
         type="button"
         variant="outline"
-        className="w-full"
+        className="border-primary/30 hover:border-primary/50 group relative h-12 w-full overflow-hidden border bg-gradient-to-r from-white to-gray-50 transition-all duration-300 hover:shadow-lg dark:from-slate-950 dark:to-slate-900"
         onClick={handleGoogleLogin}
         disabled={isLoading}
       >
         {/* Google 공식 로고 SVG */}
         <svg
-          className="mr-2 h-4 w-4"
+          className="mr-2 h-5 w-5"
           viewBox="0 0 24 24"
           fill="currentColor"
           xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,9 @@ export function GoogleOAuthButton({
             fill="#EA4335"
           />
         </svg>
-        {isLoading ? "Redirecting..." : label}
+        <span className="font-medium">
+          {isLoading ? "Redirecting..." : label}
+        </span>
       </Button>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>

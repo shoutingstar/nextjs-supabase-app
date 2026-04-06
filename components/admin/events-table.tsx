@@ -23,15 +23,15 @@ const STATUS_VARIANTS: Record<
   EventStatus,
   "default" | "secondary" | "destructive" | "outline"
 > = {
-  published: "default",
+  active: "default",
   draft: "secondary",
   completed: "outline",
   cancelled: "destructive",
 };
 
 const STATUS_LABELS: Record<EventStatus, string> = {
-  published: "공개",
-  draft: "초안",
+  active: "활성",
+  draft: "예정",
   completed: "완료",
   cancelled: "취소",
 };

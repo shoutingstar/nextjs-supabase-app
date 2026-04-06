@@ -16,9 +16,12 @@ interface RouteContext {
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
+  console.log("[ROUTE JOIN] === 라우트 핸들러 시작 ===");
+
   const { inviteCode } = await context.params;
 
   console.log("[ROUTE JOIN] 초대 링크 접속, inviteCode:", inviteCode);
+  console.log("[ROUTE JOIN] 요청 URL:", request.url);
 
   // 인증 상태 확인
   const supabase = await createClient();

@@ -18,11 +18,12 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import type { LoginFormProps } from "@/lib/types/component";
 import { cn } from "@/lib/utils";
+import { translateAuthError } from "@/lib/utils/auth-errors";
 
 export function LoginForm({
   className,
   onSuccess,
-  onError,
+  onError: _onError,
   redirectTo = "/",
   ...props
 }: LoginFormProps) {
@@ -39,11 +40,17 @@ export function LoginForm({
     setError(null);
 
     try {
+      console.log("[LOGIN FORM] 로그인 시도, email:", email);
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
+
+      console.log("[LOGIN FORM] 로그인 성공");
+      console.log("[LOGIN FORM] redirectTo:", redirectTo);
+
       onSuccess?.({
         id: "",
         email,
@@ -53,9 +60,56 @@ export function LoginForm({
         created_at: new Date().toISOString(),
         updated_at: null,
       });
-      router.push(redirectTo);
+
+      // localStorage에서 초대 코드 확인
+      let inviteCode: string | null = null;
+      try {
+        inviteCode = localStorage.getItem("pending_invite_code");
+        if (inviteCode) {
+          console.log(
+            "[LOGIN FORM] localStorage에서 초대 코드 감지:",
+            inviteCode,
+          );
+        }
+      } catch (e) {
+        console.error("[LOGIN FORM] localStorage 읽기 실패:", e);
+      }
+
+      // redirectTo를 먼저 저장 (refresh 후에도 접근 가능하도록)
+      let targetUrl = redirectTo;
+
+      // 초대 코드가 있으면 join 페이지로 리다이렉트
+      if (inviteCode) {
+        console.log("[LOGIN FORM] 초대 코드 감지:", inviteCode);
+        targetUrl = `/join/${inviteCode}`;
+        console.log("[LOGIN FORM] 최종 리다이렉트 URL:", targetUrl);
+
+        // localStorage에서 제거
+        try {
+          localStorage.removeItem("pending_invite_code");
+          console.log("[LOGIN FORM] localStorage에서 초대 코드 제거");
+        } catch (e) {
+          console.error("[LOGIN FORM] localStorage 제거 실패:", e);
+        }
+      }
+
+      // 약간의 지연 후 리다이렉트 (세션 저장 시간 확보)
+      // router.refresh()는 나중에 호출하여 searchParams 초기화 방지
+      setTimeout(() => {
+        console.log("[LOGIN FORM] 리다이렉트 시작, targetUrl:", targetUrl);
+        router.push(targetUrl);
+
+        // 페이지 이동 후에 서버 상태 새로고침
+        setTimeout(() => {
+          console.log("[LOGIN FORM] router.refresh() 호출");
+          router.refresh();
+        }, 500);
+      }, 100);
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      const message =
+        error instanceof Error ? error.message : "오류가 발생했습니다";
+      const translatedMessage = translateAuthError(message);
+      setError(translatedMessage);
     } finally {
       setIsLoading(false);
     }
@@ -120,12 +174,12 @@ export function LoginForm({
               </div>
 
               {/* Google OAuth 버튼 */}
-              <GoogleOAuthButton label="Login with Google" />
+              <GoogleOAuthButton label="Login with Google" next={redirectTo} />
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
               <Link
-                href="/auth/sign-up"
+                href={`/auth/sign-up?next=${encodeURIComponent(redirectTo)}`}
                 className="underline underline-offset-4"
               >
                 Sign up

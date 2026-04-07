@@ -53,6 +53,7 @@ export async function updateSession(request: NextRequest) {
     !user &&
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/auth") &&
+    !request.nextUrl.pathname.startsWith("/join") &&
     // /test 경로는 개발 중 컴포넌트 테스트용으로 인증 없이 접근 허용
     !request.nextUrl.pathname.startsWith("/test")
   ) {

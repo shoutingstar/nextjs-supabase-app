@@ -149,8 +149,8 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
   - ✅ 통계 데이터 집계 및 그래프 데이터 API 구현 (F015)
   - ✅ 페이지네이션 및 정렬 로직 구현
   - ✅ 데이터베이스 Migration (email, created_at 컬럼 추가)
-  - ✅ RLS 정책 수정 (무한 재귀 오류 해결)
-  - ✅ TypeScript 컴파일 및 프로덕션 빌드 성공
+  - ✅ RLS 정책 완벽 수정 (무한 재귀 오류 해결)
+  - ✅ Playwright E2E 테스트 완료 (일반 사용자/관리자 - 0 errors)
 
 - **Task 012: 핵심 기능 통합 테스트** - 구현 중
   - ✅ Playwright E2E 테스트 시나리오 생성 (tests/e2e/full-user-flow.spec.ts)

@@ -701,8 +701,8 @@ export async function joinEventAction(
     .insert({
       event_id: eventId,
       user_id: user.id,
-      status: "active",
-      rsvp: "yes",
+      status: "approved",
+      rsvp: "attending",
     })
     .select("id")
     .single();
@@ -713,8 +713,16 @@ export async function joinEventAction(
       return { success: false, error: "이미 참여 중인 이벤트입니다." };
     }
 
-    console.error("이벤트 참여 추가 오류:", insertError);
-    return { success: false, error: "이벤트 참여에 실패했습니다." };
+    console.error("이벤트 참여 추가 오류:", {
+      code: insertError.code,
+      message: insertError.message,
+      details: insertError.details,
+      hint: insertError.hint,
+    });
+    return {
+      success: false,
+      error: `이벤트 참여에 실패했습니다. (${insertError.code})`,
+    };
   }
 
   // 7. 캐시 무효화

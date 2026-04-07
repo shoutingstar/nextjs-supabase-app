@@ -6,7 +6,7 @@
  * - useTransition으로 로딩 상태 관리
  */
 
-import { useEffect, useTransition } from "react";
+import { useEffect, useRef, useTransition } from "react";
 
 import { joinEventAction } from "@/app/protected/(user)/events/actions";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ export function JoinEventButton({
   inviteCode,
 }: JoinEventButtonProps) {
   const [isPending, startTransition] = useTransition();
+  const hasAttemptedAutoJoinRef = useRef(false);
 
   // 참여 가능 여부
   const canJoin =
@@ -37,14 +38,15 @@ export function JoinEventButton({
     eventStatus !== "cancelled" &&
     eventStatus !== "completed";
 
-  // 초대 링크에서 전달된 경우 자동 참여
+  // 초대 링크에서 전달된 경우 자동 참여 (한 번만)
   useEffect(() => {
-    if (autoJoin && canJoin && !isPending) {
+    if (autoJoin && canJoin && !isPending && !hasAttemptedAutoJoinRef.current) {
       console.log(
         "[JOIN EVENT BUTTON] 자동 참여 시작 (inviteCode:",
         inviteCode,
         ")",
       );
+      hasAttemptedAutoJoinRef.current = true;
       handleJoin();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

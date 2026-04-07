@@ -4,8 +4,10 @@
  * 이벤트 참여 버튼 컴포넌트
  * - 사용자가 명시적으로 버튼을 클릭하여 참여
  * - useTransition으로 로딩 상태 관리
+ * - 참여 성공 후 페이지 새로고침으로 즉시 UI 업데이트
  */
 
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 import { joinEventAction } from "@/app/protected/(user)/events/actions";
@@ -25,6 +27,7 @@ export function JoinEventButton({
   eventStatus,
 }: JoinEventButtonProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   // 참여 가능 여부
   const canJoin =
@@ -38,8 +41,10 @@ export function JoinEventButton({
       const result = await joinEventAction(eventId);
       if (!result.success) {
         alert(result.error || "이벤트 참여에 실패했습니다.");
+      } else {
+        // 성공 시 페이지 새로고침 (참여자 수 등 UI 즉시 업데이트)
+        router.refresh();
       }
-      // 성공하면 페이지는 자동으로 리로드됨 (revalidatePath)
     });
   };
 

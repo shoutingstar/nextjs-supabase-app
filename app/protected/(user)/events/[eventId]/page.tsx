@@ -243,7 +243,8 @@ export default async function EventDetailPage({
       </div>
 
       {/* 참여자 목록 */}
-      <ParticipantsList eventId={eventId} />
+      {/* key={event.participants_count}를 사용하여 참여자 수 변경 시 리마운트 강제 */}
+      <ParticipantsList key={event.participants_count} eventId={eventId} />
     </div>
   );
 }

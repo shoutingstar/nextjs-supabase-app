@@ -1,14 +1,19 @@
 import { LoginForm } from "@/components/login-form";
 
 interface LoginPageProps {
-  searchParams: Promise<{ next?: string; redirect_to?: string }>;
+  searchParams: Promise<{
+    next?: string;
+    redirect_to?: string;
+    redirect?: string;
+  }>;
 }
 
 export default async function Page({ searchParams }: LoginPageProps) {
   const params = await searchParams;
 
-  // 리다이렉트 URL 결정 (우선순위: redirect_to > next > 기본값)
-  const redirectTo = params.redirect_to || params.next || "/protected/events";
+  // 리다이렉트 URL 결정 (우선순위: redirect > redirect_to > next > 기본값)
+  const redirectTo =
+    params.redirect || params.redirect_to || params.next || "/protected/events";
 
   console.log("[Login Page] searchParams:", JSON.stringify(params));
   console.log("[Login Page] 최종 redirectTo:", redirectTo);

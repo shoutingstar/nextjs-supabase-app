@@ -37,26 +37,35 @@ export function ParticipantsList({ eventId }: ParticipantsListProps) {
 
     // 초기 참여자 데이터 로드
     const loadParticipants = async () => {
-      const { data, error } = await supabase
-        .from("event_participants")
-        .select(
-          `
-          id,
-          user_id,
-          rsvp,
-          joined_at,
-          user:profiles(id, full_name, avatar_url)
-        `,
-        )
-        .eq("event_id", eventId)
-        .order("joined_at", { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from("event_participants")
+          .select(
+            `
+            id,
+            user_id,
+            rsvp,
+            joined_at,
+            user:profiles(id, full_name, avatar_url)
+          `,
+          )
+          .eq("event_id", eventId)
+          .order("joined_at", { ascending: false });
 
-      if (!error && data) {
-        setParticipants(data as Participant[]);
+        if (error) {
+          console.error("[ParticipantsList] 데이터 로드 오류:", error.message);
+        } else if (data) {
+          console.log(`[ParticipantsList] 참여자 ${data.length}명 로드됨`);
+          setParticipants(data as Participant[]);
+        }
+      } catch (err) {
+        console.error("[ParticipantsList] 쿼리 오류:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
+    setLoading(true);
     loadParticipants();
 
     // Realtime 구독
@@ -71,11 +80,14 @@ export function ParticipantsList({ eventId }: ParticipantsListProps) {
           filter: `event_id=eq.${eventId}`,
         },
         async () => {
+          console.log("[ParticipantsList] Realtime 이벤트 감지됨");
           // 목록 최신화
           await loadParticipants();
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(`[ParticipantsList] Realtime 구독 상태: ${status}`);
+      });
 
     return () => {
       channel.unsubscribe();

@@ -48,9 +48,6 @@ export function LoginForm({
       });
       if (error) throw error;
 
-      console.log("[LOGIN FORM] 로그인 성공");
-      console.log("[LOGIN FORM] redirectTo:", redirectTo);
-
       onSuccess?.({
         id: "",
         email,
@@ -61,52 +58,10 @@ export function LoginForm({
         updated_at: null,
       });
 
-      // localStorage에서 초대 정보 확인
-      let eventId: string | null = null;
-      let inviteCode: string | null = null;
-      try {
-        eventId = localStorage.getItem("pending_event_id");
-        inviteCode = localStorage.getItem("pending_invite_code");
-        if (eventId && inviteCode) {
-          console.log(
-            "[LOGIN FORM] localStorage에서 초대 정보 감지 - eventId:",
-            eventId,
-            "inviteCode:",
-            inviteCode,
-          );
-        }
-      } catch (e) {
-        console.error("[LOGIN FORM] localStorage 읽기 실패:", e);
-      }
-
-      // redirectTo를 먼저 저장 (refresh 후에도 접근 가능하도록)
-      let targetUrl = redirectTo;
-
-      // 초대 정보가 있으면 바로 이벤트 참여 페이지로 리다이렉트
-      if (eventId && inviteCode) {
-        console.log("[LOGIN FORM] 초대 정보 감지:", { eventId, inviteCode });
-        targetUrl = `/protected/events/${eventId}?join=true&code=${inviteCode}`;
-        console.log("[LOGIN FORM] 최종 리다이렉트 URL:", targetUrl);
-
-        // localStorage에서 제거
-        try {
-          localStorage.removeItem("pending_event_id");
-          localStorage.removeItem("pending_invite_code");
-          console.log("[LOGIN FORM] localStorage에서 초대 정보 제거");
-        } catch (e) {
-          console.error("[LOGIN FORM] localStorage 제거 실패:", e);
-        }
-      }
-
       // 약간의 지연 후 리다이렉트 (세션 저장 시간 확보)
-      // router.refresh()는 나중에 호출하여 searchParams 초기화 방지
       setTimeout(() => {
-        console.log("[LOGIN FORM] 리다이렉트 시작, targetUrl:", targetUrl);
-        router.push(targetUrl);
-
-        // 페이지 이동 후에 서버 상태 새로고침
+        router.push(redirectTo);
         setTimeout(() => {
-          console.log("[LOGIN FORM] router.refresh() 호출");
           router.refresh();
         }, 500);
       }, 100);

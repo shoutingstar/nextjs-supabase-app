@@ -17,6 +17,7 @@ import type { EventStatus } from "@/lib/types/event";
 
 import { JoinEventButton } from "./_components/join-event-button";
 import { ParticipantsCountDisplay } from "./_components/participants-count-display";
+import { ParticipantsList } from "./_components/participants-list";
 
 /* ============================================================================
  * 메타데이터 생성
@@ -240,6 +241,9 @@ export default async function EventDetailPage({
           </Button>
         )}
       </div>
+
+      {/* 참여자 목록 */}
+      <ParticipantsList eventId={eventId} />
     </div>
   );
 }

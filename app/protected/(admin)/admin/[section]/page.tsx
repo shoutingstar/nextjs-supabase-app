@@ -1,17 +1,24 @@
 /**
  * 관리자 섹션 동적 페이지 (/protected/admin/[section])
  * 지원 섹션: events(이벤트 관리), users(사용자 관리), stats(통계)
- * Phase 2: 더미 데이터 기반 테이블 및 차트 표시
- * Phase 3: API 연동 예정
+ * 실제 데이터베이스 연동
  */
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import { AdminTableControls } from "@/components/admin/admin-table-controls";
 import { EventsTable } from "@/components/admin/events-table";
 import { StatsCharts } from "@/components/admin/stats-charts";
 import { UsersTable } from "@/components/admin/users-table";
+import {
+  getAdminEvents,
+  getAdminStats,
+  getAdminUsers,
+} from "@/lib/queries/admin";
+import { createClient } from "@/lib/supabase/server";
 
 /** 지원하는 관리자 섹션 */
 const VALID_SECTIONS = ["events", "users", "stats"] as const;
@@ -38,6 +45,12 @@ const SECTION_META: Record<
 
 interface AdminSectionPageProps {
   params: Promise<{ section: string }>;
+  searchParams: Promise<{
+    page?: string;
+    q?: string;
+    status?: string;
+    role?: string;
+  }>;
 }
 
 export async function generateMetadata({
@@ -56,11 +69,89 @@ export async function generateMetadata({
   };
 }
 
+async function EventsSection({
+  page,
+  search,
+  status,
+}: {
+  page: number;
+  search?: string;
+  status?: string;
+}) {
+  const data = await getAdminEvents({
+    page,
+    perPage: 20,
+    search,
+    status,
+  });
+
+  return (
+    <>
+      <AdminTableControls
+        section="events"
+        currentSearch={search}
+        currentFilter={status}
+      />
+      <EventsTable events={data.data} />
+      <AdminPagination
+        currentPage={data.page}
+        totalPages={data.totalPages}
+        section="events"
+      />
+    </>
+  );
+}
+
+async function UsersSection({
+  page,
+  search,
+  role,
+}: {
+  page: number;
+  search?: string;
+  role?: string;
+}) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const data = await getAdminUsers({
+    page,
+    perPage: 20,
+    search,
+    role,
+  });
+
+  return (
+    <>
+      <AdminTableControls
+        section="users"
+        currentSearch={search}
+        currentFilter={role}
+      />
+      <UsersTable users={data.data} currentUserId={user?.id} />
+      <AdminPagination
+        currentPage={data.page}
+        totalPages={data.totalPages}
+        section="users"
+      />
+    </>
+  );
+}
+
+async function StatsSection() {
+  const data = await getAdminStats();
+
+  return <StatsCharts data={data} />;
+}
+
 export default async function AdminSectionPage({
   params,
+  searchParams,
 }: AdminSectionPageProps) {
-  // Next.js 15: params는 Promise로 처리
   const { section } = await params;
+  const { page = "1", q, status, role } = await searchParams;
 
   // 유효하지 않은 섹션은 404
   if (!VALID_SECTIONS.includes(section as AdminSection)) {
@@ -69,6 +160,7 @@ export default async function AdminSectionPage({
 
   const validSection = section as AdminSection;
   const meta = SECTION_META[validSection];
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
 
   return (
     <div className="space-y-6 px-6 py-6 lg:px-8">
@@ -77,7 +169,7 @@ export default async function AdminSectionPage({
         <p className="text-muted-foreground mt-2">{meta.description}</p>
       </div>
 
-      {/* 섹션별 콘텐츠 렌더링 - 데스크톱 풀 너비 테이블 */}
+      {/* 섹션별 콘텐츠 렌더링 */}
       <Suspense
         fallback={
           <div className="text-muted-foreground py-8 text-center">
@@ -85,10 +177,13 @@ export default async function AdminSectionPage({
           </div>
         }
       >
-        {validSection === "events" && <EventsTable />}
-        {validSection === "users" && <UsersTable />}
-        {/* 차트는 전체 너비 활용 */}
-        {validSection === "stats" && <StatsCharts />}
+        {validSection === "events" && (
+          <EventsSection page={currentPage} search={q} status={status} />
+        )}
+        {validSection === "users" && (
+          <UsersSection page={currentPage} search={q} role={role} />
+        )}
+        {validSection === "stats" && <StatsSection />}
       </Suspense>
     </div>
   );

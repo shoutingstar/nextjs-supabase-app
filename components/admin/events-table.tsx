@@ -2,12 +2,10 @@
 
 /**
  * 이벤트 관리 테이블 (F013)
- * 더미 데이터 기반 테이블 표시
- * Phase 3에서 API 연동 예정
+ * 실제 데이터베이스 연동 - props로 데이터 수신
  */
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,11 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MOCK_EVENTS } from "@/lib/data/mock-data";
-import type { EventStatus } from "@/lib/types/event";
+import type { AdminEventRow } from "@/lib/queries/admin";
+
+import { AdminDeleteEventButton } from "./admin-delete-event-button";
 
 const STATUS_VARIANTS: Record<
-  EventStatus,
+  AdminEventRow["status"],
   "default" | "secondary" | "destructive" | "outline"
 > = {
   active: "default",
@@ -29,20 +28,18 @@ const STATUS_VARIANTS: Record<
   cancelled: "destructive",
 };
 
-const STATUS_LABELS: Record<EventStatus, string> = {
+const STATUS_LABELS: Record<AdminEventRow["status"], string> = {
   active: "활성",
   draft: "예정",
   completed: "완료",
   cancelled: "취소",
 };
 
-export function EventsTable() {
-  // 정렬: 최근 생성일 순
-  const sortedEvents = [...MOCK_EVENTS].sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-  );
+interface EventsTableProps {
+  events: AdminEventRow[];
+}
 
+export function EventsTable({ events }: EventsTableProps) {
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("ko-KR", {
       year: "numeric",
@@ -65,7 +62,7 @@ export function EventsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedEvents.map((event) => (
+          {events.map((event) => (
             <TableRow key={event.id}>
               <TableCell className="font-medium">
                 <a
@@ -89,13 +86,7 @@ export function EventsTable() {
                 {event.max_participants && `/${event.max_participants}명`}
               </TableCell>
               <TableCell className="text-right">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-destructive hover:text-destructive"
-                >
-                  삭제
-                </Button>
+                <AdminDeleteEventButton eventId={event.id} />
               </TableCell>
             </TableRow>
           ))}

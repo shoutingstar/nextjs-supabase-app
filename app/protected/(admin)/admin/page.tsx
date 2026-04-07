@@ -1,7 +1,6 @@
 /**
  * 관리자 대시보드 페이지 (/protected/admin)
- * Phase 2: 더미 데이터 기반 통계 표시
- * Phase 3: 실제 데이터베이스 연동 예정
+ * 실제 데이터베이스 연동 - getAdminDashboardStats 호출
  */
 
 import { BarChart3, Users, Zap } from "lucide-react";
@@ -9,11 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  MOCK_EVENT_PARTICIPANTS,
-  MOCK_EVENTS,
-  MOCK_USERS,
-} from "@/lib/data/mock-data";
+import { getAdminDashboardStats } from "@/lib/queries/admin";
 
 export const metadata: Metadata = {
   title: "관리자 대시보드 | 이벤트 플래너",
@@ -42,42 +37,26 @@ const ADMIN_SECTIONS = [
   },
 ] as const;
 
-export default function AdminDashboardPage() {
-  // 통계 계산
-  const totalEvents = MOCK_EVENTS.length;
-  const totalUsers = MOCK_USERS.length;
-  const adminCount = MOCK_USERS.filter((u) => u.role === "admin").length;
-  const moderatorCount = MOCK_USERS.filter(
-    (u) => u.role === "moderator",
-  ).length;
-  const totalParticipations = Object.values(MOCK_EVENT_PARTICIPANTS).flat()
-    .length;
-  const _thisMonthEvents = MOCK_EVENTS.filter((e) => {
-    const eventDate = new Date(e.created_at);
-    const now = new Date();
-    return (
-      eventDate.getMonth() === now.getMonth() &&
-      eventDate.getFullYear() === now.getFullYear()
-    );
-  }).length;
+export default async function AdminDashboardPage() {
+  const dashboardStats = await getAdminDashboardStats();
 
   const stats = [
     {
       title: "전체 이벤트",
-      value: totalEvents,
-      description: `활성: ${MOCK_EVENTS.filter((e) => e.status === "active").length}개`,
+      value: dashboardStats.totalEvents,
+      description: `활성: ${dashboardStats.activeEvents}개`,
       icon: BarChart3,
     },
     {
       title: "전체 사용자",
-      value: totalUsers,
-      description: `관리자: ${adminCount}명, 운영진: ${moderatorCount}명`,
+      value: dashboardStats.totalUsers,
+      description: "총 가입 사용자 수",
       icon: Users,
     },
     {
       title: "활성 참여",
-      value: totalParticipations,
-      description: `총 참여 기록 수`,
+      value: dashboardStats.totalParticipations,
+      description: "총 참여 기록 수",
       icon: Zap,
     },
   ];

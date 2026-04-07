@@ -3,7 +3,7 @@
 /**
  * 통계 분석 차트 (F015)
  * Recharts를 사용한 다양한 차트
- * Phase 3에서 실제 데이터 연동 예정
+ * 실제 데이터베이스 연동
  */
 
 import {
@@ -29,15 +29,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  MOCK_DAILY_EVENTS,
-  MOCK_DAILY_USERS,
-  MOCK_EVENT_STATUS_DISTRIBUTION,
-  MOCK_TOP_EVENTS,
-  MOCK_USER_ROLE_DISTRIBUTION,
-} from "@/lib/data/mock-data";
+import type { AdminStatsData } from "@/lib/queries/admin";
 
-export function StatsCharts() {
+interface StatsChartsProps {
+  data: AdminStatsData;
+}
+
+export function StatsCharts({ data }: StatsChartsProps) {
   return (
     <div className="space-y-6">
       {/* 가입자 추이 */}
@@ -48,7 +46,7 @@ export function StatsCharts() {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={MOCK_DAILY_USERS}>
+            <LineChart data={data.dailyUsers}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -72,7 +70,7 @@ export function StatsCharts() {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={MOCK_DAILY_EVENTS}>
+            <BarChart data={data.dailyEvents}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
@@ -97,7 +95,7 @@ export function StatsCharts() {
             <ResponsiveContainer width="100%" height={400}>
               <PieChart>
                 <Pie
-                  data={MOCK_EVENT_STATUS_DISTRIBUTION}
+                  data={data.eventStatusDistribution}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -106,7 +104,7 @@ export function StatsCharts() {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {MOCK_EVENT_STATUS_DISTRIBUTION.map((entry, index) => (
+                  {data.eventStatusDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
@@ -125,7 +123,7 @@ export function StatsCharts() {
             <ResponsiveContainer width="100%" height={400}>
               <PieChart>
                 <Pie
-                  data={MOCK_USER_ROLE_DISTRIBUTION}
+                  data={data.userRoleDistribution}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -134,7 +132,7 @@ export function StatsCharts() {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {MOCK_USER_ROLE_DISTRIBUTION.map((entry, index) => (
+                  {data.userRoleDistribution.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
                 </Pie>
@@ -154,7 +152,7 @@ export function StatsCharts() {
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>
             <BarChart
-              data={MOCK_TOP_EVENTS}
+              data={data.topEvents}
               layout="vertical"
               margin={{ top: 5, right: 30, left: 200, bottom: 5 }}
             >

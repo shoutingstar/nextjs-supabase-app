@@ -2,12 +2,10 @@
 
 /**
  * 사용자 관리 테이블 (F014)
- * 더미 데이터 기반 테이블 표시
- * Phase 3에서 API 연동 예정
+ * 실제 데이터베이스 연동 - props로 데이터 수신
  */
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,11 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MOCK_USERS } from "@/lib/data/mock-data";
-import type { UserRole } from "@/lib/types/user";
+import type { AdminUserRow } from "@/lib/queries/admin";
+
+import { AdminChangeRoleSelect } from "./admin-change-role-select";
 
 const ROLE_VARIANTS: Record<
-  UserRole,
+  AdminUserRow["role"],
   "default" | "secondary" | "destructive" | "outline"
 > = {
   user: "secondary",
@@ -28,19 +27,18 @@ const ROLE_VARIANTS: Record<
   admin: "destructive",
 };
 
-const ROLE_LABELS: Record<UserRole, string> = {
+const ROLE_LABELS: Record<AdminUserRow["role"], string> = {
   user: "사용자",
   moderator: "운영진",
   admin: "관리자",
 };
 
-export function UsersTable() {
-  // 정렬: 최근 가입 순
-  const sortedUsers = [...MOCK_USERS].sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-  );
+interface UsersTableProps {
+  users: AdminUserRow[];
+  currentUserId?: string;
+}
 
+export function UsersTable({ users, currentUserId }: UsersTableProps) {
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("ko-KR", {
       year: "numeric",
@@ -62,7 +60,7 @@ export function UsersTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedUsers.map((user) => (
+          {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">{user.name}</TableCell>
               <TableCell className="text-muted-foreground text-sm">
@@ -76,17 +74,12 @@ export function UsersTable() {
               <TableCell className="text-muted-foreground text-sm">
                 {formatDate(user.created_at)}
               </TableCell>
-              <TableCell className="space-x-2 text-right">
-                <Button variant="ghost" size="sm">
-                  역할 변경
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-destructive hover:text-destructive"
-                >
-                  정지
-                </Button>
+              <TableCell className="text-right">
+                <AdminChangeRoleSelect
+                  userId={user.id}
+                  currentRole={user.role}
+                  isCurrentUser={user.id === currentUserId}
+                />
               </TableCell>
             </TableRow>
           ))}

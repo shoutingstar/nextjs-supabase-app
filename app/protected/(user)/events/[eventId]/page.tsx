@@ -74,10 +74,6 @@ export default async function EventDetailPage({
   const { eventId } = await params;
   const sp = await searchParams;
 
-  // 초대링크에서 전달된 파라미터 추출
-  const join = sp.join === "true";
-  const inviteCode = typeof sp.code === "string" ? sp.code : undefined;
-
   // 현재 로그인 사용자 확인
   const supabase = await createClient();
   const {
@@ -229,8 +225,6 @@ export default async function EventDetailPage({
           isHost={isHost}
           isParticipating={isParticipating}
           eventStatus={event.status}
-          autoJoin={join}
-          inviteCode={inviteCode}
         />
 
         {/* 호스트 전용: 수정 버튼 */}

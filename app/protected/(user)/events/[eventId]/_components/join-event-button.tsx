@@ -2,11 +2,11 @@
 
 /**
  * 이벤트 참여 버튼 컴포넌트
- * - join=true 파라미터 감지 시 자동 참여
+ * - 사용자가 명시적으로 버튼을 클릭하여 참여
  * - useTransition으로 로딩 상태 관리
  */
 
-import { useEffect, useRef, useTransition } from "react";
+import { useTransition } from "react";
 
 import { joinEventAction } from "@/app/protected/(user)/events/actions";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,6 @@ interface JoinEventButtonProps {
   isHost: boolean;
   isParticipating: boolean;
   eventStatus: string;
-  autoJoin?: boolean;
-  inviteCode?: string;
 }
 
 export function JoinEventButton({
@@ -25,11 +23,8 @@ export function JoinEventButton({
   isHost,
   isParticipating,
   eventStatus,
-  autoJoin = false,
-  inviteCode,
 }: JoinEventButtonProps) {
   const [isPending, startTransition] = useTransition();
-  const hasAttemptedAutoJoinRef = useRef(false);
 
   // 참여 가능 여부
   const canJoin =
@@ -37,20 +32,6 @@ export function JoinEventButton({
     !isParticipating &&
     eventStatus !== "cancelled" &&
     eventStatus !== "completed";
-
-  // 초대 링크에서 전달된 경우 자동 참여 (한 번만)
-  useEffect(() => {
-    if (autoJoin && canJoin && !isPending && !hasAttemptedAutoJoinRef.current) {
-      console.log(
-        "[JOIN EVENT BUTTON] 자동 참여 시작 (inviteCode:",
-        inviteCode,
-        ")",
-      );
-      hasAttemptedAutoJoinRef.current = true;
-      handleJoin();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoJoin, canJoin, isPending]);
 
   const handleJoin = () => {
     startTransition(async () => {

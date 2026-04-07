@@ -45,3 +45,17 @@ next-env.d.ts
 .claude/
 .mcp.json
 shrimp_data/
+
+# playwright 테스트 파일
+.playwright-mcp/
+
+# 로그 파일
+*.log
+dev-*.log
+*-dev.log
+server.log
+dev-server.log
+
+# 스크린샷 및 테스트 파일
+*.png
+test-*.mjs

@@ -53,13 +53,51 @@ export function LoginForm({
       });
       if (error) throw error;
 
+      // Step 1: 로그인 성공 후 사용자 정보 조회
+      const {
+        data: { user: authUser },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !authUser) {
+        throw new Error("사용자 정보를 가져올 수 없습니다.");
+      }
+
+      // Step 2: 관리자 로그인인 경우 role 권한 검증
+      if (isAdminLogin) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", authUser.id)
+          .single();
+
+        if (profileError || !profile) {
+          console.error("[LOGIN FORM] 프로필 조회 실패:", profileError);
+          throw new Error("프로필 정보를 찾을 수 없습니다.");
+        }
+
+        // Step 3: role이 'admin'이 아니면 에러 처리
+        if (profile.role !== "admin") {
+          console.warn(
+            `[LOGIN FORM] 관리자 로그인 시도 실패: 권한 없음 (role: ${profile.role})`,
+          );
+
+          // 로그아웃 처리
+          await supabase.auth.signOut();
+
+          throw new Error("관리자 계정이 아닙니다. 관리자 권한이 필요합니다.");
+        }
+
+        console.log("[LOGIN FORM] 관리자 로그인 성공, role:", profile.role);
+      }
+
       onSuccess?.({
-        id: "",
-        email,
+        id: authUser.id,
+        email: authUser.email || "",
         name: null,
-        role: "user",
+        role: isAdminLogin ? "admin" : "user",
         avatar_url: null,
-        created_at: new Date().toISOString(),
+        created_at: authUser.created_at,
         updated_at: null,
       });
 

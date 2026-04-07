@@ -21,6 +21,14 @@ export function translateAuthError(message: string): string {
       "이메일 발송 한도를 초과했습니다. 잠시 후 다시 시도해주세요",
     ],
     ["signup is disabled", "현재 회원가입이 비활성화되어 있습니다"],
+    [
+      "관리자 계정이 아닙니다",
+      "관리자 권한이 필요합니다. 관리자 계정으로 다시 로그인해주세요",
+    ],
+    [
+      "프로필 정보를 찾을 수 없습니다",
+      "사용자 정보 조회에 실패했습니다. 관리자에게 문의해주세요",
+    ],
   ];
 
   for (const [key, value] of errorMap) {

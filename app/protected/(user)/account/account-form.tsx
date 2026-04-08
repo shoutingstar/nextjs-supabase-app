@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 
-import { updateProfile, uploadAvatarImage } from "./actions";
+import { updateProfile } from "./actions";
 
 type Claims = { sub: string; email?: string; [key: string]: unknown };
 
@@ -158,25 +158,55 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
         throw new Error("JPG, PNG, WebP 형식만 지원합니다.");
       }
 
-      console.log("[UploadAvatar] 업로드 시작:", {
+      console.log("[UploadAvatar] 클라이언트 직접 업로드 시작:", {
         fileName: file.name,
         fileSize: file.size,
         fileType: file.type,
       });
 
-      const formData = new FormData();
-      formData.append("avatar", file);
+      // 1단계: 클라이언트에서 직접 Supabase Storage에 업로드
+      const timestamp = Date.now();
+      const ext = file.type.split("/")[1].replace("jpeg", "jpg");
+      const filePath = `${claims?.sub}/profiles/avatar-${timestamp}.${ext}`;
 
-      const result = await uploadAvatarImage(formData);
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("event-covers")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
 
-      console.log("[UploadAvatar] 서버 응답:", result);
+      if (uploadError) {
+        throw new Error(`파일 업로드 실패: ${uploadError.message}`);
+      }
+
+      if (!uploadData) {
+        throw new Error("파일 업로드 응답이 비어있습니다.");
+      }
+
+      // 2단계: 업로드된 URL 획득
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("event-covers").getPublicUrl(filePath);
+
+      console.log("[UploadAvatar] 업로드 성공:", { filePath, publicUrl });
+
+      // 3단계: 서버 액션으로 프로필 업데이트 (URL만 전송 - Server Actions 크기 제한 회피)
+      const result = await updateProfile({
+        fullName: fullname,
+        username,
+        website,
+        avatarUrl: publicUrl,
+      });
+
+      console.log("[UploadAvatar] 프로필 업데이트 결과:", result);
 
       if (!result.success) {
-        setError(result.error || "아바타 업로드 중 오류가 발생했습니다.");
+        setError(result.error || "프로필 업데이트 중 오류가 발생했습니다.");
         return;
       }
 
-      setAvatarUrl(result.data?.url ?? null);
+      setAvatarUrl(publicUrl);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {

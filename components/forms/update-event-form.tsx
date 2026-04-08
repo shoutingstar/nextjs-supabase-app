@@ -14,7 +14,6 @@ import {
   deleteEventAction,
   updateEvent,
   updateEventAction,
-  uploadEventCoverImage,
 } from "@/app/protected/(user)/events/actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +43,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { EventDetailData } from "@/lib/queries/events";
+import { createClient } from "@/lib/supabase/client";
 import { Toast } from "@/lib/utils/toast-utils";
 import {
   type UpdateEventFormValues,
@@ -106,6 +106,7 @@ interface UpdateEventFormProps {
  */
 export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
   const router = useRouter();
+  const supabase = createClient();
   const [isPending, startTransition] = useTransition();
   // 삭제 확인 다이얼로그 open 상태
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -139,19 +140,44 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
   async function onSubmit(values: UpdateEventFormValues) {
     let coverImageUrl: string | undefined = undefined;
 
-    // 1단계: 새 커버 이미지 업로드 (파일이 있는 경우)
-    // cover_image(File)는 Server Action으로 직렬화 불가 → 별도 업로드 단계로 처리
+    // 1단계: 새 커버 이미지 업로드 (파일이 있는 경우 - 클라이언트에서 직접 업로드)
     if (values.cover_image instanceof File && values.cover_image.size > 0) {
-      const imageFormData = new FormData();
-      imageFormData.append("cover_image", values.cover_image);
+      try {
+        // 파일 크기 재검증
+        if (values.cover_image.size > 5 * 1024 * 1024) {
+          throw new Error("파일 크기는 5MB 이하여야 합니다.");
+        }
 
-      const imageResult = await uploadEventCoverImage(imageFormData, event.id);
+        // 클라이언트에서 Supabase Storage에 직접 업로드
+        const ext = values.cover_image.type
+          .split("/")[1]
+          .replace("jpeg", "jpg");
+        const timestamp = Date.now();
+        const filePath = `events/${event.id}/cover-${timestamp}.${ext}`;
 
-      if (imageResult.success && imageResult.data) {
-        coverImageUrl = imageResult.data.url;
-      } else {
-        Toast.event.warningUploadFailed(imageResult.error);
-        // 이미지 업로드 실패해도 나머지 수정은 계속 진행
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("event-covers")
+          .upload(filePath, values.cover_image, {
+            cacheControl: "3600",
+            upsert: false,
+          });
+
+        if (uploadError) {
+          throw new Error(`이미지 업로드 실패: ${uploadError.message}`);
+        }
+
+        if (uploadData) {
+          // 공개 URL 획득
+          const {
+            data: { publicUrl },
+          } = supabase.storage.from("event-covers").getPublicUrl(filePath);
+          coverImageUrl = publicUrl;
+        }
+      } catch (err) {
+        // 이미지 업로드 실패는 경고만 (이벤트 수정은 계속 진행)
+        const errorMsg =
+          err instanceof Error ? err.message : "이미지 업로드 중 오류 발생";
+        Toast.event.warningUploadFailed(errorMsg);
       }
     }
 

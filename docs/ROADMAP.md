@@ -180,13 +180,20 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
     - @next/bundle-analyzer 설정 (ANALYZE=true npm run analyze)
     - 번들 분석 리포트 생성 완료 (.next/analyze/\*)
     - EventCard 컴포넌트 Image 최적화 검증
-  - ⏳ **Subtask 2**: SEO 정적 파일 및 동적 사이트맵 생성
-    - public/robots.txt 생성 (크롤링 정책 설정)
-    - app/sitemap.ts 생성 (동적 사이트맵 라우트)
-    - lib/seo/metadata.ts 생성 (메타데이터 헬퍼 함수)
-  - ⏳ **Subtask 3**: Open Graph 및 메타데이터 강화 (루트 레이아웃)
-    - app/layout.tsx 메타데이터 확장 (openGraph, robots, viewport, colorScheme)
-    - public/og-image.png 생성 (1200x630px)
+  - ✅ **Subtask 2**: SEO 정적 파일 및 동적 사이트맵 생성
+    - public/robots.txt 생성 (크롤링 정책 설정 - 보호 라우트 제외, 동적 경로 허용)
+    - app/sitemap.ts 생성 (동적 사이트맵 라우트 - MetadataRoute.Sitemap)
+    - lib/seo/metadata.ts 생성 (메타데이터 헬퍼 함수 5개)
+    - ISR 캐싱 설정: 24시간(86400초)
+    - 빌드 검증 완료 (/sitemap.xml 동적 라우트 생성)
+  - ✅ **Subtask 3**: Open Graph 및 메타데이터 강화 (루트 레이아웃)
+    - app/layout.tsx 메타데이터 확장 (openGraph, robots, twitter, viewport, colorScheme)
+    - Open Graph: 이미지 1200x630, locale ko_KR, siteName 설정
+    - Twitter 카드: summary_large_image 타입, creator 명시
+    - Robots: index, follow, max-image-preview:large, max-snippet, max-video-preview 설정
+    - Viewport: initialScale 1, maximumScale 5, userScalable true
+    - 다크모드 지원: colorScheme: light dark
+    - og-image.png는 메타데이터에서 참조 (사용자 준비)
   - ⏳ **Subtask 4**: 이벤트 페이지별 동적 메타데이터 구현
     - app/protected/events/[id]/page.tsx generateMetadata 함수
     - lib/seo/structured-data.ts 생성 (JSON-LD Event 스키마)
@@ -328,7 +335,7 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 ---
 
 **📅 최종 업데이트**: 2026-04-08
-**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 1 완료 - 82%)
+**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 3/5 완료 - 87%)
 
 **📌 이 로드맵은 6주 내 MVP 완성을 목표로 하며, 각 Task는 1-2일 내 완료 가능한 단위로 구성되었습니다.**
 **구조 우선 접근법을 엄격히 준수하여 중복 작업을 최소화하고 팀 협업 효율을 극대화합니다.**

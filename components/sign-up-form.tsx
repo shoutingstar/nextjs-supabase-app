@@ -105,12 +105,30 @@ export function SignUpForm({
         }, 500);
       }, 100);
     } catch (error: unknown) {
-      const message =
-        error instanceof Error ? error.message : "오류가 발생했습니다";
+      let message = "오류가 발생했습니다";
+
+      // 다양한 에러 타입 처리
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
+        // AuthApiError 등 메시지 속성이 있는 객체
+        message = error.message;
+      }
+
       // 이미 한국어 메시지면 그대로 사용, 영어면 번역
       const translatedMessage = message.includes("이미 가입된")
         ? message
         : translateAuthError(message);
+
+      console.error("[SignUp Error]", {
+        originalError: error,
+        translatedMessage,
+      });
       setError(translatedMessage);
       onError?.(translatedMessage);
     } finally {

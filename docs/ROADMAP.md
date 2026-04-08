@@ -173,13 +173,28 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
   - ✅ 애니메이션 시스템 (lib/animations/component-animations.ts)
   - ✅ Toast 사용 가이드 (docs/guides/toast-guide.md)
 
-- **Task 014: 성능 최적화 및 SEO**
-  - 이미지 최적화 (next/image, webp 포맷)
-  - 코드 스플리팅 최적화
-  - Supabase 쿼리 최적화 (select 최소화, JOIN 최적화)
-  - 메타 태그 및 Open Graph 설정
-  - robots.txt 및 sitemap.xml 생성
-  - Lighthouse 점수 90+ 달성
+- **Task 014: 성능 최적화 및 SEO** - 진행 중
+  - ✅ **Subtask 1**: Next.config.ts 설정 및 이미지 최적화
+    - next.config.ts 생성 (WebP/AVIF 형식 지원, minimumCacheTTL)
+    - sharp 패키지 설치 완료
+    - @next/bundle-analyzer 설정 (ANALYZE=true npm run analyze)
+    - 번들 분석 리포트 생성 완료 (.next/analyze/\*)
+    - EventCard 컴포넌트 Image 최적화 검증
+  - ⏳ **Subtask 2**: SEO 정적 파일 및 동적 사이트맵 생성
+    - public/robots.txt 생성 (크롤링 정책 설정)
+    - app/sitemap.ts 생성 (동적 사이트맵 라우트)
+    - lib/seo/metadata.ts 생성 (메타데이터 헬퍼 함수)
+  - ⏳ **Subtask 3**: Open Graph 및 메타데이터 강화 (루트 레이아웃)
+    - app/layout.tsx 메타데이터 확장 (openGraph, robots, viewport, colorScheme)
+    - public/og-image.png 생성 (1200x630px)
+  - ⏳ **Subtask 4**: 이벤트 페이지별 동적 메타데이터 구현
+    - app/protected/events/[id]/page.tsx generateMetadata 함수
+    - lib/seo/structured-data.ts 생성 (JSON-LD Event 스키마)
+  - ⏳ **Subtask 5**: 성능 측정 및 Lighthouse 검증
+    - npm run build 및 Lighthouse 분석 (모바일/데스크톱)
+    - 성능 점수 목표: Performance 90+, SEO 95+
+    - 번들 크기 검증 (<150KB 메인, <200KB 이벤트 페이지)
+    - docs/guides/performance-report.md 작성
 
 - **Task 015: 배포 및 모니터링**
   - Vercel 프로젝트 설정 및 환경 변수 구성
@@ -313,7 +328,7 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 ---
 
 **📅 최종 업데이트**: 2026-04-08
-**📊 진행 상황**: Phase 4 시작 (12/15 Tasks 완료 - 80%)
+**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 1 완료 - 82%)
 
 **📌 이 로드맵은 6주 내 MVP 완성을 목표로 하며, 각 Task는 1-2일 내 완료 가능한 단위로 구성되었습니다.**
 **구조 우선 접근법을 엄격히 준수하여 중복 작업을 최소화하고 팀 협업 효율을 극대화합니다.**

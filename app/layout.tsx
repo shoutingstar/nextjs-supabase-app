@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
+import { ErrorBoundary } from "@/components/ui/error-boundary";
+
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
@@ -37,7 +39,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ErrorBoundary showRetry={true}>{children}</ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

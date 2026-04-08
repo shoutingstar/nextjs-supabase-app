@@ -6,7 +6,7 @@ interface SignUpPageProps {
 
 export default async function Page({ searchParams }: SignUpPageProps) {
   const params = await searchParams;
-  const redirectTo = params.next || "/protected/events";
+  const redirectTo = params.next || "/protected/setup-profile";
 
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">

@@ -69,6 +69,30 @@ export async function GET(request: NextRequest) {
   }
 
   // 오픈 리다이렉트 공격 방지: next 파라미터가 "/"로 시작해야만 허용
-  const safeNext = next.startsWith("/") ? next : "/";
+  let safeNext = next.startsWith("/") ? next : "/";
+
+  // OAuth 신규 사용자이면서 full_name이 없으면 프로필 설정 페이지로 이동
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username, full_name")
+        .eq("id", user.id)
+        .single();
+
+      // username이 설정되지 않았으면 setup-profile 페이지로 이동
+      if (!profile?.username) {
+        safeNext = "/protected/setup-profile";
+      }
+    }
+  } catch (err) {
+    // 사용자 정보 확인 중 오류가 나면 기존 safeNext 유지
+    console.error("사용자 정보 확인 중 오류:", err);
+  }
+
   return NextResponse.redirect(`${origin}${safeNext}`);
 }

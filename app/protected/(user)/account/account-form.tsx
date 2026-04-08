@@ -85,17 +85,44 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
         setError("로그인이 필요합니다.");
         return;
       }
+
+      // username 검증
+      if (updatedUsername && updatedUsername.trim()) {
+        const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
+        if (!USERNAME_REGEX.test(updatedUsername.trim())) {
+          setError(
+            "사용자명은 영문, 숫자, 언더스코어(_)만 사용 가능하며 3-20자여야 합니다",
+          );
+          return;
+        }
+      }
+
       setLoading(true);
       setError(null);
       setSuccess(false);
 
-      const { error: updateError } = await supabase.from("profiles").upsert({
-        id: claims.sub,
-        full_name: updatedFullname,
+      console.log("[UpdateProfile] 업데이트 시작:", {
+        userId: claims.sub,
         username: updatedUsername,
+        fullname: updatedFullname,
         website: updatedWebsite,
-        updated_at: new Date().toISOString(),
       });
+
+      const { error: updateError, data: updateData } = await supabase
+        .from("profiles")
+        .upsert({
+          id: claims.sub,
+          full_name: updatedFullname || null,
+          username: updatedUsername || null,
+          website: updatedWebsite || null,
+          updated_at: new Date().toISOString(),
+        });
+
+      console.log("[UpdateProfile] 응답:", {
+        error: updateError,
+        data: updateData,
+      });
+
       if (updateError) throw updateError;
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);

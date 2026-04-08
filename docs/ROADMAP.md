@@ -194,9 +194,12 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
     - Viewport: initialScale 1, maximumScale 5, userScalable true
     - 다크모드 지원: colorScheme: light dark
     - og-image.png는 메타데이터에서 참조 (사용자 준비)
-  - ⏳ **Subtask 4**: 이벤트 페이지별 동적 메타데이터 구현
-    - app/protected/events/[id]/page.tsx generateMetadata 함수
-    - lib/seo/structured-data.ts 생성 (JSON-LD Event 스키마)
+  - ✅ **Subtask 4**: 이벤트 페이지별 동적 메타데이터 구현
+    - app/protected/events/[eventId]/page.tsx generateMetadata 함수 확장 (openGraph, twitter, robots 추가)
+    - lib/seo/structured-data.ts 생성 (JSON-LD 유틸: Event, Organization, BreadcrumbList)
+    - 이벤트 페이지에 JSON-LD Event 스키마 렌더링 (<script type="application/ld+json">)
+    - 동적 메타데이터: 이벤트 커버 이미지, 설명, 날짜, 장소 포함
+    - 활성 이벤트만 검색 엔진 인덱싱 (status 확인)
   - ⏳ **Subtask 5**: 성능 측정 및 Lighthouse 검증
     - npm run build 및 Lighthouse 분석 (모바일/데스크톱)
     - 성능 점수 목표: Performance 90+, SEO 95+
@@ -335,7 +338,7 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 ---
 
 **📅 최종 업데이트**: 2026-04-08
-**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 3/5 완료 - 87%)
+**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 4/5 완료 - 91%)
 
 **📌 이 로드맵은 6주 내 MVP 완성을 목표로 하며, 각 Task는 1-2일 내 완료 가능한 단위로 구성되었습니다.**
 **구조 우선 접근법을 엄격히 준수하여 중복 작업을 최소화하고 팀 협업 효율을 극대화합니다.**

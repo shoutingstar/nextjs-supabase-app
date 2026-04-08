@@ -12,6 +12,10 @@ import { CopyInviteButton } from "@/components/events/copy-invite-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getEventDetail } from "@/lib/queries/events";
+import {
+  createEventStructuredData,
+  structuredDataToScript,
+} from "@/lib/seo/structured-data";
 import { createClient } from "@/lib/supabase/server";
 import type { EventStatus } from "@/lib/types/event";
 
@@ -38,9 +42,46 @@ export async function generateMetadata({
     return { title: "이벤트를 찾을 수 없습니다 | Gather" };
   }
 
+  const description =
+    event.description ?? `${event.title} 이벤트에 참여하세요.`;
+  const fullUrl = `${process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "http://localhost:3000"}/protected/events/${eventId}`;
+
   return {
     title: `${event.title} | Gather`,
-    description: event.description ?? `${event.title} 이벤트에 참여하세요.`,
+    description,
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : "http://localhost:3000",
+    ),
+    openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      url: fullUrl,
+      title: event.title,
+      description,
+      images: event.cover_image_url
+        ? [
+            {
+              url: event.cover_image_url,
+              width: 1200,
+              height: 630,
+              alt: `${event.title} 커버 이미지`,
+            },
+          ]
+        : [],
+      siteName: "Gather",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description,
+      images: event.cover_image_url ? [event.cover_image_url] : [],
+    },
+    robots: {
+      index: event.status === "active",
+      follow: true,
+    },
   };
 }
 
@@ -129,8 +170,33 @@ export default async function EventDetailPage({
   }
   const inviteUrl = `${appUrl || "http://localhost:3000"}/join/${event.invite_code}`;
 
+  // JSON-LD 구조화된 데이터 생성
+  const structuredData = createEventStructuredData({
+    name: event.title,
+    description: event.description ?? "",
+    image: event.cover_image_url ?? undefined,
+    startDate: new Date(event.event_date),
+    location: event.location
+      ? {
+          name: event.location,
+        }
+      : undefined,
+    organizer: {
+      name: event.host?.full_name ?? "호스트",
+    },
+    url: `${process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : "http://localhost:3000"}/protected/events/${eventId}`,
+  });
+
   return (
     <div className="mx-auto max-w-2xl space-y-6 pb-24">
+      {/* JSON-LD 구조화된 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: structuredDataToScript(structuredData),
+        }}
+      />
+
       {/* 뒤로가기 */}
       <Link
         href="/protected/events"

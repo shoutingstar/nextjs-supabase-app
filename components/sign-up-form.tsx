@@ -87,7 +87,6 @@ export function SignUpForm({
         console.error("[SignUp API Error]", {
           message: error.message,
           status: error.status,
-          statusCode: error.statusCode,
         });
 
         // "already" 포함 시 중복 이메일 에러
@@ -107,13 +106,14 @@ export function SignUpForm({
 
       console.log("[SignUp] 회원가입 성공, redirectTo:", redirectTo);
 
+      // 회원가입 성공 콜백
       onSuccess?.({
-        id: "",
-        email,
-        name: null,
+        id: data?.user?.id || "",
+        email: data?.user?.email || email,
+        name: data?.user?.user_metadata?.full_name || null,
         role: "user",
-        avatar_url: null,
-        created_at: new Date().toISOString(),
+        avatar_url: data?.user?.user_metadata?.avatar_url || null,
+        created_at: data?.user?.created_at || new Date().toISOString(),
         updated_at: null,
       });
 
@@ -132,6 +132,11 @@ export function SignUpForm({
       }, 100);
     } catch (error: unknown) {
       let message = "오류가 발생했습니다";
+
+      console.error("[SignUp Catch Error]", {
+        error,
+        errorType: error instanceof Error ? "Error" : typeof error,
+      });
 
       // 다양한 에러 타입 처리
       if (error instanceof Error) {

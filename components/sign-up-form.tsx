@@ -40,6 +40,19 @@ export function SignUpForm({
     setIsLoading(true);
     setError(null);
 
+    // 입력 검증
+    if (!email.trim()) {
+      setError("이메일을 입력해주세요");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("비밀번호는 최소 6자 이상이어야 합니다");
+      setIsLoading(false);
+      return;
+    }
+
     if (password !== repeatPassword) {
       setError("비밀번호가 일치하지 않습니다");
       setIsLoading(false);
@@ -47,11 +60,16 @@ export function SignUpForm({
     }
 
     try {
+      // window.location.origin이 없으면 기본값 사용
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const emailRedirectTo = origin ? `${origin}${redirectTo}` : redirectTo;
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}${redirectTo}`,
+          emailRedirectTo,
         },
       });
 
@@ -60,10 +78,18 @@ export function SignUpForm({
         data,
         error,
         userExists: !!data?.user,
+        errorMessage: error?.message,
+        errorStatus: error?.status,
       });
 
       // 먼저 error 객체 확인 (API 에러, rate limit 등)
       if (error) {
+        console.error("[SignUp API Error]", {
+          message: error.message,
+          status: error.status,
+          statusCode: error.statusCode,
+        });
+
         // "already" 포함 시 중복 이메일 에러
         if (error.message?.toLowerCase().includes("already")) {
           throw new Error("이미 가입된 이메일 주소입니다");

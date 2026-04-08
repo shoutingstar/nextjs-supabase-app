@@ -62,17 +62,22 @@ export function SignUpForm({
         userExists: !!data?.user,
       });
 
-      // Supabase 보안 정책: 중복 이메일은 error 없이 user: null 반환
+      // 먼저 error 객체 확인 (API 에러, rate limit 등)
+      if (error) {
+        // "already" 포함 시 중복 이메일 에러
+        if (error.message?.toLowerCase().includes("already")) {
+          throw new Error("이미 가입된 이메일 주소입니다");
+        }
+        // 다른 에러는 그대로 던지기
+        throw error;
+      }
+
+      // error가 없고 user가 없는 경우만 중복 이메일로 판단
+      // (Supabase 보안 정책: 중복 이메일은 error 없이 user: null 반환)
       if (!data?.user) {
         console.warn("[SignUp] Email already registered (user is null)");
         throw new Error("이미 가입된 이메일 주소입니다");
       }
-
-      if (error?.message?.toLowerCase().includes("already")) {
-        throw new Error("이미 가입된 이메일 주소입니다");
-      }
-
-      if (error) throw error;
 
       console.log("[SignUp] 회원가입 성공, redirectTo:", redirectTo);
 

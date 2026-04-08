@@ -47,10 +47,20 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
         setWebsite(data.website);
       }
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "프로필 로드 중 오류가 발생했습니다.";
+      let errorMessage = "프로필 로드 중 오류가 발생했습니다.";
+
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (
+        err &&
+        typeof err === "object" &&
+        "message" in err &&
+        typeof err.message === "string"
+      ) {
+        errorMessage = err.message;
+      }
+
+      console.error("[GetProfile Error]", { originalError: err, errorMessage });
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -90,10 +100,24 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : "프로필 업데이트 중 오류가 발생했습니다.";
+      let errorMessage = "프로필 업데이트 중 오류가 발생했습니다.";
+
+      // 다양한 에러 타입 처리
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (
+        err &&
+        typeof err === "object" &&
+        "message" in err &&
+        typeof err.message === "string"
+      ) {
+        errorMessage = err.message;
+      }
+
+      console.error("[UpdateProfile Error]", {
+        originalError: err,
+        errorMessage,
+      });
       setError(errorMessage);
     } finally {
       setLoading(false);

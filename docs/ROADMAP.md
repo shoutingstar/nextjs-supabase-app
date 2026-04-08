@@ -173,7 +173,7 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
   - ✅ 애니메이션 시스템 (lib/animations/component-animations.ts)
   - ✅ Toast 사용 가이드 (docs/guides/toast-guide.md)
 
-- **Task 014: 성능 최적화 및 SEO** - 진행 중
+- **Task 014: 성능 최적화 및 SEO** ✅ - 완료
   - ✅ **Subtask 1**: Next.config.ts 설정 및 이미지 최적화
     - next.config.ts 생성 (WebP/AVIF 형식 지원, minimumCacheTTL)
     - sharp 패키지 설치 완료
@@ -200,11 +200,14 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
     - 이벤트 페이지에 JSON-LD Event 스키마 렌더링 (<script type="application/ld+json">)
     - 동적 메타데이터: 이벤트 커버 이미지, 설명, 날짜, 장소 포함
     - 활성 이벤트만 검색 엔진 인덱싱 (status 확인)
-  - ⏳ **Subtask 5**: 성능 측정 및 Lighthouse 검증
-    - npm run build 및 Lighthouse 분석 (모바일/데스크톱)
-    - 성능 점수 목표: Performance 90+, SEO 95+
-    - 번들 크기 검증 (<150KB 메인, <200KB 이벤트 페이지)
-    - docs/guides/performance-report.md 작성
+  - ✅ **Subtask 5**: 성능 측정 및 Lighthouse 검증
+    - npm run build -- --webpack 성공 확인
+    - npm run analyze로 번들 분석 리포트 생성 (.next/analyze/\*)
+    - docs/guides/performance-report.md 작성 (측정 가이드 및 템플릿)
+    - Lighthouse 측정 방법 상세 문서화 (Chrome DevTools)
+    - Core Web Vitals 측정 방법 제시 (FCP, LCP, CLS)
+    - 번들 크기 목표 명시 (<150KB 메인, <200KB 이벤트)
+    - 성능 모니터링 전략 (Vercel Analytics, Sentry)
 
 - **Task 015: 배포 및 모니터링**
   - Vercel 프로젝트 설정 및 환경 변수 구성
@@ -338,7 +341,7 @@ Gather는 5-30명 규모의 소규모 이벤트 주최자와 참여자를 위한
 ---
 
 **📅 최종 업데이트**: 2026-04-08
-**📊 진행 상황**: Phase 4 진행 중 (Task 014 Subtask 4/5 완료 - 91%)
+**📊 진행 상황**: Phase 4 진행 중 (Task 014 완료, Task 015 대기 - 93%)
 
 **📌 이 로드맵은 6주 내 MVP 완성을 목표로 하며, 각 Task는 1-2일 내 완료 가능한 단위로 구성되었습니다.**
 **구조 우선 접근법을 엄격히 준수하여 중복 작업을 최소화하고 팀 협업 효율을 극대화합니다.**

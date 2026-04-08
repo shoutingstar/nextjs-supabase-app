@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 
+import { updateProfile } from "./actions";
+
 type Claims = { sub: string; email?: string; [key: string]: unknown };
 
 export default function AccountForm({ claims }: { claims: Claims | null }) {
@@ -71,7 +73,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
     getProfile();
   }, [claims, getProfile]);
 
-  async function updateProfile({
+  async function handleUpdateProfile({
     username: updatedUsername,
     fullname: updatedFullname,
     website: updatedWebsite,
@@ -81,55 +83,34 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
     website: string | null;
   }) {
     try {
-      if (!claims?.sub) {
-        setError("로그인이 필요합니다.");
-        return;
-      }
-
-      // username 검증
-      if (updatedUsername && updatedUsername.trim()) {
-        const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
-        if (!USERNAME_REGEX.test(updatedUsername.trim())) {
-          setError(
-            "사용자명은 영문, 숫자, 언더스코어(_)만 사용 가능하며 3-20자여야 합니다",
-          );
-          return;
-        }
-      }
-
       setLoading(true);
       setError(null);
       setSuccess(false);
 
-      console.log("[UpdateProfile] 업데이트 시작:", {
-        userId: claims.sub,
+      console.log("[UpdateProfile] 서버 액션 호출:", {
         username: updatedUsername,
         fullname: updatedFullname,
         website: updatedWebsite,
       });
 
-      const { error: updateError, data: updateData } = await supabase
-        .from("profiles")
-        .upsert({
-          id: claims.sub,
-          full_name: updatedFullname || null,
-          username: updatedUsername || null,
-          website: updatedWebsite || null,
-          updated_at: new Date().toISOString(),
-        });
-
-      console.log("[UpdateProfile] 응답:", {
-        error: updateError,
-        data: updateData,
+      // 서버 액션 호출 (RLS 정책 적용됨)
+      const result = await updateProfile({
+        fullName: updatedFullname,
+        username: updatedUsername,
+        website: updatedWebsite,
       });
 
-      if (updateError) throw updateError;
+      if (!result.success) {
+        setError(result.error || "프로필 업데이트 중 오류가 발생했습니다.");
+        return;
+      }
+
+      console.log("[UpdateProfile] 성공:", result.data);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       let errorMessage = "프로필 업데이트 중 오류가 발생했습니다.";
 
-      // 다양한 에러 타입 처리
       if (err instanceof Error) {
         errorMessage = err.message;
       } else if (
@@ -239,7 +220,7 @@ export default function AccountForm({ claims }: { claims: Claims | null }) {
           {/* 저장 버튼 */}
           <Button
             onClick={() =>
-              updateProfile({
+              handleUpdateProfile({
                 username,
                 fullname,
                 website,

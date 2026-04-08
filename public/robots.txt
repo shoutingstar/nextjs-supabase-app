@@ -1,0 +1,36 @@
+# robots.txt - Gather 검색 엔진 크롤링 정책
+# 생성일: 2026-04-08
+
+# 모든 검색 엔진에 대한 기본 정책
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /protected/
+Disallow: /_next/
+Disallow: /api/
+
+# 특정 경로의 페이지 메타데이터 수집 허용
+Allow: /protected/events/*/
+
+# Sitemap 위치
+Sitemap: https://gather.example.com/sitemap.xml
+
+# 크롤링 속도 제한 (선택사항)
+Crawl-delay: 1
+Request-rate: 30/60
+
+# Google Bot 특화 규칙 (선택)
+User-agent: Googlebot
+Allow: /
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /protected/
+Disallow: /_next/
+
+# Naver Bot
+User-agent: Yeti
+Allow: /
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /protected/

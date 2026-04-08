@@ -2,15 +2,28 @@
 
 import { createClient } from "@/lib/supabase/server";
 
+export interface ActionResult<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+
+/**
+ * 프로필 정보를 업데이트합니다.
+ * - 이름, 사용자명, 웹사이트, 아바타 URL 업데이트
+ * - username은 3-20자, 영문/숫자/언더스코어만 가능
+ */
 export async function updateProfile({
   fullName,
   username,
   website,
+  avatarUrl,
 }: {
   fullName: string | null;
   username: string | null;
   website: string | null;
-}) {
+  avatarUrl?: string | null;
+}): Promise<ActionResult> {
   const supabase = await createClient();
 
   const {
@@ -39,15 +52,23 @@ export async function updateProfile({
       username,
       fullName,
       website,
+      avatarUrl,
     });
 
-    const { error, data } = await supabase.from("profiles").upsert({
+    const updateData: Record<string, unknown> = {
       id: user.id,
       full_name: fullName || null,
       username: username || null,
       website: website || null,
       updated_at: new Date().toISOString(),
-    });
+    };
+
+    // avatarUrl이 제공되면 포함
+    if (avatarUrl !== undefined) {
+      updateData.avatar_url = avatarUrl;
+    }
+
+    const { error, data } = await supabase.from("profiles").upsert(updateData);
 
     if (error) {
       console.error("[UpdateProfile Error]", error);
@@ -63,5 +84,125 @@ export async function updateProfile({
         : "프로필 업데이트 중 오류가 발생했습니다";
     console.error("[UpdateProfile Exception]", errorMessage);
     return { error: errorMessage, success: false };
+  }
+}
+
+/**
+ * 프로필 아바타 이미지를 Supabase Storage에 업로드합니다.
+ * - 버킷: avatars
+ * - 파일 경로: {userId}/avatar-{timestamp}.{ext}
+ * - 지원 형식: jpg, png, webp (max 5MB)
+ * - 기존 아바타는 자동으로 삭제됨
+ */
+export async function uploadAvatarImage(
+  formData: FormData,
+): Promise<ActionResult<{ url: string }>> {
+  const supabase = await createClient();
+
+  // 현재 사용자 확인
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, error: "로그인이 필요합니다." };
+  }
+
+  const file = formData.get("avatar") as File | null;
+
+  if (!file || file.size === 0) {
+    return { success: false, error: "파일을 선택해 주세요." };
+  }
+
+  // 파일 크기 검사 (5MB)
+  if (file.size > 5 * 1024 * 1024) {
+    return { success: false, error: "파일 크기는 5MB 이하여야 합니다." };
+  }
+
+  // 지원 형식 검사
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+  if (!allowedTypes.includes(file.type)) {
+    return {
+      success: false,
+      error: "JPG, PNG, WebP 형식만 지원합니다.",
+    };
+  }
+
+  // 기존 아바타 삭제
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("avatar_url")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.avatar_url) {
+      const url = new URL(profile.avatar_url);
+      const pathParts = url.pathname.split("/avatars/");
+      if (pathParts.length > 1) {
+        await supabase.storage.from("avatars").remove([pathParts[1]]);
+      }
+    }
+  } catch (err) {
+    // 기존 아바타 삭제 실패는 무시
+    console.warn("[DeleteOldAvatar] 기존 아바타 삭제 실패:", err);
+  }
+
+  // 파일 확장자 추출
+  const ext = file.type.split("/")[1].replace("jpeg", "jpg");
+  const timestamp = Date.now();
+  // 파일 경로: {userId}/avatar-{timestamp}.{ext}
+  const filePath = `${user.id}/avatar-${timestamp}.${ext}`;
+
+  try {
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("[UploadAvatar Error]", {
+        error: uploadError,
+        message: uploadError.message,
+        statusCode: uploadError.statusCode,
+      });
+
+      // 버킷이 없거나 접근 거부 시 더 명확한 메시지
+      if (
+        uploadError.statusCode === 404 ||
+        uploadError.message.includes("not found")
+      ) {
+        return {
+          success: false,
+          error:
+            "avatars 버킷이 없습니다. Supabase 대시보드에서 'avatars' 버킷을 생성하세요.",
+        };
+      }
+
+      if (uploadError.statusCode === 403) {
+        return {
+          success: false,
+          error:
+            "아바타 업로드 권한이 없습니다. Supabase RLS 정책을 확인하세요.",
+        };
+      }
+
+      return { success: false, error: `업로드 실패: ${uploadError.message}` };
+    }
+
+    // 공개 URL 생성
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("avatars").getPublicUrl(filePath);
+
+    console.log("[UploadAvatar Success]", { filePath, publicUrl });
+    return { success: true, data: { url: publicUrl } };
+  } catch (err) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.error("[UploadAvatar Exception]", errorMsg);
+    return { success: false, error: `업로드 중 오류 발생: ${errorMsg}` };
   }
 }

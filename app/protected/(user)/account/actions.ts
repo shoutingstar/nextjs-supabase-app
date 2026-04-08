@@ -89,8 +89,8 @@ export async function updateProfile({
 
 /**
  * 프로필 아바타 이미지를 Supabase Storage에 업로드합니다.
- * - 버킷: avatars
- * - 파일 경로: {userId}/avatar-{timestamp}.{ext}
+ * - 버킷: event-covers (이벤트 커버와 동일 버킷 공유)
+ * - 파일 경로: {userId}/profiles/avatar-{timestamp}.{ext}
  * - 지원 형식: jpg, png, webp (max 5MB)
  * - 기존 아바타는 자동으로 삭제됨
  */
@@ -139,9 +139,9 @@ export async function uploadAvatarImage(
 
     if (profile?.avatar_url) {
       const url = new URL(profile.avatar_url);
-      const pathParts = url.pathname.split("/avatars/");
+      const pathParts = url.pathname.split("/event-covers/");
       if (pathParts.length > 1) {
-        await supabase.storage.from("avatars").remove([pathParts[1]]);
+        await supabase.storage.from("event-covers").remove([pathParts[1]]);
       }
     }
   } catch (err) {
@@ -152,12 +152,12 @@ export async function uploadAvatarImage(
   // 파일 확장자 추출
   const ext = file.type.split("/")[1].replace("jpeg", "jpg");
   const timestamp = Date.now();
-  // 파일 경로: {userId}/avatar-{timestamp}.{ext}
-  const filePath = `${user.id}/avatar-${timestamp}.${ext}`;
+  // 파일 경로: {userId}/profiles/avatar-{timestamp}.{ext}
+  const filePath = `${user.id}/profiles/avatar-${timestamp}.${ext}`;
 
   try {
     const { error: uploadError } = await supabase.storage
-      .from("avatars")
+      .from("event-covers")
       .upload(filePath, file, {
         cacheControl: "3600",
         upsert: false,
@@ -169,18 +169,6 @@ export async function uploadAvatarImage(
         message: uploadError.message,
         statusCode: uploadError.statusCode,
       });
-
-      // 버킷이 없거나 접근 거부 시 더 명확한 메시지
-      if (
-        uploadError.statusCode === 404 ||
-        uploadError.message.includes("not found")
-      ) {
-        return {
-          success: false,
-          error:
-            "avatars 버킷이 없습니다. Supabase 대시보드에서 'avatars' 버킷을 생성하세요.",
-        };
-      }
 
       if (uploadError.statusCode === 403) {
         return {
@@ -196,7 +184,7 @@ export async function uploadAvatarImage(
     // 공개 URL 생성
     const {
       data: { publicUrl },
-    } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    } = supabase.storage.from("event-covers").getPublicUrl(filePath);
 
     console.log("[UploadAvatar Success]", { filePath, publicUrl });
     return { success: true, data: { url: publicUrl } };

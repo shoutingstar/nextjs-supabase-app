@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
@@ -59,20 +59,17 @@ export const metadata: Metadata = {
     "max-snippet": -1,
     "max-video-preview": -1,
   },
+};
 
-  /* ============================================================================
-   * Viewport 설정
-   * ============================================================================ */
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
-
-  /* ============================================================================
-   * 다크모드 지원
-   * ============================================================================ */
+/* ============================================================================
+ * Viewport 설정 (Next.js 15에서 분리됨)
+ * ============================================================================ */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  // 다크모드 지원
   colorScheme: "light dark",
 };
 

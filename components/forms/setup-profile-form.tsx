@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { Toast } from "@/lib/utils/toast-utils";
 
 interface SetupProfileFormProps {
   userId: string;
@@ -57,7 +58,7 @@ export function SetupProfileForm({
         } else {
           setUsernameError(null);
         }
-      } catch (err) {
+      } catch (_err) {
         // 사용자명이 존재하지 않는 경우 (정상)
         setUsernameError(null);
       }
@@ -99,11 +100,15 @@ export function SetupProfileForm({
         throw updateError;
       }
 
+      // 성공 메시지 표시
+      Toast.profile.setupSuccess();
+
       // 성공 후 이벤트 페이지로 이동
       router.push("/protected/events");
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "오류가 발생했습니다";
+      Toast.profile.setupError(errorMessage);
       setError(errorMessage);
     } finally {
       setLoading(false);

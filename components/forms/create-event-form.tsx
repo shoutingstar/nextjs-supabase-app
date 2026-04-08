@@ -10,7 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import {
   createEventAction,
@@ -28,6 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Toast } from "@/lib/utils/toast-utils";
 import {
   type CreateEventFormValues,
   createEventSchema,
@@ -97,9 +97,7 @@ export function CreateEventForm({
 
     if (!result.success || !result.data) {
       // Zod 에러 포함 서버 에러 메시지 표시
-      toast.error("이벤트 생성에 실패했습니다.", {
-        description: result.error,
-      });
+      Toast.event.createError(result.error);
       return;
     }
 
@@ -117,16 +115,13 @@ export function CreateEventForm({
         await updateEvent(eventId, { cover_image_url: imageResult.data.url });
       } else {
         // 이미지 업로드 실패는 경고만 (이벤트는 이미 생성됨)
-        toast.warning("커버 이미지 업로드에 실패했습니다.", {
-          description:
-            "이벤트는 생성되었습니다. 나중에 이미지를 추가할 수 있습니다.",
-        });
+        Toast.event.warningUploadFailed(
+          "이벤트는 생성되었습니다. 나중에 이미지를 추가할 수 있습니다.",
+        );
       }
     }
 
-    toast.success("이벤트가 생성되었습니다!", {
-      description: `"${values.title}" 이벤트가 만들어졌습니다. 초대 코드: ${invite_code}`,
-    });
+    Toast.event.created(values.title, invite_code);
 
     // 성공 시 새 이벤트 상세 페이지로 이동
     startTransition(() => {

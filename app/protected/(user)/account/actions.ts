@@ -55,18 +55,14 @@ export async function updateProfile({
       avatarUrl,
     });
 
-    const updateData: Record<string, unknown> = {
+    const updateData = {
       id: user.id,
       full_name: fullName || null,
       username: username || null,
       website: website || null,
+      avatar_url: avatarUrl ?? undefined,
       updated_at: new Date().toISOString(),
-    };
-
-    // avatarUrl이 제공되면 포함
-    if (avatarUrl !== undefined) {
-      updateData.avatar_url = avatarUrl;
-    }
+    } as const;
 
     const { error, data } = await supabase.from("profiles").upsert(updateData);
 
@@ -170,7 +166,7 @@ export async function uploadAvatarImage(
         statusCode: uploadError.statusCode,
       });
 
-      if (uploadError.statusCode === 403) {
+      if (uploadError.statusCode === "403") {
         return {
           success: false,
           error:

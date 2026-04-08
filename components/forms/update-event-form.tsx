@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import {
   deleteEventAction,
@@ -45,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { EventDetailData } from "@/lib/queries/events";
+import { Toast } from "@/lib/utils/toast-utils";
 import {
   type UpdateEventFormValues,
   updateEventSchema,
@@ -150,9 +150,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
       if (imageResult.success && imageResult.data) {
         coverImageUrl = imageResult.data.url;
       } else {
-        toast.warning("커버 이미지 업로드에 실패했습니다.", {
-          description: imageResult.error,
-        });
+        Toast.event.warningUploadFailed(imageResult.error);
         // 이미지 업로드 실패해도 나머지 수정은 계속 진행
       }
     }
@@ -164,9 +162,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
 
     if (!result.success) {
       // Zod 에러 포함 서버 에러 메시지 표시
-      toast.error("이벤트 수정에 실패했습니다.", {
-        description: result.error,
-      });
+      Toast.event.updateError(result.error);
       return;
     }
 
@@ -175,9 +171,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
       await updateEvent(event.id, { cover_image_url: coverImageUrl });
     }
 
-    toast.success("이벤트가 수정되었습니다!", {
-      description: `"${values.title ?? event.title}" 이벤트가 업데이트되었습니다.`,
-    });
+    Toast.event.updated(values.title ?? event.title);
 
     // 성공 시 수정된 이벤트 상세 페이지로 이동
     startTransition(() => {
@@ -203,9 +197,7 @@ export function UpdateEventForm({ event, redirectTo }: UpdateEventFormProps) {
         throw err;
       }
       // 실제 오류인 경우 (권한 없음, 이벤트 없음 등)
-      toast.error("이벤트 삭제에 실패했습니다.", {
-        description: "잠시 후 다시 시도해 주세요.",
-      });
+      Toast.event.deleteError();
       setIsDeleting(false);
       setDeleteDialogOpen(false);
     }

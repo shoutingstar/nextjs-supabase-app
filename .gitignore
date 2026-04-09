@@ -48,6 +48,11 @@ shrimp_data/
 
 # playwright 테스트 파일
 .playwright-mcp/
+playwright-report/
+test-results/
+
+# 테스트 임시 파일
+.test-files/
 
 # 로그 파일
 *.log

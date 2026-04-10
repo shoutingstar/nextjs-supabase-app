@@ -53,13 +53,9 @@ export function JoinEventButton({
     return null;
   }
 
-  // 이미 참여 중
+  // 이미 참여 중: 버튼 표시 안 함
   if (isParticipating) {
-    return (
-      <Button variant="outline" className="w-full" disabled>
-        ✓ 이미 참여 중
-      </Button>
-    );
+    return null;
   }
 
   // 취소/완료된 이벤트
